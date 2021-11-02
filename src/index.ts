@@ -3,7 +3,9 @@ import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
 import { registerKey } from "./handlers/register";
-import { client, dbName } from "./mongo";
+import { client } from "./mongo";
+import { getClass, registerClass } from "./handlers/classes";
+import { checkApiKey } from "./middleware/apiKey";
 const app = express();
 
 dotenv.config();
@@ -17,8 +19,8 @@ const rateLimiter = rateLimit({
 });
 
 client.connect((err: any) => {
-  const collection = client.db(dbName).collection("apiKeys");
-  client.close();
+  // tslint:disable-next-line
+  console.log("mongodb connected");
 });
 
 app.use(express.json());
@@ -30,6 +32,11 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/register", (req, res) => registerKey(req, res));
+
+app.use(checkApiKey);
+
+app.post("/api/class", (req, res) => registerClass(req, res));
+app.get("/api/class", (req, res) => getClass(req, res));
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);
