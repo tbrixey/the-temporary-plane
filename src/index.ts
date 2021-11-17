@@ -2,10 +2,12 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
-import { registerKey } from "./handlers/register";
+import { registerKey } from "./handlers/player/register";
 import { client } from "./mongo";
 import { getClass, registerClass } from "./handlers/classes";
 import { checkApiKey } from "./middleware/apiKey";
+import { getPlayer } from "./handlers/player";
+import { getCities } from "./handlers/cities";
 const app = express();
 
 dotenv.config();
@@ -31,12 +33,14 @@ app.get("/", (req, res) => {
   res.send("The Temporary Plane is online");
 });
 
-app.post("/api/register", (req, res) => registerKey(req, res));
+app.post("/api/register/:playerName", (req, res) => registerKey(req, res));
 
 app.use(checkApiKey);
 
-app.post("/api/class", (req, res) => registerClass(req, res));
+app.get("/api/player/:playerName", (req, res) => getPlayer(req, res));
+app.post("/api/class/:className", (req, res) => registerClass(req, res));
 app.get("/api/class", (req, res) => getClass(req, res));
+app.get("/api/cities", (req, res) => getCities(req, res));
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);

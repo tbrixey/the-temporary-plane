@@ -4,7 +4,7 @@ import { client, dbName } from "../../mongo";
 // This registers a user to a specific class
 
 export const registerClass = async (req: Request, res: Response) => {
-  if (!req.params.className) {
+  if (!req.body.class) {
     res.status(400).json({ message: "Missing class" });
   }
 
@@ -18,11 +18,8 @@ export const registerClass = async (req: Request, res: Response) => {
   } else {
     await collection.findOneAndUpdate(
       { apiKey: authSplit[1] },
-      { $set: { class: req.params.className, updatedOn: new Date() } }
+      { $set: { class: req.body.class } }
     );
-    res.status(200).json({
-      ...req.params,
-      message: "Class selected! Pick a race using /race/<racename>",
-    });
+    res.status(200).json({ ...req.body });
   }
 };

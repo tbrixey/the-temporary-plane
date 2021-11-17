@@ -1,5 +1,5 @@
 import { Request, response, Response } from "express";
-import { client, dbName } from "../mongo";
+import { client, dbName } from "../../mongo";
 
 const genKey = () => {
   return [...Array(10)]
@@ -9,10 +9,10 @@ const genKey = () => {
 };
 
 export const registerKey = async (req: Request, res: Response) => {
-  if (req.body.playerName === undefined) {
-    res.status(500).send({ message: "Missing player name" });
+  if (req.params.playerName === undefined) {
+    return res.status(400).send({ message: "Missing player name" });
   }
-  const playerName = req.body.playerName;
+  const playerName = req.params.playerName;
 
   const apiKey = genKey();
 
@@ -29,12 +29,12 @@ export const registerKey = async (req: Request, res: Response) => {
       createdOn: new Date(),
       playerName,
     });
-    res.json({
+    return res.json({
       playerName,
       apiKey,
       message: "Player created! Pick a class using /class/<classname>",
     });
   } else {
-    res.status(409).json({ message: "Player already exists!" });
+    return res.status(409).json({ message: "Player already exists!" });
   }
 };
