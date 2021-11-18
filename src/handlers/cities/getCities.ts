@@ -1,11 +1,32 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
+import { client, dbName } from "../../mongo";
 
-// This provies class info when requested
+interface CityQuery {
+  name?: string;
+  population?: string;
+  type?: string;
+}
 
-export const getCities = (req: Request, res: Response) => {
-  if (!req.body.class) {
-    res.status(400).json({ message: "Missing class" });
-  }
+export const getCities: RequestHandler<{}, any, any, CityQuery> = async (
+  req,
+  res
+) => {
+  const filters = req.query;
+  const findObj: {
+    name?: { $regex: string; $options: string };
+    population?: number;
+    type?: string;
+  } = {};
 
-  res.status(200).json({ ...req.body });
+  const collection = client.db(dbName).collection("cities");
+
+  if (filters.name) findObj.name = { $regex: filters.name, $options: "i" };
+
+  if (filters.population) findObj.population = parseInt(filters.population);
+
+  if (filters.type) findObj.type = filters.type;
+
+  const cities = await collection.find(findObj).toArray();
+
+  res.status(200).json(cities);
 };

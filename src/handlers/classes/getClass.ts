@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import { client, dbName } from "../../mongo";
 
 // This provies class info when requested
 
-export const getClass = (req: Request, res: Response) => {
-  if (!req.body.class) {
-    res.status(400).json({ message: "Missing class" });
-  }
+export const getClass = async (req: Request, res: Response) => {
+  const collection = client.db(dbName).collection("classes");
 
-  res.status(200).json({ ...req.body });
+  const classes = await collection.find().toArray();
+
+  res.status(200).json(classes);
 };

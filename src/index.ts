@@ -6,8 +6,9 @@ import { registerKey } from "./handlers/player/register";
 import { client } from "./mongo";
 import { getClass, registerClass } from "./handlers/classes";
 import { checkApiKey } from "./middleware/apiKey";
-import { getPlayer } from "./handlers/player";
-import { getCities } from "./handlers/cities";
+import { getPlayer, getPlayers } from "./handlers/player";
+import { getCities, registerStartingCity } from "./handlers/cities";
+import { getRaces, registerRace } from "./handlers/races";
 const app = express();
 
 dotenv.config();
@@ -33,14 +34,19 @@ app.get("/", (req, res) => {
   res.send("The Temporary Plane is online");
 });
 
-app.post("/api/register/:playerName", (req, res) => registerKey(req, res));
+app.post("/api/register/:playerName", registerKey);
 
 app.use(checkApiKey);
 
-app.get("/api/player/:playerName", (req, res) => getPlayer(req, res));
-app.post("/api/class/:className", (req, res) => registerClass(req, res));
-app.get("/api/class", (req, res) => getClass(req, res));
-app.get("/api/cities", (req, res) => getCities(req, res));
+app.post("/api/class/:className", registerClass);
+app.post("/api/race/:raceName", registerRace);
+app.post("/api/city/:cityName", registerStartingCity);
+
+app.get("/api/player/:playerName", getPlayer);
+app.get("/api/players", getPlayers);
+app.get("/api/class", getClass);
+app.get("/api/races", getRaces);
+app.get("/api/cities", getCities);
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);

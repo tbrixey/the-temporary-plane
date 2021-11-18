@@ -6,7 +6,8 @@
     "trailing-comma": [false],
     "no-console": {
       "severity": "warning"
-    }
+    },
+    "radix": false
   },
   "rulesDirectory": []
 }

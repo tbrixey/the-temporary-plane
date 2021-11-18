@@ -16,13 +16,14 @@ export const registerClass = async (req: Request, res: Response) => {
   if (checkClass.class) {
     res.status(400).json({ message: "Player already has a class" });
   } else {
-    await collection.findOneAndUpdate(
+    const newDoc = await collection.findOneAndUpdate(
       { apiKey: authSplit[1] },
-      { $set: { class: req.params.className, updatedOn: new Date() } }
+      { $set: { class: req.params.className, updatedOn: new Date() } },
+      { returnDocument: "after" }
     );
     res.status(200).json({
-      ...req.params,
-      message: "Class selected! Pick a race using /race/<racename>",
+      ...newDoc.value,
+      message: "Class selected! Pick a race using /api/race/<racename>",
     });
   }
 };

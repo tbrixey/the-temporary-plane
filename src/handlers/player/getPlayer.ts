@@ -11,19 +11,33 @@ export const getPlayer = async (req: Request, res: Response) => {
   const authSplit = req.headers.authorization.split(" ");
   const keyCollection = client.db(dbName).collection("apiKeys");
 
-  const checkPlayer = await keyCollection.findOne({
+  const collection = await keyCollection.findOne({
     playerName: incommingPlayerName,
   });
 
-  if (checkPlayer) {
-    if (checkPlayer.apiKey === authSplit[1]) {
-      return res.status(200).json(checkPlayer);
-    } else if (checkPlayer) {
+  if (collection) {
+    if (collection.apiKey === authSplit[1]) {
+      return res.status(200).json(collection);
+    } else if (collection) {
       return res
         .status(200)
-        .json({ playerName: checkPlayer.playerName, class: checkPlayer.class });
+        .json({ playerName: collection.playerName, class: collection.class });
     }
   } else {
     return res.status(404).json({ message: "Player not found" });
   }
+};
+
+export const getPlayers = async (req: Request, res: Response) => {
+  const keyCollection = client.db(dbName).collection("apiKeys");
+
+  const collection = await keyCollection
+    .find()
+    .map((player) => ({
+      playerName: player.playerName,
+      location: player.location,
+    }))
+    .toArray();
+
+  res.status(200).json(collection);
 };

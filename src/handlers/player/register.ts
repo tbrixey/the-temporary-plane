@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { client, dbName } from "../../mongo";
 
 const genKey = () => {
@@ -32,7 +32,7 @@ export const registerKey = async (req: Request, res: Response) => {
     return res.json({
       playerName,
       apiKey,
-      message: "Player created! Pick a class using /class/<classname>",
+      message: "Player created! Pick a class using /api/class/<classname>",
     });
   } else {
     return res.status(409).json({ message: "Player already exists!" });

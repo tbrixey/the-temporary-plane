@@ -4,7 +4,7 @@ This will get you started as well as some basic character endpoints you can hit.
 
 #### GET
 
-`/api/player/:playerName`
+`/api/player`
 
 example when you are requesting another player.
 
@@ -30,4 +30,17 @@ When requesting your own character.
   "arrivalTime": ""
   "bag": [{ "id": 1, "count": 2 }]
 }
+```
+
+`/api/players`
+
+get all players name and locations
+
+```json
+[
+  {
+    "playerName": "Player Name",
+    "location": "Drandor"
+  }
+]
 ```

@@ -17,10 +17,6 @@ example get response
 
 #### POST
 
-Sets your player's class. This can only be set once for now.
+`/api/class/<className>`
 
-```json
-{
-  "class": "Fighter"
-}
-```
+Sets your player's class. This can only be set once for now.

@@ -12,6 +12,7 @@ Get all cities. You can filter results by passing parameters below.
 | ---------- | ------ |
 | name       | String |
 | population | Number |
+| type       | String |
 
 ```json
 [
@@ -19,23 +20,37 @@ Get all cities. You can filter results by passing parameters below.
     "name": "Drandor",
     "population": 384,
     "description": "lorem ipsum",
+    "type": "city",
     "traders": [
       {
-        "general": {
-          "name": "Drandor Goods",
-          "money": 1000,
-          "items": [
-            {
-              "id": 1,
-              "name": "Health Postion",
-              "description": "Heals player by 25",
-              "type": "consumable",
-              "effect": 25
-            }
-          ]
-        }
+        "name": "Drandor Goods",
+        "type": "general",
+        "money": 250,
+        "items": [
+          {
+            "id": 1,
+            "count": 25
+          }
+        ]
+      },
+      {
+        "name": "Drandor Goods",
+        "type": "weaponsmith",
+        "money": 1250,
+        "items": [
+          {
+            "id": 23,
+            "count": 25
+          }
+        ]
       }
     ]
   }
 ]
 ```
+
+#### POST
+
+`/api/city/:cityName`
+
+This registers your starting city. Should be done once before doing anything else.

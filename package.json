@@ -9,17 +9,16 @@
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
-    "prestart": "npm run build",
-    "start": "nodemon .",
-    "dev": "nodemon --watch ./**/*.ts --exec ts-node src/index.ts",
+    "start": "ts-node ./src/index.ts",
+    "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tbrixey/the-temporary-plane.git"
   },
-  "author": "Trevor Brixey",
-  "license": "ISC",
+  "author": "Trevor Brixey Apps",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tbrixey/the-temporary-plane/issues"
   },
