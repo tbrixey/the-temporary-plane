@@ -28,6 +28,14 @@ export const registerKey = async (req: Request, res: Response) => {
       count: 0,
       createdOn: new Date(),
       playerName,
+      level: 1,
+      stats: {
+        str: 0,
+        int: 0,
+        dex: 0,
+        con: 0,
+        luck: 0,
+      },
     });
     return res.json({
       playerName,

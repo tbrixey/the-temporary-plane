@@ -7,12 +7,15 @@ The classes are inspired from D&D and other RPGs I've played. They contain most 
 example get response
 
 ```json
-{
-  "name": "Fighter",
-  "weight": 100,
-  "description": "lorem ipsum",
-  "speed": 25
-}
+[
+  {
+    "name": "Fighter",
+    "weight": 120,
+    "description": "A master of martial combat, skilled with a variety of weapons and armor.",
+    "speed": 20,
+    "bonus": "str"
+  }
+]
 ```
 
 #### POST

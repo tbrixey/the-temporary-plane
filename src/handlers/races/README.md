@@ -7,10 +7,12 @@ The races are inspired from D&D and other RPGs I've played.
 example get response
 
 ```json
-{
-  "name": "Human",
-  "description": "lorem ipsum"
-}
+[
+  {
+    "name": "Human",
+    "description": "lorem ipsum"
+  }
+]
 ```
 
 #### POST
