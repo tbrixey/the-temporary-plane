@@ -4,7 +4,7 @@ This will get you started as well as some basic character endpoints you can hit.
 
 #### GET
 
-`/api/player`
+`/api/player/<playerName>`
 
 example when you are requesting another player.
 
@@ -27,6 +27,7 @@ When requesting your own character.
   "class": "Fighter",
   "coin": 1000,
   "level": 1,
+  "xpToNextLevel": 100,
   "location": "Drandor",
   "traveling": "",
   "arrivalTime": "",
@@ -37,6 +38,13 @@ When requesting your own character.
     "dex": 0,
     "con": 0,
     "luck": 0
+  },
+  "skills": {
+    "mining": 0,
+    "woodcutting": 0,
+    "arcana": 0,
+    "cooking": 0,
+    "gathering": 0
   }
 }
 ```

@@ -4,7 +4,7 @@ The races are inspired from D&D and other RPGs I've played.
 
 #### GET
 
-example get response
+`/api/race`
 
 ```json
 [

@@ -9,6 +9,7 @@ import { checkApiKey } from "./middleware/apiKey";
 import { getPlayer, getPlayers } from "./handlers/player";
 import { getCities, registerStartingCity } from "./handlers/cities";
 import { getRaces, registerRace } from "./handlers/races";
+import { characterCreationComplete } from "./middleware/characterCreationComplete";
 const app = express();
 
 dotenv.config();
@@ -35,18 +36,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/register/:playerName", registerKey);
+app.get("/api/players", getPlayers);
 
 app.use(checkApiKey);
 
 app.post("/api/class/:className", registerClass);
 app.post("/api/race/:raceName", registerRace);
 app.post("/api/city/:cityName", registerStartingCity);
-
 app.get("/api/player/:playerName", getPlayer);
-app.get("/api/players", getPlayers);
 app.get("/api/class", getClass);
-app.get("/api/races", getRaces);
+app.get("/api/race", getRaces);
 app.get("/api/cities", getCities);
+
+app.use(characterCreationComplete);
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);

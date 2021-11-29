@@ -4,7 +4,7 @@ The classes are inspired from D&D and other RPGs I've played. They contain most 
 
 #### GET
 
-example get response
+`/api/class`
 
 ```json
 [
@@ -13,7 +13,7 @@ example get response
     "weight": 120,
     "description": "A master of martial combat, skilled with a variety of weapons and armor.",
     "speed": 20,
-    "bonus": "str"
+    "bonus": "Strength, Constitution"
   }
 ]
 ```
