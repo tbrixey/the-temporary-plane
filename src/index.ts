@@ -7,9 +7,15 @@ import { client } from "./mongo";
 import { getClass, registerClass } from "./handlers/classes";
 import { checkApiKey } from "./middleware/apiKey";
 import { getPlayer, getPlayers } from "./handlers/player";
-import { getCities, registerStartingCity } from "./handlers/cities";
+import {
+  getCities,
+  getLocations,
+  registerStartingCity,
+} from "./handlers/locations";
 import { getRaces, registerRace } from "./handlers/races";
 import { characterCreationComplete } from "./middleware/characterCreationComplete";
+import { travelTo } from "./handlers/travel";
+import { travelInfo } from "./handlers/travel/travelInfo";
 const app = express();
 
 dotenv.config();
@@ -49,6 +55,10 @@ app.get("/api/race", getRaces);
 app.get("/api/cities", getCities);
 
 app.use(characterCreationComplete);
+
+app.get("/api/locations", getLocations);
+app.get("/api/travel/:destination", travelInfo);
+app.post("/api/travel/:destination", travelTo);
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);

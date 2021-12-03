@@ -21,6 +21,8 @@ Get all cities. You can filter results by passing parameters below.
     "population": 384,
     "description": "lorem ipsum",
     "type": "city",
+    "x": 10,
+    "y": 10,
     "traders": [
       {
         "name": "Drandor Goods",

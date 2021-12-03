@@ -11,6 +11,7 @@ export const checkApiKey = async (
     const collection = client.db(dbName).collection("apiKeys");
     const lookupKey = await collection.findOne({ apiKey: authSplit[1] });
     if (lookupKey) {
+      req.body.currentUser = lookupKey;
       next();
     } else {
       res.status(401).json({ message: "unauthorized" });

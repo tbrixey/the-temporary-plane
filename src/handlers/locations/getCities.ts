@@ -15,16 +15,16 @@ export const getCities: RequestHandler<{}, any, any, CityQuery> = async (
   const findObj: {
     name?: { $regex: string; $options: string };
     population?: number;
-    type?: string;
-  } = {};
+    type: string;
+  } = {
+    type: "city",
+  };
 
-  const collection = client.db(dbName).collection("cities");
+  const collection = client.db(dbName).collection("locations");
 
   if (filters.name) findObj.name = { $regex: filters.name, $options: "i" };
 
   if (filters.population) findObj.population = parseInt(filters.population);
-
-  if (filters.type) findObj.type = filters.type;
 
   const cities = await collection.find(findObj).toArray();
 

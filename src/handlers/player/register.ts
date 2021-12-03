@@ -31,13 +31,6 @@ export const registerKey = async (req: Request, res: Response) => {
       level: 1,
       xpToNextLevel: 100,
       bag: [{ id: 1, count: 2 }],
-      stats: {
-        str: 0,
-        int: 0,
-        dex: 0,
-        con: 0,
-        luck: 0,
-      },
       skills: {
         mining: 0,
         woodcutting: 0,

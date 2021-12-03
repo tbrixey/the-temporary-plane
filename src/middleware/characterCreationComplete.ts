@@ -6,11 +6,8 @@ export const characterCreationComplete = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.headers.authorization) {
-    const authSplit = req.headers.authorization.split(" ");
-    const collection = client.db(dbName).collection("apiKeys");
-    const lookupKey = await collection.findOne({ apiKey: authSplit[1] });
-
+  if (req.body.currentUser) {
+    const lookupKey = req.body.currentUser;
     if (!lookupKey.class) {
       return res.json({
         message:
@@ -29,6 +26,6 @@ export const characterCreationComplete = async (
       });
     }
 
-    return next;
+    return next();
   }
 };
