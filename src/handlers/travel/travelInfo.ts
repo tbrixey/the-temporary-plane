@@ -40,14 +40,14 @@ export const travelInfo = async (req: Request, res: Response) => {
   const y = userLocation.y - destLocation.y;
 
   const length = Math.hypot(x, y);
-  const travelTime = (length / 2 / currentUser.speed).toFixed(2);
+  const travelTime = parseFloat((length / 2 / currentUser.speed).toFixed(2));
 
   const now = moment();
   const timeToArrival = moment().add(travelTime, "m");
 
-  const travelText = now.to(timeToArrival, true);
-
   return res.status(200).json({
-    message: `It will take ${travelText} to get to ${destination}`,
+    message: `It will take approximately ${
+      travelTime * 100
+    } seconds to get to ${destination}`,
   });
 };
