@@ -20,7 +20,7 @@ const app = express();
 
 dotenv.config();
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 80;
 
 const rateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
