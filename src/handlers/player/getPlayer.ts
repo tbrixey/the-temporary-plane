@@ -29,6 +29,7 @@ export const getPlayer = async (req: Request, res: Response) => {
 };
 
 export const getPlayers = async (req: Request, res: Response) => {
+  await client.connect();
   const keyCollection = client.db(dbName).collection("apiKeys");
 
   const collection = await keyCollection
@@ -39,5 +40,6 @@ export const getPlayers = async (req: Request, res: Response) => {
     }))
     .toArray();
 
-  res.status(200).json(collection);
+  await client.close();
+  return res.status(200).json(collection);
 };

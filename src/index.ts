@@ -31,6 +31,7 @@ const rateLimiter = rateLimit({
 client.connect((err: any) => {
   // tslint:disable-next-line
   console.log("mongodb connected");
+  client.close();
 });
 
 app.use(express.json());
