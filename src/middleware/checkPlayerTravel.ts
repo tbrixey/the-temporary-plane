@@ -35,6 +35,7 @@ export const checkPlayerTravel = async (
               $unset: { arrivalTime: "" },
             }
           );
+          req.body.currentUser.location = traveler.to.name;
           return next();
         }
       } else {
