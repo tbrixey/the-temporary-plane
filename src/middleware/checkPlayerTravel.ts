@@ -25,8 +25,10 @@ export const checkPlayerTravel = async (
             .status(200)
             .json({ message: `Currently in transit to ${traveler.to.name}.` });
         } else {
-          travelCollection.deleteOne({ playerName: currentUser.playerName });
-          userCollection.findOneAndUpdate(
+          await travelCollection.deleteOne({
+            playerName: currentUser.playerName,
+          });
+          await userCollection.findOneAndUpdate(
             { apiKey: currentUser.apiKey },
             {
               $set: { location: traveler.to.name },
@@ -36,7 +38,7 @@ export const checkPlayerTravel = async (
           return next();
         }
       } else {
-        userCollection.findOneAndUpdate(
+        await userCollection.findOneAndUpdate(
           { apiKey: currentUser.apiKey },
           { $unset: { arrivalTime: "" } }
         );
