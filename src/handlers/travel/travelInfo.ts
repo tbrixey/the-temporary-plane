@@ -1,15 +1,19 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { client, dbName } from "../../mongo";
 import { find } from "lodash";
-import moment from "moment";
+import { ExpressRequest } from "../../types/express";
 
 // This provies class info when requested
 
-export const travelInfo = async (req: Request, res: Response) => {
+export const travelInfo = async (req: ExpressRequest, res: Response) => {
   const currentUser = req.body.currentUser;
   const destination = req.params.destination;
   if (!destination) {
     return res.status(400).json({ message: "Missing destination" });
+  }
+
+  if (destination === currentUser.location) {
+    return res.status(400).json({ message: "Currently at destination" });
   }
 
   const collection = client.db(dbName).collection("locations");
@@ -41,9 +45,6 @@ export const travelInfo = async (req: Request, res: Response) => {
 
   const length = Math.hypot(x, y);
   const travelTime = parseFloat((length / 2 / currentUser.speed).toFixed(2));
-
-  const now = moment();
-  const timeToArrival = moment().add(travelTime, "m");
 
   return res.status(200).json({
     message: `It will take approximately ${

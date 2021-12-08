@@ -16,6 +16,7 @@ import { getRaces, registerRace } from "./handlers/races";
 import { characterCreationComplete } from "./middleware/characterCreationComplete";
 import { travelTo } from "./handlers/travel";
 import { travelInfo } from "./handlers/travel/travelInfo";
+import { checkPlayerTravel } from "./middleware/checkPlayerTravel";
 const app = express();
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.get("/api/race", getRaces);
 app.get("/api/cities", getCities);
 
 app.use(characterCreationComplete);
+app.use(checkPlayerTravel);
 
 app.get("/api/locations", getLocations);
 app.get("/api/travel/:destination", travelInfo);
