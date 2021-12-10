@@ -29,6 +29,8 @@ export const registerKey = async (req: Request, res: Response) => {
       createdOn: new Date(),
       playerName,
       level: 1,
+      maxHitpoints: 10,
+      hitpoints: 10,
       xpToNextLevel: 100,
       bag: [{ id: 1, count: 2 }],
       skills: {
