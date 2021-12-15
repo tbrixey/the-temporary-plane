@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { client, dbName } from "../../mongo";
+import { mergeBag } from "../../util/player";
 
 export const getPlayer = async (req: Request, res: Response) => {
   const incommingPlayerName = req.params.playerName;
@@ -16,41 +17,22 @@ export const getPlayer = async (req: Request, res: Response) => {
       {
         $match: { playerName: incommingPlayerName },
       },
-      // {
-      //   $unwind: {
-      //     path: "$bag",
-      //   },
-      // },
       {
         $lookup: {
           from: "items",
           localField: "bag.id",
           foreignField: "id",
-          as: "newBag",
+          as: "items",
         },
       },
-      // {
-      //   $addFields: {
-      //     "bag.item": {
-      //       $mergeObjects: [{ $arrayElemAt: ["$newBag", 0] }, "$bag"],
-      //     },
-      //   },
-      // // },
-      // {
-      //   $group: {
-      //     _id: "$bag.id",
-      //     bag: { $first: "$bag" },
-      //   },
-      // },
     ])
     .toArray();
 
-  console.log("COLLECTION", collection);
-  return res.status(200).json(collection);
-
   if (collection && collection[0]) {
     if (collection[0].apiKey === authSplit[1]) {
-      return res.status(200).json(collection[0]);
+      const mergedCollection = mergeBag(collection[0]);
+
+      return res.status(200).json(mergedCollection);
     } else if (collection) {
       return res.status(200).json({
         playerName: collection[0].playerName,

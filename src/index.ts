@@ -17,6 +17,7 @@ import { characterCreationComplete } from "./middleware/characterCreationComplet
 import { travelTo } from "./handlers/travel";
 import { travelInfo } from "./handlers/travel/travelInfo";
 import { checkPlayerTravel } from "./middleware/checkPlayerTravel";
+import { useItem } from "./handlers/useItem";
 const app = express();
 
 dotenv.config();
@@ -56,11 +57,19 @@ app.get("/api/race", getRaces);
 app.get("/api/cities", getCities);
 
 app.use(characterCreationComplete);
+
+app.post("/api/item/use/:itemId", useItem);
+
 app.use(checkPlayerTravel);
 
 app.get("/api/locations", getLocations);
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
+
+app.use((req, res, next) => {
+  res.status(404);
+  res.send("The path was not found.");
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at port ${port}`);
