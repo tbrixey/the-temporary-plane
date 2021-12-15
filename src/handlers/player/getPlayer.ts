@@ -11,17 +11,51 @@ export const getPlayer = async (req: Request, res: Response) => {
   const authSplit = req.headers.authorization.split(" ");
   const keyCollection = client.db(dbName).collection("apiKeys");
 
-  const collection = await keyCollection.findOne({
-    playerName: incommingPlayerName,
-  });
+  const collection = await keyCollection
+    .aggregate([
+      {
+        $match: { playerName: incommingPlayerName },
+      },
+      // {
+      //   $unwind: {
+      //     path: "$bag",
+      //   },
+      // },
+      {
+        $lookup: {
+          from: "items",
+          localField: "bag.id",
+          foreignField: "id",
+          as: "newBag",
+        },
+      },
+      // {
+      //   $addFields: {
+      //     "bag.item": {
+      //       $mergeObjects: [{ $arrayElemAt: ["$newBag", 0] }, "$bag"],
+      //     },
+      //   },
+      // // },
+      // {
+      //   $group: {
+      //     _id: "$bag.id",
+      //     bag: { $first: "$bag" },
+      //   },
+      // },
+    ])
+    .toArray();
 
-  if (collection) {
-    if (collection.apiKey === authSplit[1]) {
-      return res.status(200).json(collection);
+  console.log("COLLECTION", collection);
+  return res.status(200).json(collection);
+
+  if (collection && collection[0]) {
+    if (collection[0].apiKey === authSplit[1]) {
+      return res.status(200).json(collection[0]);
     } else if (collection) {
-      return res
-        .status(200)
-        .json({ playerName: collection.playerName, class: collection.class });
+      return res.status(200).json({
+        playerName: collection[0].playerName,
+        class: collection[0].class,
+      });
     }
   } else {
     return res.status(404).json({ message: "Player not found" });
