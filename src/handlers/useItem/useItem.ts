@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
-import { find } from "lodash";
+import { Response } from "express";
+import { find, findIndex } from "lodash";
 import { client, dbName } from "../../mongo";
+import { ExpressRequest } from "../../types/express";
 
-export const useItem = async (req: Request, res: Response) => {
+export const useItem = async (req: ExpressRequest, res: Response) => {
   if (!req.params.itemId) {
     return res.status(400).json({ message: "Missing parameter playerName" });
   }
@@ -10,12 +11,65 @@ export const useItem = async (req: Request, res: Response) => {
   const itemId = parseInt(req.params.itemId);
   const currentUser = req.body.currentUser;
 
-  const findItem = find(currentUser.bag, { id: itemId });
+  const itemIndex = findIndex(currentUser.bag, { id: itemId });
 
-  console.log("CURRENT", findItem);
+  const playerCollection = client.db(dbName).collection("apiKeys");
 
-  if (findItem && findItem.count > 0) {
-    return res.status(200).json({ message: "Player used item" });
+  // console.log("CURRENT", itemIndex);
+
+  if (currentUser.bag[itemIndex] && currentUser.bag[itemIndex].count > 0) {
+    const setField: any = {};
+    const arrayFilters: any = {};
+    if (currentUser.bag[itemIndex].type === "consumable") {
+      if (currentUser.bag[itemIndex].effect) {
+        const effect = Object.keys(currentUser.bag[itemIndex].effect);
+
+        switch (effect[0]) {
+          case "hitpoints":
+            if (currentUser.hitpoints < currentUser.maxHitpoints) {
+              const newHitpoint =
+                currentUser.hitpoints +
+                  currentUser.bag[itemIndex].effect.hitpoints >
+                currentUser.maxHitpoints
+                  ? currentUser.maxHitpoints
+                  : currentUser.hitpoints +
+                    currentUser.bag[itemIndex].effect.hitpoints;
+
+              setField.$set = {
+                hitpoints: newHitpoint,
+              };
+              if (currentUser.bag[itemIndex].count - 1 <= 0) {
+                setField.$pull = {
+                  bag: { id: itemId },
+                };
+              } else {
+                setField.$inc = {
+                  "bag.$[elem].count": -1,
+                };
+                arrayFilters.arrayFilters = [{ "elem.id": itemId }];
+              }
+            } else {
+              return res
+                .status(200)
+                .json({ message: "Player is already at max health" });
+            }
+            break;
+        }
+      }
+    }
+
+    const updateResponse = await playerCollection.findOneAndUpdate(
+      {
+        apiKey: currentUser.apiKey,
+      },
+      setField,
+      arrayFilters
+    );
+    console.log("CURRENT USER", updateResponse);
+
+    return res
+      .status(200)
+      .json({ message: "Player used " + currentUser.bag[itemIndex].name });
   } else {
     return res
       .status(400)
