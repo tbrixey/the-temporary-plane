@@ -24,6 +24,8 @@ export const useItem = async (req: ExpressRequest, res: Response) => {
       if (currentUser.bag[itemIndex].effect) {
         const effect = Object.keys(currentUser.bag[itemIndex].effect);
 
+        console.log("EFFECT", effect);
+
         switch (effect[0]) {
           case "hitpoints":
             if (currentUser.hitpoints < currentUser.maxHitpoints) {
@@ -54,18 +56,24 @@ export const useItem = async (req: ExpressRequest, res: Response) => {
                 .json({ message: "Player is already at max health" });
             }
             break;
+          case "stats":
+            console.log("INSIDE", currentUser.bag[itemIndex]);
+            setField.$inc = {
+              "bag.$[elem].count": -1,
+            };
+            arrayFilters.arrayFilters = [{ "elem.id": itemId }];
+            break;
         }
       }
     }
 
-    const updateResponse = await playerCollection.findOneAndUpdate(
-      {
-        apiKey: currentUser.apiKey,
-      },
-      setField,
-      arrayFilters
-    );
-    console.log("CURRENT USER", updateResponse);
+    // const updateResponse = await playerCollection.findOneAndUpdate(
+    //   {
+    //     apiKey: currentUser.apiKey,
+    //   },
+    //   setField,
+    //   arrayFilters
+    // );
 
     return res
       .status(200)
