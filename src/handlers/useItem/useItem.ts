@@ -57,7 +57,6 @@ export const useItem = async (req: ExpressRequest, res: Response) => {
             }
             break;
           case "stats":
-            console.log("INSIDE", currentUser.bag[itemIndex]);
             setField.$inc = {
               "bag.$[elem].count": -1,
             };
@@ -96,8 +95,8 @@ export const useItem = async (req: ExpressRequest, res: Response) => {
         .json({ message: "You can't use " + currentUser.bag[itemIndex].name });
     }
 
-    if (setField.isEmpty) {
-      await playerCollection.updateOne(
+    if (setField && (setField.$set || setField.$inc)) {
+      await playerCollection.findOneAndUpdate(
         {
           apiKey: currentUser.apiKey,
         },

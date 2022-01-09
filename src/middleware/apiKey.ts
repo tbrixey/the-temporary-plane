@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { client, dbName } from "../mongo";
-import { mergeBag } from "../util/player";
+import { addBonusStats, mergeBag } from "../util/player";
 
 export const checkApiKey = async (
   req: Request,
@@ -27,8 +27,9 @@ export const checkApiKey = async (
       .toArray();
 
     if (lookupKey) {
-      const mergedCollection = mergeBag(lookupKey[0]);
-      req.body.currentUser = mergedCollection;
+      const mergedCollection = await mergeBag(lookupKey[0]);
+      const adjustedUser = await addBonusStats(mergedCollection, collection);
+      req.body.currentUser = adjustedUser;
       next();
     } else {
       res.status(401).json({ message: "unauthorized" });

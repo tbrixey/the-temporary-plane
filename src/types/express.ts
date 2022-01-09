@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as core from "express-serve-static-core";
 
-interface User {
+export interface User {
   currentUser: {
     apiKey: string;
     count: number;

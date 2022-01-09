@@ -1,5 +1,5 @@
-import { keyBy, merge, values } from "lodash";
-import { Document } from "mongodb";
+import { keyBy, keys, merge, values } from "lodash";
+import { Collection, Document } from "mongodb";
 
 export const mergeBag = (collection: Document) => {
   if (!collection.bag && !collection.items) {
@@ -12,4 +12,44 @@ export const mergeBag = (collection: Document) => {
   collection.bag = mergedBag;
   delete collection.items;
   return collection;
+};
+
+export const addBonusStats = async (
+  playerCollection: any,
+  collection: Collection<Document>
+) => {
+  if (!playerCollection.bonusStats) {
+    return playerCollection;
+  }
+
+  const date = new Date();
+
+  if (playerCollection.bonusStats.time < date) {
+    delete playerCollection.bonusStats;
+
+    await collection.findOneAndUpdate(
+      { apiKey: playerCollection.apiKey },
+      { $unset: { bonusStats: "" } }
+    );
+
+    return playerCollection;
+  }
+
+  const bonusKeys = keys(playerCollection.bonusStats);
+
+  switch (bonusKeys[0]) {
+    case "stats":
+      const stat = keys(playerCollection.bonusStats.stats);
+      playerCollection.stats[stat[0]] +=
+        playerCollection.bonusStats.stats[stat[0]];
+      break;
+    case "speed":
+      playerCollection.speed += playerCollection.bonusStats.speed;
+      break;
+    case "weight":
+      playerCollection.weight += playerCollection.bonusStats.weight;
+      break;
+  }
+
+  return playerCollection;
 };
