@@ -14,6 +14,18 @@ export const mergeBag = (collection: Document) => {
   return collection;
 };
 
+export const mergeQuests = (collection: Document) => {
+  if (!collection.quests && !collection.fullQuests) {
+    return collection;
+  }
+  const mergedQuests = values(
+    merge(keyBy(collection.quests, "id"), keyBy(collection.fullQuests, "id"))
+  );
+  collection.quests = mergedQuests;
+  delete collection.fullQuests;
+  return collection;
+};
+
 export const addBonusStats = async (
   playerCollection: any,
   collection: Collection<Document>

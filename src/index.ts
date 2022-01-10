@@ -62,7 +62,7 @@ app.post("/api/item/use/:itemId", useItem);
 
 app.use(checkPlayerTravel);
 
-app.get("/api/locations", getLocations);
+// app.get("/api/locations", getLocations); Hiding this request so you can't just "know" all locations
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
 

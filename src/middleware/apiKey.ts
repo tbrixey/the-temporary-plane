@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { client, dbName } from "../mongo";
-import { addBonusStats, mergeBag } from "../util/player";
+import { addBonusStats, mergeBag, mergeQuests } from "../util/player";
 
 export const checkApiKey = async (
   req: Request,
@@ -23,12 +23,24 @@ export const checkApiKey = async (
             as: "items",
           },
         },
+        {
+          $lookup: {
+            from: "quests",
+            localField: "quests.id",
+            foreignField: "id",
+            as: "fullQuests",
+          },
+        },
       ])
       .toArray();
 
     if (lookupKey) {
-      const mergedCollection = await mergeBag(lookupKey[0]);
-      const adjustedUser = await addBonusStats(mergedCollection, collection);
+      const mergedBagCollection = await mergeBag(lookupKey[0]);
+      const mergedQuestCollection = await mergeQuests(mergedBagCollection);
+      const adjustedUser = await addBonusStats(
+        mergedQuestCollection,
+        collection
+      );
       req.body.currentUser = adjustedUser;
       next();
     } else {

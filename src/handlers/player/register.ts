@@ -17,6 +17,13 @@ export const registerKey = async (req: Request, res: Response) => {
   const apiKey = genKey();
 
   const collection = client.db(dbName).collection("apiKeys");
+  const newPlayerQuest = await client
+    .db(dbName)
+    .collection("quests")
+    .find({ id: 1 }, { projection: { _id: 0 } })
+    .toArray();
+
+  console.log("NEW", newPlayerQuest);
 
   const getPlayer = await collection.findOne({
     playerName,
@@ -32,7 +39,8 @@ export const registerKey = async (req: Request, res: Response) => {
       maxHitpoints: 10,
       hitpoints: 10,
       xpToNextLevel: 100,
-      bag: [{ id: 1, count: 2 }],
+      gold: 0,
+      bag: [],
       skills: {
         mining: 0,
         woodcutting: 0,
@@ -40,11 +48,13 @@ export const registerKey = async (req: Request, res: Response) => {
         cooking: 0,
         gathering: 0,
       },
+      quests: [{ id: 1 }],
     });
     return res.json({
       playerName,
       apiKey,
       message: "Player created! Pick a class using /api/class/<classname>",
+      quests: newPlayerQuest[0],
     });
   } else {
     return res.status(409).json({ message: "Player already exists!" });
