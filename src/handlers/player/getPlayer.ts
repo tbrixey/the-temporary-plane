@@ -48,7 +48,7 @@ export const getPlayers = async (req: Request, res: Response) => {
   const keyCollection = client.db(dbName).collection("apiKeys");
 
   const collection = await keyCollection
-    .find()
+    .find({ startingLocation: { $exists: true } })
     .map((player) => ({
       playerName: player.playerName,
       location: player.location,
