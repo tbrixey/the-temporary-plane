@@ -48,10 +48,22 @@ export const getPlayers = async (req: Request, res: Response) => {
   const keyCollection = client.db(dbName).collection("apiKeys");
 
   const collection = await keyCollection
-    .find({ startingLocation: { $exists: true } })
+    .aggregate([
+      { $match: { startingLocation: { $exists: true } } },
+      {
+        $lookup: {
+          from: "locations",
+          localField: "location",
+          foreignField: "name",
+          as: "locationCoords",
+        },
+      },
+    ])
     .map((player) => ({
       playerName: player.playerName,
       location: player.location,
+      x: player.locationCoords[0].x,
+      y: player.locationCoords[0].y,
     }))
     .toArray();
 
