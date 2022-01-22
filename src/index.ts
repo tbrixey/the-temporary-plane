@@ -45,6 +45,8 @@ app.get("/", (req, res) => {
 
 app.post("/api/register/:playerName", registerKey);
 app.get("/api/players", getPlayers);
+// app.get("/api/locations", getLocations);
+app.get("/api/cities", getCities);
 
 app.use(checkApiKey);
 
@@ -54,7 +56,6 @@ app.post("/api/city/:cityName", registerStartingCity);
 app.get("/api/player/:playerName", getPlayer);
 app.get("/api/class", getClass);
 app.get("/api/race", getRaces);
-app.get("/api/cities", getCities);
 
 app.use(characterCreationComplete);
 
@@ -62,7 +63,6 @@ app.post("/api/item/use/:itemId", useItem);
 
 app.use(checkPlayerTravel);
 
-// app.get("/api/locations", getLocations); Hiding this request so you can't just "know" all locations
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
 
