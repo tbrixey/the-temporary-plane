@@ -18,6 +18,7 @@ import { travelTo } from "./handlers/travel";
 import { travelInfo } from "./handlers/travel/travelInfo";
 import { checkPlayerTravel } from "./middleware/checkPlayerTravel";
 import { useItem } from "./handlers/useItem";
+import { checkQuestComplete } from "./middleware/checkQuestComplete";
 const app = express();
 
 dotenv.config();
@@ -58,6 +59,7 @@ app.get("/api/class", getClass);
 app.get("/api/race", getRaces);
 
 app.use(characterCreationComplete);
+app.use(checkQuestComplete);
 
 app.post("/api/item/use/:itemId", useItem);
 
