@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { client, dbName } from "../mongo";
+import { NextFunction, Response } from "express";
 import { ExpressRequest } from "../types/express";
+import { checkQuestCompletion } from "../util/quests";
 
 export const characterCreationComplete = async (
   req: ExpressRequest,
@@ -26,6 +26,8 @@ export const characterCreationComplete = async (
           "Please choose a starting location. Pick a starting city /api/city/<racename>",
       });
     }
+
+    checkQuestCompletion(currentUser, 1);
 
     return next();
   }
