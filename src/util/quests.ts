@@ -95,7 +95,7 @@ const itemsToAdd = (
         },
         {
           $inc: {
-            "bag.$.count": 1,
+            "bag.$.count": item.count,
           },
         }
       );
