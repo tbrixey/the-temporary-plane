@@ -59,12 +59,25 @@ app.get("/api/class", getClass);
 app.get("/api/race", getRaces);
 
 app.use(characterCreationComplete);
+app.use(checkPlayerTravel);
 app.use(checkQuestComplete);
 
+app.use(async (req, res, next) => {
+  const oldSend = res.json;
+  res.json = (data) => {
+    const questList =
+      req.body.questsComplete && req.body.questsComplete.join(", ");
+    const newData = {
+      data,
+      questsComplete: questList,
+    };
+    res.json = oldSend;
+    return res.json(newData);
+  };
+  next();
+});
+
 app.post("/api/item/use/:itemId", useItem);
-
-app.use(checkPlayerTravel);
-
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
 

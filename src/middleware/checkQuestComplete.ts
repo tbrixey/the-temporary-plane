@@ -10,10 +10,17 @@ export const checkQuestComplete = async (
   if (req.body.currentUser) {
     const currentUser = req.body.currentUser;
     if (currentUser.quests.length > 0) {
-      // Need to loop through all active quests and check them all.
-      checkQuest(currentUser, currentUser.quests[0].id);
+      currentUser.quests.forEach(async (quest) => {
+        const questComplete = await checkQuest(currentUser, quest.id);
+        if (questComplete.complete) {
+          if (req.body.questsComplete === undefined) {
+            req.body.questsComplete = [];
+          }
+          req.body.questsComplete.push(quest.title);
+        }
+      });
     }
 
-    return next();
+    next();
   }
 };

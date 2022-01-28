@@ -36,7 +36,17 @@ export interface User {
     name: string;
     description: string;
     effect?: {
-      [key: string]: any;
+      hitpoints?: number;
+      speed?: number;
+      weight?: number;
+      time?: number;
+      stats?: {
+        str?: number;
+        dex?: number;
+        con?: number;
+        int?: number;
+        luck?: number;
+      };
     };
     type: "consumable" | "junk" | "equipment";
     value: number;
@@ -64,6 +74,7 @@ export interface User {
 }
 interface RequestUser {
   currentUser: User;
+  questsComplete: any;
 }
 
 export type ExpressRequest = Request<core.ParamsDictionary, any, RequestUser>;
