@@ -1,7 +1,8 @@
 import { find } from "lodash";
-import { Collection, Document } from "mongodb";
 import { client, dbName } from "../mongo";
-import { User } from "../types";
+import { User, Quest } from "../types";
+import { itemsToAdd } from "./items";
+import nextLevel from "./nextLevel";
 
 export const checkQuest = async (user: User, questId: number) => {
   const quest = find(user.quests, { id: questId });
@@ -26,9 +27,9 @@ export const checkQuest = async (user: User, questId: number) => {
       }
       break;
     case "fetch":
-      break;
+      return checkFetchQuest(user, quest);
     case "explore":
-      break;
+      return checkExploreQuest(user, quest);
   }
 };
 
@@ -74,42 +75,22 @@ const giveRewards = async (
   );
 };
 
-const nextLevel = (level: number) => {
-  const exponent = 1.5;
-  const baseXP = 100;
-  return Math.floor(baseXP * level ** exponent);
+const checkFetchQuest = (user: User, quest: Quest) => {
+  const checkItem = find(user.bag, quest.acquire);
+
+  if (!checkItem) return { complete: false };
+
+  const checkLocation = user.location === quest.location;
+
+  if (!checkLocation) return { complete: false };
 };
 
-const itemsToAdd = (
-  user: User,
-  givenItems: { id: number; count: number }[],
-  collection: Collection<Document>
-) => {
-  givenItems.forEach((item) => {
-    const found = find(user.bag, { id: item.id });
-    if (found) {
-      collection.updateOne(
-        {
-          apiKey: user.apiKey,
-          "bag.id": item.id,
-        },
-        {
-          $inc: {
-            "bag.$.count": item.count,
-          },
-        }
-      );
-    } else {
-      collection.updateOne(
-        {
-          apiKey: user.apiKey,
-        },
-        {
-          $push: {
-            bag: item,
-          },
-        }
-      );
-    }
-  });
+const checkExploreQuest = (user: User, quest: Quest) => {
+  const checkItem = find(user.bag, quest.acquire);
+
+  if (!checkItem) return { complete: false };
+
+  const checkLocation = user.location === quest.location;
+
+  if (!checkLocation) return { complete: false };
 };

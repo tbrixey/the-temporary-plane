@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as core from "express-serve-static-core";
+import { Quest } from "./quest";
 
 export interface User {
   apiKey: string;
@@ -11,21 +12,7 @@ export interface User {
   maxHitpoints: number;
   xpToNextLevel: number;
   gold: number;
-  quests: {
-    id: number;
-    title: string;
-    description: string;
-    type: "intro" | "fetch" | "explore" | "fight";
-    tasks?: string[];
-    rewards: {
-      gold: number;
-      xp: number;
-      items: {
-        id: number;
-        count: number;
-      }[];
-    };
-  }[];
+  quests: Quest[];
   updatedOn: Date;
   location: string;
   startingLocation: string;
