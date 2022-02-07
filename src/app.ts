@@ -3,7 +3,6 @@ import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
 import { registerKey } from "./handlers/player/register";
-import { client } from "./mongo";
 import { getClass, registerClass } from "./handlers/classes";
 import { checkApiKey } from "./middleware/apiKey";
 import { getPlayer, getPlayers } from "./handlers/player";
@@ -23,17 +22,10 @@ const app = express();
 
 dotenv.config();
 
-const port = process.env.PORT || 80;
-
 const rateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 100, // limit
   message: "Rate limit exceeded. Please try again later.",
-});
-
-client.connect((err: any) => {
-  // tslint:disable-next-line
-  console.log("mongodb connected");
 });
 
 app.use(express.json());
@@ -86,6 +78,4 @@ app.use((req, res, next) => {
   res.send("The path was not found.");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at port ${port}`);
-});
+export default app;

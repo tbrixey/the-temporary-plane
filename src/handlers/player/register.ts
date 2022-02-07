@@ -17,19 +17,18 @@ export const registerKey = async (req: Request, res: Response) => {
   const apiKey = genKey();
 
   const collection = client.db(dbName).collection("apiKeys");
-  const newPlayerQuest = await client
-    .db(dbName)
-    .collection("quests")
-    .find({ id: 1 }, { projection: { _id: 0 } })
-    .toArray();
-
-  console.log("NEW", newPlayerQuest);
 
   const getPlayer = await collection.findOne({
     playerName,
   });
 
   if (!getPlayer) {
+    const newPlayerQuest = await client
+      .db(dbName)
+      .collection("quests")
+      .find({ id: 1 }, { projection: { _id: 0 } })
+      .toArray();
+
     await collection.insertOne({
       apiKey,
       count: 0,
