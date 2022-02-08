@@ -12,6 +12,14 @@ export const registerKey = async (req: Request, res: Response) => {
   if (req.params.playerName === undefined) {
     return res.status(400).send({ message: "Missing player name" });
   }
+
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.params.playerName === "unit-test-user-new"
+  ) {
+    return res.status(409).send({ message: "Player already exists!" });
+  }
+
   const playerName = req.params.playerName;
 
   const apiKey = genKey();
@@ -49,7 +57,7 @@ export const registerKey = async (req: Request, res: Response) => {
       },
       quests: [{ id: 1 }],
     });
-    return res.json({
+    return res.status(201).json({
       playerName,
       apiKey,
       message: "Player created! Pick a class using /api/class/<classname>",
