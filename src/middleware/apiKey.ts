@@ -34,7 +34,7 @@ export const checkApiKey = async (
       ])
       .toArray();
 
-    if (lookupKey) {
+    if (lookupKey.length > 0) {
       const mergedBagCollection = await mergeBag(lookupKey[0]);
       const mergedQuestCollection = await mergeQuests(mergedBagCollection);
       const adjustedUser = await addBonusStats(

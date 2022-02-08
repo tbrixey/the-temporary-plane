@@ -15,10 +15,8 @@ export const connectDB = async () => {
   await client.connect();
   // Establish and verify connection
   await client.db("admin").command({ ping: 1 });
-  console.log("Connected successfully to server");
 };
 
 export const closeDB = async () => {
   await client.close();
-  console.log("Client closed");
 };
