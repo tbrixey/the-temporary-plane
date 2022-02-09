@@ -10,9 +10,10 @@ export interface Quest {
   rewards: {
     gold: number;
     xp: number;
-    items: {
+    items?: {
       id: number;
       count: number;
+      name?: string;
     }[];
   };
 }

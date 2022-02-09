@@ -28,5 +28,5 @@ export const getCities: RequestHandler<{}, any, any, CityQuery> = async (
 
   const cities = await collection.find(findObj).toArray();
 
-  res.status(200).json(cities);
+  res.status(200).json({ data: cities });
 };

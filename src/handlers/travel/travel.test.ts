@@ -12,10 +12,8 @@ describe("GET /travel", () => {
       );
 
     expect(response.status).toEqual(200);
-    expect(JSON.parse(response.text)).toMatchObject({
-      data: {
-        message: expect.any(String),
-      },
+    expect(JSON.parse(response.text).data).toMatchObject({
+      message: expect.any(String),
     });
   });
 
@@ -30,7 +28,7 @@ describe("POST /travel", () => {
   it("Starts travelling somewhere and tries to travel somewhere else", async () => {
     const user = await request(app).post("/api/register/unit-test-user-new");
 
-    const userParse = JSON.parse(user.text);
+    const userParse = JSON.parse(user.text).data;
 
     await request(app)
       .post("/api/class/Fighter")

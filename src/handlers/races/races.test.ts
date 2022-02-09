@@ -11,7 +11,7 @@ describe("GET /race", () => {
       );
 
     expect(response.status).toEqual(200);
-    expect(JSON.parse(response.text)[0]).toMatchObject({
+    expect(JSON.parse(response.text).data[0]).toMatchObject({
       _id: expect.any(String),
       name: expect.any(String),
       description: expect.any(String),

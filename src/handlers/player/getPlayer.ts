@@ -32,11 +32,13 @@ export const getPlayer = async (req: Request, res: Response) => {
     if (collection[0].apiKey === authSplit[1]) {
       const mergedCollection = mergeBag(collection[0]);
 
-      return res.status(200).json(mergedCollection);
+      return res.status(200).json({ data: mergedCollection });
     } else if (collection) {
       return res.status(200).json({
-        playerName: collection[0].playerName,
-        class: collection[0].class,
+        data: {
+          playerName: collection[0].playerName,
+          class: collection[0].class,
+        },
       });
     }
   } else {
@@ -67,5 +69,5 @@ export const getPlayers = async (req: Request, res: Response) => {
     }))
     .toArray();
 
-  return res.status(200).json(collection);
+  return res.status(200).json({ data: collection });
 };

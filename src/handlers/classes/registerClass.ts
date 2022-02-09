@@ -68,7 +68,7 @@ export const registerClass = async (req: Request, res: Response) => {
       { returnDocument: "after" }
     );
     return res.status(200).json({
-      ...newDoc.value,
+      data: { ...newDoc.value },
       message: "Class selected! Pick a race using /api/race/<racename>",
     });
   }

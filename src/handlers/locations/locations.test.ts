@@ -6,7 +6,7 @@ describe("GET /cities", () => {
     const response = await request(app).get("/api/cities");
 
     expect(response.status).toEqual(200);
-    expect(JSON.parse(response.text)[0]).toMatchObject({
+    expect(JSON.parse(response.text).data[0]).toMatchObject({
       _id: expect.any(String),
       name: expect.any(String),
       population: expect.any(Number),

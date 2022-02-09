@@ -14,7 +14,7 @@ describe("Register user", () => {
   test("POST /city /race /class", async () => {
     const user = await request(app).post("/api/register/unit-test-user-new");
 
-    const userParse = JSON.parse(user.text);
+    const userParse = JSON.parse(user.text).data;
 
     const classRes = await request(app)
       .post("/api/class/Fighter")
@@ -32,10 +32,10 @@ describe("Register user", () => {
 
     await collection.deleteOne({ playerName: "unit-test-user-new" });
     expect(classRes.status).toEqual(200);
-    expect(JSON.parse(classRes.text).class).toBe("Fighter");
+    expect(JSON.parse(classRes.text).data.class).toBe("Fighter");
     expect(raceRes.status).toEqual(200);
-    expect(JSON.parse(raceRes.text).race).toBe("Human");
+    expect(JSON.parse(raceRes.text).data.race).toBe("Human");
     expect(cityRes.status).toEqual(200);
-    expect(JSON.parse(cityRes.text).startingLocation).toBe("Thalo");
+    expect(JSON.parse(cityRes.text).data.startingLocation).toBe("Thalo");
   });
 });

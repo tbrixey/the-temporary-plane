@@ -27,7 +27,7 @@ describe("GET /player", () => {
   it("gets list of players", async () => {
     const response = await request(app).get("/api/players");
 
-    expect(JSON.parse(response.text)[0]).toMatchObject(
+    expect(JSON.parse(response.text).data[0]).toMatchObject(
       expect.objectContaining({
         location: expect.any(String),
         playerName: expect.any(String),
@@ -45,7 +45,7 @@ describe("GET /player", () => {
         "Bearer e00sl5xsl3psiw8oq1cg589eux3qioodph7xeyex89awschwsem8lwv5c4y3946gzbka2bheug8ox3c5wjtjmacufep7fvjkglxkf02f6g9"
       );
 
-    expect(JSON.parse(response.text)).toMatchObject({
+    expect(JSON.parse(response.text).data).toMatchObject({
       playerName: "unit-test-user",
       level: expect.any(Number),
     });
@@ -59,7 +59,7 @@ describe("GET /player", () => {
         "Bearer e00sl5xsl3psiw8oq1cg589eux3qioodph7xeyex89awschwsem8lwv5c4y3946gzbka2bheug8ox3c5wjtjmacufep7fvjkglxkf02f6g9"
       );
 
-    expect(JSON.parse(response.text)).toMatchObject({
+    expect(JSON.parse(response.text).data).toMatchObject({
       playerName: "My Name",
     });
   });

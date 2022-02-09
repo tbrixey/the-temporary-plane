@@ -6,5 +6,5 @@ export const getRaces = async (req: Request, res: Response) => {
 
   const races = await collection.find().toArray();
 
-  res.status(200).json(races);
+  res.status(200).json({ data: races });
 };

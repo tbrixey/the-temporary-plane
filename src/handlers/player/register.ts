@@ -58,10 +58,12 @@ export const registerKey = async (req: Request, res: Response) => {
       quests: [{ id: 1 }],
     });
     return res.status(201).json({
-      playerName,
-      apiKey,
-      message: "Player created! Pick a class using /api/class/<classname>",
-      quests: newPlayerQuest[0],
+      data: {
+        playerName,
+        apiKey,
+        message: "Player created! Pick a class using /api/class/<classname>",
+        quests: newPlayerQuest[0],
+      },
     });
   } else {
     return res.status(409).json({ message: "Player already exists!" });

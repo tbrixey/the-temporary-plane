@@ -30,7 +30,7 @@ export const registerStartingCity = async (req: Request, res: Response) => {
       { returnDocument: "after" }
     );
     return res.status(200).json({
-      ...newDoc.value,
+      data: { ...newDoc.value },
       message: `Starting city selected! The world is now yours!
       You can start by requesting your current quests via /api/quests/current
       You can see what quests are available in your current location via /api/quests/available

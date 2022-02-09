@@ -18,6 +18,7 @@ import { travelInfo } from "./handlers/travel/travelInfo";
 import { checkPlayerTravel } from "./middleware/checkPlayerTravel";
 import { useItem } from "./handlers/useItem";
 import { checkQuestComplete } from "./middleware/checkQuestComplete";
+import { getQuests } from "./handlers/quests";
 const app = express();
 
 dotenv.config();
@@ -72,6 +73,7 @@ app.use(async (req, res, next) => {
 app.post("/api/item/use/:itemId", useItem);
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
+app.get("/api/quests", getQuests);
 
 app.use((req, res, next) => {
   res.status(404);

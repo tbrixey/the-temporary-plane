@@ -8,5 +8,5 @@ export const getClass = async (req: Request, res: Response) => {
 
   const classes = await collection.find().toArray();
 
-  res.status(200).json(classes);
+  res.status(200).json({ data: classes });
 };

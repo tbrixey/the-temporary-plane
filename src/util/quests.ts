@@ -38,7 +38,7 @@ const giveRewards = async (
   rewards: {
     gold: number;
     xp: number;
-    items: { id: number; count: number }[];
+    items?: { id: number; count: number }[];
   },
   questId: number
 ) => {
@@ -75,22 +75,21 @@ const giveRewards = async (
   );
 };
 
-const checkFetchQuest = (user: User, quest: Quest) => {
+const checkFetchQuest = async (user: User, quest: Quest) => {
   const checkItem = find(user.bag, quest.acquire);
-
-  if (!checkItem) return { complete: false };
-
   const checkLocation = user.location === quest.location;
 
+  if (!checkItem) return { complete: false };
   if (!checkLocation) return { complete: false };
+
+  await giveRewards(user, quest.rewards, quest.id);
+  return { complete: true, title: quest.title };
 };
 
-const checkExploreQuest = (user: User, quest: Quest) => {
-  const checkItem = find(user.bag, quest.acquire);
-
-  if (!checkItem) return { complete: false };
-
+const checkExploreQuest = async (user: User, quest: Quest) => {
   const checkLocation = user.location === quest.location;
 
   if (!checkLocation) return { complete: false };
+  await giveRewards(user, quest.rewards, quest.id);
+  return { complete: true, title: quest.title };
 };

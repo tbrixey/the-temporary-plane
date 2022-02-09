@@ -24,7 +24,7 @@ export const registerRace = async (req: Request, res: Response) => {
       { returnDocument: "after" }
     );
     res.status(200).json({
-      ...newDoc.value,
+      data: { ...newDoc.value },
       message: "Race selected! Pick a starting city /api/city/<racename>",
     });
   }
