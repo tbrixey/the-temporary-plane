@@ -3,6 +3,7 @@ export interface Quest {
   title: string;
   description: string;
   type: "intro" | "fetch" | "explore" | "fight";
+  goto?: string;
   acquire?: number;
   location?: string;
   tasks?: string[];
