@@ -31,9 +31,9 @@ const rateLimiter = rateLimit({
 
 app.use(express.json());
 app.use(cors());
-app.use("/api/", rateLimiter);
+app.use("/api", rateLimiter);
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("The Temporary Plane is online");
 });
 
