@@ -37,10 +37,11 @@ app.get("/api", (req, res) => {
   res.send("The Temporary Plane is online");
 });
 
-app.post("/api/register/:playerName", registerKey);
+// app.post("/api/register/:playerName", registerKey);
 app.get("/api/players", getPlayers);
-// app.get("/api/locations", getLocations);
 app.get("/api/cities", getCities);
+app.get("/api/class", getClass);
+app.get("/api/race", getRaces);
 
 app.use(checkApiKey);
 
@@ -48,8 +49,6 @@ app.post("/api/class/:className", registerClass);
 app.post("/api/race/:raceName", registerRace);
 app.post("/api/city/:cityName", registerStartingCity);
 app.get("/api/player/:playerName", getPlayer);
-app.get("/api/class", getClass);
-app.get("/api/race", getRaces);
 
 app.use(characterCreationComplete);
 app.use(checkPlayerTravel);
