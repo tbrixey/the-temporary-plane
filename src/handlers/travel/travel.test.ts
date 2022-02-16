@@ -56,7 +56,7 @@ describe("POST /travel", () => {
 
     expect(travelResOne.status).toEqual(200);
     expect(travelResTwo.status).toEqual(200);
-    expect(JSON.parse(travelResTwo.text).message).toEqual(
+    expect(JSON.parse(travelResTwo.text).data.message).toEqual(
       "Currently in transit to Drandor."
     );
   });
