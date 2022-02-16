@@ -40,7 +40,8 @@ const giveRewards = async (
     xp: number;
     items?: { id: number; count: number }[];
   },
-  questId: number
+  questId: number,
+  acquire?: number
 ) => {
   const userCollection = client.db(dbName).collection("apiKeys");
 
@@ -60,11 +61,15 @@ const giveRewards = async (
     query.$inc = { ...query.$inc, xpToNextLevel: -rewards.xp };
   }
 
-  if (rewards.items.length > 0) {
-    itemsToAdd(user, rewards.items, userCollection);
+  if (rewards.items && rewards.items.length > 0) {
+    await itemsToAdd(user, rewards.items, userCollection);
   }
 
-  query.$pull = { quests: { id: questId } };
+  if (acquire) {
+    query.$pull = { bag: { id: acquire }, quests: { id: questId } };
+  } else {
+    query.$pull = { quests: { id: questId } };
+  }
 
   return userCollection.updateOne(
     { apiKey: user.apiKey },
@@ -77,7 +82,7 @@ const giveRewards = async (
 
 const checkFetchQuest = async (user: User, quest: Quest) => {
   const userCollection = client.db(dbName).collection("apiKeys");
-  const checkItem = find(user.bag, quest.acquire);
+  const checkItem = find(user.bag, { id: quest.acquire });
   const checkFinalLocation = user.location === quest.location;
   const checkGotoLocation = user.location === quest.goto;
 
@@ -87,7 +92,7 @@ const checkFetchQuest = async (user: User, quest: Quest) => {
   if (!checkItem) return { complete: false };
   if (!checkFinalLocation) return { complete: false };
 
-  await giveRewards(user, quest.rewards, quest.id);
+  await giveRewards(user, quest.rewards, quest.id, quest.acquire);
   return { complete: true, title: quest.title };
 };
 

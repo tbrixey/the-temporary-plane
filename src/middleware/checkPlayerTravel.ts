@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ExpressRequest } from "../types/express";
 import { client, dbName } from "../mongo";
+import moment from "moment";
 
 export const checkPlayerTravel = async (
   req: ExpressRequest,
@@ -21,9 +22,16 @@ export const checkPlayerTravel = async (
 
       if (traveler) {
         if (currentUser.arrivalTime >= date) {
-          return res
-            .status(200)
-            .json({ message: `Currently in transit to ${traveler.to.name}.` });
+          const dateNow = moment(date);
+          const dateArrive = moment(currentUser.arrivalTime);
+          return res.status(200).json({
+            message: `Currently in transit to ${
+              traveler.to.name
+            }. Please wait until you arrive in ${dateArrive.diff(
+              dateNow,
+              "seconds"
+            )} seconds`,
+          });
         } else {
           await travelCollection.deleteOne({
             playerName: currentUser.playerName,

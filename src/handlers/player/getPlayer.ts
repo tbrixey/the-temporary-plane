@@ -12,32 +12,18 @@ export const getPlayer = async (req: Request, res: Response) => {
   const authSplit = req.headers.authorization.split(" ");
   const keyCollection = client.db(dbName).collection("apiKeys");
 
-  const collection = await keyCollection
-    .aggregate([
-      {
-        $match: { playerName: incommingPlayerName },
-      },
-      {
-        $lookup: {
-          from: "items",
-          localField: "bag.id",
-          foreignField: "id",
-          as: "items",
-        },
-      },
-    ])
-    .toArray();
+  const collection = await keyCollection.findOne({
+    playerName: incommingPlayerName,
+  });
 
-  if (collection && collection[0]) {
-    if (collection[0].apiKey === authSplit[1]) {
-      const mergedCollection = mergeBag(collection[0]);
-
-      return res.status(200).json({ data: mergedCollection });
+  if (collection) {
+    if (collection.apiKey === authSplit[1]) {
+      return res.status(200).json({ data: req.body.currentUser });
     } else if (collection) {
       return res.status(200).json({
         data: {
-          playerName: collection[0].playerName,
-          class: collection[0].class,
+          playerName: collection.playerName,
+          class: collection.class,
         },
       });
     }

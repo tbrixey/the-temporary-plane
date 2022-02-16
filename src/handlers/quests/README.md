@@ -1,6 +1,6 @@
 # Quests
 
-You have to have questing in any good RPG. This is where we handle most things questing. Getting, finding, dropping.
+You have to have questing in any good RPG. This is where we handle most things questing. Getting, finding, dropping. You can't do anything with quests while you are in transit. The only place you can check quests is inside a city.
 
 #### GET
 

@@ -47,8 +47,8 @@ export const travelInfo = async (req: ExpressRequest, res: Response) => {
   const travelTime = parseFloat((length / 2 / currentUser.speed).toFixed(2));
 
   return res.status(200).json({
-    message: `It will take approximately ${
-      travelTime * 100
-    } seconds to get to ${destination}`,
+    message: `It will take approximately ${(travelTime * 100).toFixed(
+      0
+    )} seconds to get to ${destination}`,
   });
 };
