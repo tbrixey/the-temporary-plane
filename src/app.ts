@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { registerKey } from "./handlers/player/register";
 import { getClass, registerClass } from "./handlers/classes";
 import { checkApiKey } from "./middleware/apiKey";
-import { getPlayer, getPlayers } from "./handlers/player";
+import { getPlayer, getPlayers, levelPlayer } from "./handlers/player";
 import {
   getCities,
   getLocations,
@@ -70,6 +70,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
+app.post("/api/player/level/:toLevel", levelPlayer);
 app.post("/api/item/use/:itemId", useItem);
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
