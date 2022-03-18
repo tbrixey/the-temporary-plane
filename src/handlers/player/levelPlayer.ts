@@ -5,7 +5,7 @@ import { ExpressRequest, User } from "../../types";
 type Stats = "str" | "con" | "int" | "dex" | "luck";
 
 const updateStat = (user: User, stat: Stats) => {
-  user.stats[stat] = user.stats[stat]++;
+  user.stats[stat] += 1;
   return user;
 };
 
@@ -29,19 +29,35 @@ const levelMap = new Map([
   ["weight", (user: User) => updateWeight(user)],
 ]);
 
-export const levelPlayer = (req: ExpressRequest, res: Response) => {
+export const levelPlayer = async (req: ExpressRequest, res: Response) => {
   const user = req.body.currentUser;
   const toLevel = req.params.toLevel;
-  if (user.levelPointToUse) {
+  if (!user.levelPointsToUse || user.levelPointsToUse <= 0) {
     return res
       .status(400)
       .json({ message: "You don't have any level points to use." });
   }
 
-  const updatedUser = levelMap.get(toLevel)(user);
-  const newHP = (user.maxHitpoints = 5 + user.stats.con);
+  if (!levelMap.has(toLevel)) {
+    return res
+      .status(400)
+      .json({ message: "Invalid item to level: " + toLevel });
+  }
+
+  levelMap.get(toLevel)(user);
+  const newHP = 5 + user.stats.con;
 
   user.maxHitpoints += newHP;
   user.hitpoints += newHP;
-  console.log(updatedUser);
+  user.levelPointsToUse -= 1;
+
+  const collection = client.db(dbName).collection("apiKeys");
+  await collection.updateOne(
+    { apiKey: user.apiKey },
+    {
+      $set: user,
+    }
+  );
+
+  return res.status(200).json({ message: "You leveled up!", user });
 };

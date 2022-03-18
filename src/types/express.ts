@@ -58,7 +58,7 @@ export interface User {
   };
   weight: number;
   arrivalTime: Date;
-  levelPointToUse?: number;
+  levelPointsToUse?: number;
 }
 interface RequestUser {
   currentUser: User;
