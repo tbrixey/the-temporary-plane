@@ -20,6 +20,7 @@ import { useItem } from "./handlers/useItem";
 import { checkQuestComplete } from "./middleware/checkQuestComplete";
 import { acceptQuest, dropQuest, getQuests } from "./handlers/quests";
 import { isPlayerInCity } from "./middleware/isPlayerInCity";
+import { skillingInfo } from "./handlers/skilling";
 const app = express();
 
 dotenv.config();
@@ -71,11 +72,16 @@ app.use(async (req, res, next) => {
 });
 
 app.post("/api/item/use/:itemId", useItem);
+
 app.get("/api/travel/:destination", travelInfo);
 app.post("/api/travel/:destination", travelTo);
+
 app.get("/api/quests", isPlayerInCity, getQuests);
 app.post("/api/quests/:questId", isPlayerInCity, acceptQuest);
 app.delete("/api/quests/:questId", isPlayerInCity, dropQuest);
+
+app.get("/api/skilling", skillingInfo);
+// app.post("/api/skilling/:skillName", skilling);
 
 app.use((req, res, next) => {
   res.status(404);
