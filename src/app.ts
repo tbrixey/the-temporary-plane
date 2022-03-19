@@ -82,7 +82,7 @@ app.post("/api/quests/:questId", isPlayerInCity, acceptQuest);
 app.delete("/api/quests/:questId", isPlayerInCity, dropQuest);
 
 app.get("/api/skilling", skillingInfo);
-app.post("/api/skilling/:skillName", skilling);
+app.post("/api/skilling/:skillName/:item", skilling);
 
 app.use((req, res, next) => {
   res.status(404);
