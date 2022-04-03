@@ -3,6 +3,12 @@ import moment from "moment";
 import { client, dbName } from "../../mongo";
 import { ExpressRequest } from "../../types";
 
+interface SkillingBody {
+  skillName: string;
+  item: string;
+  count: number;
+}
+
 interface FindObject {
   location: string;
   skill: string;
@@ -10,12 +16,13 @@ interface FindObject {
   itemName?: string;
 }
 
-export const skilling = async (req: ExpressRequest, res: Response) => {
-  const currentUser = req.body.currentUser;
-  const skill = req.params.skillName;
-  const itemToGet = req.params.item;
+export const skilling = async (
+  req: ExpressRequest<SkillingBody>,
+  res: Response
+) => {
+  const { currentUser, skillName: skill, item, count } = req.body;
 
-  if (!skill || !itemToGet) {
+  if (!skill || !item) {
     return res.status(400).json({
       message: `invalid request. Missing either /:skillName or /:item`,
     });
@@ -25,7 +32,7 @@ export const skilling = async (req: ExpressRequest, res: Response) => {
     location: currentUser.location,
     skill,
     level: { $lte: currentUser.level },
-    itemName: itemToGet.toLowerCase(),
+    itemName: item.toLowerCase(),
   };
 
   console.log(findObj);
@@ -54,6 +61,6 @@ export const skilling = async (req: ExpressRequest, res: Response) => {
   // });
 
   res.status(200).json({
-    message: `Started working on ${skill} getting ${itemToGet}`,
+    message: `Started working on ${skill} getting ${item}`,
   });
 };

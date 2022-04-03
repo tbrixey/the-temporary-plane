@@ -4,7 +4,10 @@ import moment from "moment";
 import { client, dbName } from "../../mongo";
 import { ExpressRequest } from "../../types/express";
 
-export const useItem = async (req: ExpressRequest, res: Response) => {
+export const useItem = async (
+  req: ExpressRequest<{}, { itemId: string }>,
+  res: Response
+) => {
   if (!req.params.itemId) {
     return res.status(400).json({ message: "Missing parameter playerName" });
   }

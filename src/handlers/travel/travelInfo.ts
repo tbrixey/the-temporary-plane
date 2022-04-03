@@ -5,7 +5,10 @@ import { ExpressRequest } from "../../types/express";
 
 // This provies class info when requested
 
-export const travelInfo = async (req: ExpressRequest, res: Response) => {
+export const travelInfo = async (
+  req: ExpressRequest<{}, { destination: string }>,
+  res: Response
+) => {
   const currentUser = req.body.currentUser;
   const destination = req.params.destination;
   if (!destination) {

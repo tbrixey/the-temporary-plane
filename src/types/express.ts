@@ -65,9 +65,9 @@ interface RequestUser {
   questsComplete: any;
 }
 
-export type ExpressRequest = Request<
+export type ExpressRequest<Body = {}, Params = any> = Request<
   core.ParamsDictionary,
   any,
-  RequestUser,
-  any
+  RequestUser & Body,
+  Params
 >;

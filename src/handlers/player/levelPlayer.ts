@@ -29,7 +29,10 @@ const levelMap = new Map([
   ["weight", (user: User) => updateWeight(user)],
 ]);
 
-export const levelPlayer = async (req: ExpressRequest, res: Response) => {
+export const levelPlayer = async (
+  req: ExpressRequest<{}, { toLevel: string }>,
+  res: Response
+) => {
   const user = req.body.currentUser;
   const toLevel = req.params.toLevel;
   if (!user.levelPointsToUse || user.levelPointsToUse <= 0) {
@@ -41,7 +44,7 @@ export const levelPlayer = async (req: ExpressRequest, res: Response) => {
   if (!levelMap.has(toLevel)) {
     return res
       .status(400)
-      .json({ message: "Invalid item to level: " + toLevel });
+      .json({ message: "Invalid stat to level: " + toLevel });
   }
 
   levelMap.get(toLevel)(user);
