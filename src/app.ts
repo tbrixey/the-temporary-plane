@@ -21,6 +21,7 @@ import { checkQuestComplete } from "./middleware/checkQuestComplete";
 import { acceptQuest, dropQuest, getQuests } from "./handlers/quests";
 import { isPlayerInCity } from "./middleware/isPlayerInCity";
 import { skilling, skillingInfo } from "./handlers/skilling";
+import { checkPlayerSkillingStatus } from "./middleware/checkPlayerSkillingStatus";
 const app = express();
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.get("/api/player/:playerName", getPlayer);
 app.use(characterCreationComplete);
 app.use(checkPlayerTravel);
 app.use(checkQuestComplete);
+app.use(checkPlayerSkillingStatus);
 
 app.use(async (req, res, next) => {
   const oldSend = res.json;
@@ -82,7 +84,7 @@ app.post("/api/quests/:questId", isPlayerInCity, acceptQuest);
 app.delete("/api/quests/:questId", isPlayerInCity, dropQuest);
 
 app.get("/api/skilling", skillingInfo);
-app.post("/api/skilling/:skillName/:item", skilling);
+app.post("/api/skilling", skilling);
 
 app.use((req, res, next) => {
   res.status(404);

@@ -57,7 +57,8 @@ export interface User {
     luck: number;
   };
   weight: number;
-  arrivalTime: Date;
+  arrivalTime?: Date;
+  finishTime?: Date;
   levelPointsToUse?: number;
 }
 interface RequestUser {
