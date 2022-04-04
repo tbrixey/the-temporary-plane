@@ -2,6 +2,13 @@ import * as mongoDB from "mongodb";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+// This ensures all models are loaded
+require("./schemas/apiKeys");
+require("./schemas/classes");
+require("./schemas/items");
+require("./schemas/quests");
+require("./schemas/skills");
+
 dotenv.config();
 
 const dbURI = process.env.MONGODB_URI;
@@ -14,8 +21,6 @@ export const client: mongoDB.MongoClient = new mongoDB.MongoClient(dbURI, {
 export const connectDB = async () => {
   // Connect the client to the server
   mongoose.connect(dbURI);
-  // Establish and verify connection
-  await client.db("admin").command({ ping: 1 });
 };
 
 export const closeDB = async () => {

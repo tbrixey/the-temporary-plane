@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { isNumber } from "lodash";
-import { client, dbName } from "../../mongo";
+import skills from "../../mongo/schemas/skills";
 import { ExpressRequest } from "../../types";
 
 interface SkillingQuery {
@@ -24,15 +24,13 @@ export const skillingInfo = async (req: ExpressRequest, res: Response) => {
   if (filters.level && isNumber(filters.level))
     findObj.level = { $lte: parseInt(filters.level) };
 
-  const collection = client.db(dbName).collection("skills");
+  const skillList = await skills.find(findObj);
 
-  const skills = await collection.find(findObj).toArray();
-
-  if (skills.length === 0) {
+  if (skillList.length === 0) {
     return res
       .status(200)
       .json({ message: "There are no skills matching your criteria." });
   }
 
-  res.status(200).json({ data: skills });
+  res.status(200).json({ data: skillList });
 };

@@ -1,5 +1,6 @@
 import { keyBy, keys, merge, values } from "lodash";
 import { Collection, Document } from "mongodb";
+import apiKeys from "../mongo/schemas/apiKeys";
 
 export const mergeBag = (collection: Document) => {
   if (!collection.bag && !collection.items) {
@@ -26,10 +27,7 @@ export const mergeQuests = (collection: Document) => {
   return collection;
 };
 
-export const addBonusStats = async (
-  playerCollection: any,
-  collection: Collection<Document>
-) => {
+export const addBonusStats = async (playerCollection: any) => {
   if (!playerCollection.bonusStats) {
     return playerCollection;
   }
@@ -39,7 +37,7 @@ export const addBonusStats = async (
   if (playerCollection.bonusStats.time < date) {
     delete playerCollection.bonusStats;
 
-    await collection.findOneAndUpdate(
+    await apiKeys.findOneAndUpdate(
       { apiKey: playerCollection.apiKey },
       { $unset: { bonusStats: "" } }
     );

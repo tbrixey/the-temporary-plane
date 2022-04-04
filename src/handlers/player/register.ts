@@ -40,7 +40,6 @@ export const registerKey = async (req: Request, res: Response) => {
     await collection.insertOne({
       apiKey,
       count: 0,
-      createdOn: new Date(),
       playerName,
       level: 1,
       maxHitpoints: 10,
