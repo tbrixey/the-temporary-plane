@@ -1,4 +1,5 @@
 import * as mongoDB from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -12,7 +13,7 @@ export const client: mongoDB.MongoClient = new mongoDB.MongoClient(dbURI, {
 
 export const connectDB = async () => {
   // Connect the client to the server
-  await client.connect();
+  mongoose.connect(dbURI);
   // Establish and verify connection
   await client.db("admin").command({ ping: 1 });
 };
