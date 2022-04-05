@@ -13,7 +13,8 @@
     "start-dev": "ts-node ./src/server.ts",
     "dev": "nodemon",
     "test": "jest --watch",
-    "test-ci": "jest"
+    "test-ci": "jest",
+    "pretty": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
