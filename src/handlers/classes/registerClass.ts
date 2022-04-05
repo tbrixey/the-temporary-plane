@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
-import { client, dbName } from "../../mongo";
-import apiKeys from "../../mongo/schemas/apiKeys";
-import classes from "../../mongo/schemas/classes";
+import { Request, Response } from 'express';
+import { client, dbName } from '../../mongo';
+import apiKeys from '../../mongo/schemas/apiKeys';
+import classes from '../../mongo/schemas/classes';
 
 // This registers a user to a specific class
 
 export const registerClass = async (req: Request, res: Response) => {
   if (!req.params.className) {
-    return res.status(400).json({ message: "Missing class" });
+    return res.status(400).json({ message: 'Missing class' });
   }
 
   const classFound = await classes.findOne({
@@ -15,15 +15,15 @@ export const registerClass = async (req: Request, res: Response) => {
   });
 
   if (!classFound) {
-    return res.status(400).json({ message: "Class not found" });
+    return res.status(400).json({ message: 'Class not found' });
   }
 
-  const authSplit = req.headers.authorization.split(" ");
+  const authSplit = req.headers.authorization.split(' ');
 
   const checkClass = await apiKeys.findOne({ apiKey: authSplit[1] });
 
   if (checkClass.class) {
-    return res.status(400).json({ message: "Player already has a class" });
+    return res.status(400).json({ message: 'Player already has a class' });
   } else {
     const statBoost: { [key: string]: number } = {
       str: 0,
@@ -34,21 +34,21 @@ export const registerClass = async (req: Request, res: Response) => {
     };
 
     switch (req.params.className) {
-      case "Fighter":
+      case 'Fighter':
         statBoost.str = 1;
         statBoost.con = 1;
         break;
-      case "Rogue":
+      case 'Rogue':
         statBoost.dex = 2;
         break;
-      case "Mage":
+      case 'Mage':
         statBoost.int = 2;
         break;
-      case "Cleric":
+      case 'Cleric':
         statBoost.int = 1;
         statBoost.luck = 1;
         break;
-      case "Ranger":
+      case 'Ranger':
         statBoost.dex = 1;
         statBoost.con = 1;
         break;
@@ -65,11 +65,11 @@ export const registerClass = async (req: Request, res: Response) => {
           stats: statBoost,
         },
       },
-      { returnDocument: "after" }
+      { returnDocument: 'after' }
     );
     return res.status(200).json({
       data: { ...newDoc },
-      message: "Class selected! Pick a race using /api/race/<racename>",
+      message: 'Class selected! Pick a race using /api/race/<racename>',
     });
   }
 };

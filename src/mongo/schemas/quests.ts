@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Quest } from "../../types";
+import mongoose from 'mongoose';
+import { Quest } from '../../types';
 
 export const questSchema = new mongoose.Schema<Quest>(
   {
@@ -8,7 +8,7 @@ export const questSchema = new mongoose.Schema<Quest>(
     goto: String,
     type: {
       type: String,
-      enum: ["intro", "fetch", "explore"],
+      enum: ['intro', 'fetch', 'explore'],
     },
     tasks: [String],
     rewards: {
@@ -25,7 +25,7 @@ export const questSchema = new mongoose.Schema<Quest>(
     acquire: Number,
     location: String,
   },
-  { collection: "quests" }
+  { collection: 'quests' }
 );
 
-export default mongoose.model<Quest>("quests", questSchema);
+export default mongoose.model<Quest>('quests', questSchema);

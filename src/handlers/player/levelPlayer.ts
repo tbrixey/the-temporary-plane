@@ -1,8 +1,8 @@
-import { Response } from "express";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest, User } from "../../types";
+import { Response } from 'express';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest, User } from '../../types';
 
-type Stats = "str" | "con" | "int" | "dex" | "luck";
+type Stats = 'str' | 'con' | 'int' | 'dex' | 'luck';
 
 const updateStat = (user: User, stat: Stats) => {
   user.stats[stat] += 1;
@@ -20,13 +20,13 @@ const updateWeight = (user: User) => {
 };
 
 const levelMap = new Map([
-  ["str", (user: User) => updateStat(user, "str")],
-  ["dex", (user: User) => updateStat(user, "dex")],
-  ["int", (user: User) => updateStat(user, "int")],
-  ["con", (user: User) => updateStat(user, "con")],
-  ["luck", (user: User) => updateStat(user, "luck")],
-  ["speed", (user: User) => updateSpeed(user)],
-  ["weight", (user: User) => updateWeight(user)],
+  ['str', (user: User) => updateStat(user, 'str')],
+  ['dex', (user: User) => updateStat(user, 'dex')],
+  ['int', (user: User) => updateStat(user, 'int')],
+  ['con', (user: User) => updateStat(user, 'con')],
+  ['luck', (user: User) => updateStat(user, 'luck')],
+  ['speed', (user: User) => updateSpeed(user)],
+  ['weight', (user: User) => updateWeight(user)],
 ]);
 
 export const levelPlayer = async (
@@ -44,7 +44,7 @@ export const levelPlayer = async (
   if (!levelMap.has(toLevel)) {
     return res
       .status(400)
-      .json({ message: "Invalid stat to level: " + toLevel });
+      .json({ message: 'Invalid stat to level: ' + toLevel });
   }
 
   levelMap.get(toLevel)(user);
@@ -54,7 +54,7 @@ export const levelPlayer = async (
   user.hitpoints += newHP;
   user.levelPointsToUse -= 1;
 
-  const collection = client.db(dbName).collection("apiKeys");
+  const collection = client.db(dbName).collection('apiKeys');
   await collection.updateOne(
     { apiKey: user.apiKey },
     {
@@ -62,5 +62,5 @@ export const levelPlayer = async (
     }
   );
 
-  return res.status(200).json({ message: "You leveled up!", user });
+  return res.status(200).json({ message: 'You leveled up!', user });
 };

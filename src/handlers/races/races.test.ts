@@ -1,13 +1,13 @@
-import request from "supertest";
-import app from "../../app";
+import request from 'supertest';
+import app from '../../app';
 
-describe("GET /race", () => {
-  it("gets list of races", async () => {
+describe('GET /race', () => {
+  it('gets list of races', async () => {
     const response = await request(app)
-      .get("/api/race")
+      .get('/api/race')
       .set(
-        "Authorization",
-        "Bearer e00sl5xsl3psiw8oq1cg589eux3qioodph7xeyex89awschwsem8lwv5c4y3946gzbka2bheug8ox3c5wjtjmacufep7fvjkglxkf02f6g9"
+        'Authorization',
+        'Bearer e00sl5xsl3psiw8oq1cg589eux3qioodph7xeyex89awschwsem8lwv5c4y3946gzbka2bheug8ox3c5wjtjmacufep7fvjkglxkf02f6g9'
       );
 
     expect(response.status).toEqual(200);
@@ -18,8 +18,8 @@ describe("GET /race", () => {
     });
   });
 
-  it("fails auth to get races", async () => {
-    const response = await request(app).get("/api/race");
+  it('fails auth to get races', async () => {
+    const response = await request(app).get('/api/race');
 
     expect(response.status).toEqual(401);
   });

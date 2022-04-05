@@ -1,5 +1,5 @@
-import { NextFunction, Response } from "express";
-import { ExpressRequest } from "../types/express";
+import { NextFunction, Response } from 'express';
+import { ExpressRequest } from '../types/express';
 
 export const characterCreationComplete = async (
   req: ExpressRequest,
@@ -11,18 +11,18 @@ export const characterCreationComplete = async (
     if (!currentUser.class) {
       return res.json({
         message:
-          "Please choose a class. Pick a class using /api/class/<classname>",
+          'Please choose a class. Pick a class using /api/class/<classname>',
       });
     }
     if (!currentUser.race) {
       return res.json({
-        message: "Please choose a race. Pick a race using /api/race/<racename>",
+        message: 'Please choose a race. Pick a race using /api/race/<racename>',
       });
     }
     if (!currentUser.startingLocation) {
       return res.json({
         message:
-          "Please choose a starting location. Pick a starting city /api/city/<racename>",
+          'Please choose a starting location. Pick a starting city /api/city/<racename>',
       });
     }
 

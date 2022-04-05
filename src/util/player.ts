@@ -1,14 +1,14 @@
-import { keyBy, keys, merge, values } from "lodash";
-import { Collection, Document } from "mongodb";
-import apiKeys from "../mongo/schemas/apiKeys";
+import { keyBy, keys, merge, values } from 'lodash';
+import { Collection, Document } from 'mongodb';
+import apiKeys from '../mongo/schemas/apiKeys';
 
 export const mergeBag = (collection: Document) => {
   if (!collection.bag && !collection.items) {
-    console.warn("MergeBag function: missing bag or items in collection");
+    console.warn('MergeBag function: missing bag or items in collection');
     return collection;
   }
   const mergedBag = values(
-    merge(keyBy(collection.bag, "id"), keyBy(collection.items, "id"))
+    merge(keyBy(collection.bag, 'id'), keyBy(collection.items, 'id'))
   );
   collection.bag = mergedBag;
   delete collection.items;
@@ -20,7 +20,7 @@ export const mergeQuests = (collection: Document) => {
     return collection;
   }
   const mergedQuests = values(
-    merge(keyBy(collection.quests, "id"), keyBy(collection.fullQuests, "id"))
+    merge(keyBy(collection.quests, 'id'), keyBy(collection.fullQuests, 'id'))
   );
   collection.quests = mergedQuests;
   delete collection.fullQuests;
@@ -39,7 +39,7 @@ export const addBonusStats = async (playerCollection: any) => {
 
     await apiKeys.findOneAndUpdate(
       { apiKey: playerCollection.apiKey },
-      { $unset: { bonusStats: "" } }
+      { $unset: { bonusStats: '' } }
     );
 
     return playerCollection;
@@ -48,15 +48,15 @@ export const addBonusStats = async (playerCollection: any) => {
   const bonusKeys = keys(playerCollection.bonusStats);
 
   switch (bonusKeys[0]) {
-    case "stats":
+    case 'stats':
       const stat = keys(playerCollection.bonusStats.stats);
       playerCollection.stats[stat[0]] +=
         playerCollection.bonusStats.stats[stat[0]];
       break;
-    case "speed":
+    case 'speed':
       playerCollection.speed += playerCollection.bonusStats.speed;
       break;
-    case "weight":
+    case 'weight':
       playerCollection.weight += playerCollection.bonusStats.weight;
       break;
   }

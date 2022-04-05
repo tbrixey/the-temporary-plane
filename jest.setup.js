@@ -1,4 +1,4 @@
-const { connectDB, closeDB } = require("./src/mongo");
+const { connectDB, closeDB } = require('./src/mongo');
 
 beforeAll(async () => {
   await connectDB();

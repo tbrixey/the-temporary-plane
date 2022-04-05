@@ -1,3 +1,3 @@
-export * from "./getCities";
-export * from "./registerCities";
-export * from "./getLocations";
+export * from './getCities';
+export * from './registerCities';
+export * from './getLocations';

@@ -1,15 +1,15 @@
-import { Response } from "express";
-import { find, findIndex } from "lodash";
-import moment from "moment";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest } from "../../types/express";
+import { Response } from 'express';
+import { find, findIndex } from 'lodash';
+import moment from 'moment';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest } from '../../types/express';
 
 export const useItem = async (
   req: ExpressRequest<{}, { itemId: string }>,
   res: Response
 ) => {
   if (!req.params.itemId) {
-    return res.status(400).json({ message: "Missing parameter playerName" });
+    return res.status(400).json({ message: 'Missing parameter playerName' });
   }
 
   const itemId = parseInt(req.params.itemId);
@@ -17,20 +17,20 @@ export const useItem = async (
 
   const itemIndex = findIndex(currentUser.bag, { id: itemId });
 
-  const playerCollection = client.db(dbName).collection("apiKeys");
+  const playerCollection = client.db(dbName).collection('apiKeys');
 
   // console.log("CURRENT", itemIndex);
 
   if (currentUser.bag[itemIndex] && currentUser.bag[itemIndex].count > 0) {
     const setField: any = {};
     const arrayFilters: any = {};
-    if (currentUser.bag[itemIndex].type === "consumable") {
+    if (currentUser.bag[itemIndex].type === 'consumable') {
       if (currentUser.bag[itemIndex].effect) {
         const effect = Object.keys(currentUser.bag[itemIndex].effect);
         const now = new Date();
 
         switch (effect[0]) {
-          case "hitpoints":
+          case 'hitpoints':
             if (currentUser.hitpoints < currentUser.maxHitpoints) {
               const newHitpoint =
                 currentUser.hitpoints +
@@ -49,50 +49,50 @@ export const useItem = async (
                 };
               } else {
                 setField.$inc = {
-                  "bag.$[elem].count": -1,
+                  'bag.$[elem].count': -1,
                 };
-                arrayFilters.arrayFilters = [{ "elem.id": itemId }];
+                arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
               }
             } else {
               return res
                 .status(200)
-                .json({ message: "You are already at max health" });
+                .json({ message: 'You are already at max health' });
             }
             break;
-          case "stats":
+          case 'stats':
             setField.$inc = {
-              "bag.$[elem].count": -1,
+              'bag.$[elem].count': -1,
             };
-            arrayFilters.arrayFilters = [{ "elem.id": itemId }];
+            arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
             setField.$set = {
               bonusStats: {
                 stats: statItem(currentUser.bag[itemIndex].effect.stats),
                 time: moment(now)
-                  .add(currentUser.bag[itemIndex].effect.time, "m")
+                  .add(currentUser.bag[itemIndex].effect.time, 'm')
                   .toDate(),
               },
             };
             break;
-          case "speed":
-          case "weight":
+          case 'speed':
+          case 'weight':
             const key = Object.keys(currentUser.bag[itemIndex].effect);
             setField.$inc = {
-              "bag.$[elem].count": -1,
+              'bag.$[elem].count': -1,
             };
-            arrayFilters.arrayFilters = [{ "elem.id": itemId }];
+            arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
             setField.$set = {
               bonusStats:
-                key[0] === "speed"
+                key[0] === 'speed'
                   ? { speed: currentUser.bag[itemIndex].effect.speed }
                   : { weight: currentUser.bag[itemIndex].effect.weight },
             };
             setField.$set.bonusStats.time = moment(now)
-              .add(currentUser.bag[itemIndex].effect.time, "m")
+              .add(currentUser.bag[itemIndex].effect.time, 'm')
               .toDate();
             break;
         }
       }
-    } else if (currentUser.bag[itemIndex].type === "junk") {
+    } else if (currentUser.bag[itemIndex].type === 'junk') {
       return res
         .status(200)
         .json({ message: "You can't use " + currentUser.bag[itemIndex].name });
@@ -110,9 +110,9 @@ export const useItem = async (
 
     return res
       .status(200)
-      .json({ message: "You used " + currentUser.bag[itemIndex].name });
+      .json({ message: 'You used ' + currentUser.bag[itemIndex].name });
   } else {
-    return res.status(400).json({ message: "You does not have item to use." });
+    return res.status(400).json({ message: 'You does not have item to use.' });
   }
 };
 
@@ -120,15 +120,15 @@ const statItem = (stat: { [key: string]: number }) => {
   const key = Object.keys(stat);
 
   switch (key[0]) {
-    case "str":
+    case 'str':
       return { str: stat.str };
-    case "con":
+    case 'con':
       return { con: stat.con };
-    case "dex":
+    case 'dex':
       return { dex: stat.dex };
-    case "int":
+    case 'int':
       return { int: stat.int };
-    case "luck":
+    case 'luck':
       return { luck: stat.luck };
   }
 };

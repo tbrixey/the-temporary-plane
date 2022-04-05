@@ -1,6 +1,6 @@
-import { find } from "lodash";
-import { Collection, Document } from "mongodb";
-import { User } from "../types";
+import { find } from 'lodash';
+import { Collection, Document } from 'mongodb';
+import { User } from '../types';
 
 export const itemsToAdd = (
   user: User,
@@ -13,11 +13,11 @@ export const itemsToAdd = (
       collection.updateOne(
         {
           apiKey: user.apiKey,
-          "bag.id": item.id,
+          'bag.id': item.id,
         },
         {
           $inc: {
-            "bag.$.count": item.count,
+            'bag.$.count': item.count,
           },
         }
       );

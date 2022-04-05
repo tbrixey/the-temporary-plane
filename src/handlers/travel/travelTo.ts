@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { find } from "lodash";
-import moment from "moment";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest } from "../../types/express";
+import { Request, Response } from 'express';
+import { find } from 'lodash';
+import moment from 'moment';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest } from '../../types/express';
 
 // This provies class info when requested
 
@@ -13,16 +13,16 @@ export const travelTo = async (
   const currentUser = req.body.currentUser;
   const destination = req.params.destination;
   if (!destination) {
-    return res.status(400).json({ message: "Missing destination" });
+    return res.status(400).json({ message: 'Missing destination' });
   }
 
   if (destination === currentUser.location) {
-    return res.status(400).json({ message: "Currently at destination" });
+    return res.status(400).json({ message: 'Currently at destination' });
   }
 
-  const collection = client.db(dbName).collection("locations");
-  const userCollection = client.db(dbName).collection("apiKeys");
-  const travelCollection = client.db(dbName).collection("traveling");
+  const collection = client.db(dbName).collection('locations');
+  const userCollection = client.db(dbName).collection('apiKeys');
+  const travelCollection = client.db(dbName).collection('traveling');
 
   const location = await collection
     .find({
@@ -57,7 +57,7 @@ export const travelTo = async (
   const newTime = travelTime + parseFloat(randomDeviations.toFixed(2));
 
   const now = new Date();
-  const timeToArrival = moment(now).add(newTime, "m").toDate();
+  const timeToArrival = moment(now).add(newTime, 'm').toDate();
 
   await userCollection.findOneAndUpdate(
     { apiKey: currentUser.apiKey },

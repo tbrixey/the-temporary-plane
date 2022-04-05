@@ -16,7 +16,7 @@ export interface Item {
       luck?: number;
     };
   };
-  type: "consumable" | "junk" | "equipment";
+  type: 'consumable' | 'junk' | 'equipment';
   value: number;
   weight: number;
 }

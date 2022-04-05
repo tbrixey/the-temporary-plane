@@ -1,8 +1,8 @@
-import { find } from "lodash";
-import { client, dbName } from "../mongo";
-import { User, Quest } from "../types";
-import { itemsToAdd } from "./items";
-import nextLevel from "./nextLevel";
+import { find } from 'lodash';
+import { client, dbName } from '../mongo';
+import { User, Quest } from '../types';
+import { itemsToAdd } from './items';
+import nextLevel from './nextLevel';
 
 export const checkQuest = async (user: User, questId: number) => {
   const quest = find(user.quests, { id: questId });
@@ -11,14 +11,14 @@ export const checkQuest = async (user: User, questId: number) => {
   }
 
   switch (quest.type) {
-    case "intro":
+    case 'intro':
       if (quest.id === 1) {
         if (user.class && user.race && user.startingLocation) {
           try {
             await giveRewards(user, quest.rewards, quest.id);
             return { complete: true, title: quest.title };
           } catch (err) {
-            console.warn("Error giving rewards");
+            console.warn('Error giving rewards');
             return { complete: false };
           }
         } else {
@@ -26,9 +26,9 @@ export const checkQuest = async (user: User, questId: number) => {
         }
       }
       break;
-    case "fetch":
+    case 'fetch':
       return checkFetchQuest(user, quest);
-    case "explore":
+    case 'explore':
       return checkExploreQuest(user, quest);
   }
 };
@@ -43,7 +43,7 @@ const giveRewards = async (
   questId: number,
   acquire?: number
 ) => {
-  const userCollection = client.db(dbName).collection("apiKeys");
+  const userCollection = client.db(dbName).collection('apiKeys');
 
   const query: any = {
     $inc: {
@@ -81,7 +81,7 @@ const giveRewards = async (
 };
 
 const checkFetchQuest = async (user: User, quest: Quest) => {
-  const userCollection = client.db(dbName).collection("apiKeys");
+  const userCollection = client.db(dbName).collection('apiKeys');
   const checkItem = find(user.bag, { id: quest.acquire });
   const checkFinalLocation = user.location === quest.location;
   const checkGotoLocation = user.location === quest.goto;

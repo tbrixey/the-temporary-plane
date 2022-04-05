@@ -2,7 +2,7 @@ export interface Quest {
   id: number;
   title: string;
   description: string;
-  type: "intro" | "fetch" | "explore" | "fight";
+  type: 'intro' | 'fetch' | 'explore' | 'fight';
   goto?: string;
   acquire?: number;
   location?: string;

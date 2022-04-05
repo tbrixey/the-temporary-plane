@@ -1,2 +1,2 @@
-export * from "./getRaces";
-export * from "./registerRace";
+export * from './getRaces';
+export * from './registerRace';

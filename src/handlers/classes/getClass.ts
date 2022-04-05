@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import classes from "../../mongo/schemas/classes";
+import { Request, Response } from 'express';
+import classes from '../../mongo/schemas/classes';
 
 // This provies class info when requested
 

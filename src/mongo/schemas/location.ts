@@ -1,18 +1,18 @@
-import mongoose from "mongoose";
-import { Location } from "../../types";
+import mongoose from 'mongoose';
+import { Location } from '../../types';
 
 const locationSchema = new mongoose.Schema<Location>(
   {
     name: String,
     type: {
       type: String,
-      enum: ["city", "poi", "town"],
+      enum: ['city', 'poi', 'town'],
     },
     x: Number,
     y: Number,
     population: Number,
   },
-  { collection: "locations" }
+  { collection: 'locations' }
 );
 
-export default mongoose.model<Location>("locations", locationSchema);
+export default mongoose.model<Location>('locations', locationSchema);

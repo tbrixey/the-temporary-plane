@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Classes } from "../../types";
+import mongoose from 'mongoose';
+import { Classes } from '../../types';
 
 const classSchema = new mongoose.Schema<Classes>(
   {
@@ -9,7 +9,7 @@ const classSchema = new mongoose.Schema<Classes>(
     speed: Number,
     bonus: String,
   },
-  { collection: "classes" }
+  { collection: 'classes' }
 );
 
-export default mongoose.model<Classes>("classes", classSchema);
+export default mongoose.model<Classes>('classes', classSchema);

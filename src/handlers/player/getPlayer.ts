@@ -1,16 +1,16 @@
-import { Request, Response } from "express";
-import { client, dbName } from "../../mongo";
-import { mergeBag } from "../../util/player";
+import { Request, Response } from 'express';
+import { client, dbName } from '../../mongo';
+import { mergeBag } from '../../util/player';
 
 export const getPlayer = async (req: Request, res: Response) => {
   const incommingPlayerName = req.params.playerName;
 
   if (!incommingPlayerName) {
-    return res.status(400).json({ message: "Missing parameter playerName" });
+    return res.status(400).json({ message: 'Missing parameter playerName' });
   }
 
-  const authSplit = req.headers.authorization.split(" ");
-  const keyCollection = client.db(dbName).collection("apiKeys");
+  const authSplit = req.headers.authorization.split(' ');
+  const keyCollection = client.db(dbName).collection('apiKeys');
 
   const collection = await keyCollection.findOne({
     playerName: incommingPlayerName,
@@ -28,22 +28,22 @@ export const getPlayer = async (req: Request, res: Response) => {
       });
     }
   } else {
-    return res.status(404).json({ message: "Player not found" });
+    return res.status(404).json({ message: 'Player not found' });
   }
 };
 
 export const getPlayers = async (req: Request, res: Response) => {
-  const keyCollection = client.db(dbName).collection("apiKeys");
+  const keyCollection = client.db(dbName).collection('apiKeys');
 
   const collection = await keyCollection
     .aggregate([
       { $match: { startingLocation: { $exists: true } } },
       {
         $lookup: {
-          from: "locations",
-          localField: "location",
-          foreignField: "name",
-          as: "locationCoords",
+          from: 'locations',
+          localField: 'location',
+          foreignField: 'name',
+          as: 'locationCoords',
         },
       },
     ])

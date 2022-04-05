@@ -1,2 +1,2 @@
-export * from "./getPlayer";
-export * from "./levelPlayer";
+export * from './getPlayer';
+export * from './levelPlayer';

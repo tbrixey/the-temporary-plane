@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import * as core from "express-serve-static-core";
-import { Quest } from "./quest";
+import { Request, Response } from 'express';
+import * as core from 'express-serve-static-core';
+import { Quest } from './quest';
 
 export interface User {
   apiKey: string;
@@ -35,7 +35,7 @@ export interface User {
         luck?: number;
       };
     };
-    type: "consumable" | "junk" | "equipment";
+    type: 'consumable' | 'junk' | 'equipment';
     value: number;
     weight: number;
   }[];

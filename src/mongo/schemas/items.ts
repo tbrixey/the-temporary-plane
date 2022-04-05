@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Item } from "../../types";
+import mongoose from 'mongoose';
+import { Item } from '../../types';
 
 export const itemSchema = new mongoose.Schema<Item>(
   {
@@ -28,7 +28,7 @@ export const itemSchema = new mongoose.Schema<Item>(
     value: Number,
     weight: Number,
   },
-  { collection: "items" }
+  { collection: 'items' }
 );
 
-export default mongoose.model<Item>("items", itemSchema);
+export default mongoose.model<Item>('items', itemSchema);

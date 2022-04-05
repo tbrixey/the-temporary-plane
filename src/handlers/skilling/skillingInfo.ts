@@ -1,7 +1,7 @@
-import { Response } from "express";
-import { isNumber } from "lodash";
-import skills from "../../mongo/schemas/skills";
-import { ExpressRequest } from "../../types";
+import { Response } from 'express';
+import { isNumber } from 'lodash';
+import skills from '../../mongo/schemas/skills';
+import { ExpressRequest } from '../../types';
 
 interface SkillingQuery {
   skill?: string;
@@ -29,7 +29,7 @@ export const skillingInfo = async (req: ExpressRequest, res: Response) => {
   if (skillList.length === 0) {
     return res
       .status(200)
-      .json({ message: "There are no skills matching your criteria." });
+      .json({ message: 'There are no skills matching your criteria.' });
   }
 
   res.status(200).json({ data: skillList });

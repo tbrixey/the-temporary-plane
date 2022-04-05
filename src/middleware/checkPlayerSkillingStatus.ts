@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { ExpressRequest } from "../types/express";
-import { client, dbName } from "../mongo";
-import moment from "moment";
+import { NextFunction, Request, Response } from 'express';
+import { ExpressRequest } from '../types/express';
+import { client, dbName } from '../mongo';
+import moment from 'moment';
 
 export const checkPlayerSkillingStatus = async (
   req: ExpressRequest,
@@ -14,8 +14,8 @@ export const checkPlayerSkillingStatus = async (
     if (currentUser.finishTime) {
       const date = new Date();
 
-      const skillingCollection = client.db(dbName).collection("skilling");
-      const userCollection = client.db(dbName).collection("apiKeys");
+      const skillingCollection = client.db(dbName).collection('skilling');
+      const userCollection = client.db(dbName).collection('apiKeys');
       const skiller = await skillingCollection.findOne({
         playerName: currentUser.playerName,
       });
@@ -29,19 +29,19 @@ export const checkPlayerSkillingStatus = async (
               skiller.skill
             }. Please wait until you finish in ${dateFinished.diff(
               dateNow,
-              "seconds"
+              'seconds'
             )} seconds`,
           });
         } else {
           await skillingCollection.deleteOne({
             playerName: currentUser.playerName,
           });
-          const incString = "skills." + skiller.skill;
+          const incString = 'skills.' + skiller.skill;
           await userCollection.findOneAndUpdate(
             { apiKey: currentUser.apiKey },
             {
               $inc: { [incString]: skiller.count },
-              $unset: { finishTime: "" },
+              $unset: { finishTime: '' },
             }
           );
           return next();
@@ -49,7 +49,7 @@ export const checkPlayerSkillingStatus = async (
       } else {
         await userCollection.findOneAndUpdate(
           { apiKey: currentUser.apiKey },
-          { $unset: { finishTime: "" } }
+          { $unset: { finishTime: '' } }
         );
       }
     }

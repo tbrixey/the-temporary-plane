@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Skill } from "../../types";
+import mongoose from 'mongoose';
+import { Skill } from '../../types';
 
 const skillSchema = new mongoose.Schema<Skill>(
   {
@@ -11,7 +11,7 @@ const skillSchema = new mongoose.Schema<Skill>(
     craftable: Boolean,
     time: Number,
   },
-  { collection: "skills" }
+  { collection: 'skills' }
 );
 
-export default mongoose.model<Skill>("skills", skillSchema);
+export default mongoose.model<Skill>('skills', skillSchema);

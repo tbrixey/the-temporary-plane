@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { ExpressRequest } from "../types/express";
-import { client, dbName } from "../mongo";
-import moment from "moment";
+import { NextFunction, Request, Response } from 'express';
+import { ExpressRequest } from '../types/express';
+import { client, dbName } from '../mongo';
+import moment from 'moment';
 
 export const checkPlayerTravel = async (
   req: ExpressRequest,
@@ -14,8 +14,8 @@ export const checkPlayerTravel = async (
     if (currentUser.arrivalTime) {
       const date = new Date();
 
-      const travelCollection = client.db(dbName).collection("traveling");
-      const userCollection = client.db(dbName).collection("apiKeys");
+      const travelCollection = client.db(dbName).collection('traveling');
+      const userCollection = client.db(dbName).collection('apiKeys');
       const traveler = await travelCollection.findOne({
         playerName: currentUser.playerName,
       });
@@ -29,7 +29,7 @@ export const checkPlayerTravel = async (
               traveler.to.name
             }. Please wait until you arrive in ${dateArrive.diff(
               dateNow,
-              "seconds"
+              'seconds'
             )} seconds`,
           });
         } else {
@@ -40,7 +40,7 @@ export const checkPlayerTravel = async (
             { apiKey: currentUser.apiKey },
             {
               $set: { location: traveler.to.name },
-              $unset: { arrivalTime: "" },
+              $unset: { arrivalTime: '' },
             }
           );
           req.body.currentUser.location = traveler.to.name;
@@ -49,7 +49,7 @@ export const checkPlayerTravel = async (
       } else {
         await userCollection.findOneAndUpdate(
           { apiKey: currentUser.apiKey },
-          { $unset: { arrivalTime: "" } }
+          { $unset: { arrivalTime: '' } }
         );
       }
     }

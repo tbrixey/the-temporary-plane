@@ -1,7 +1,7 @@
-import { Response } from "express";
-import moment from "moment";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest } from "../../types";
+import { Response } from 'express';
+import moment from 'moment';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest } from '../../types';
 
 interface SkillingBody {
   skillName: string;
@@ -37,7 +37,7 @@ export const skilling = async (
 
   console.log(findObj);
 
-  const collection = client.db(dbName).collection("skills");
+  const collection = client.db(dbName).collection('skills');
   const skills = await collection.find(findObj).toArray();
 
   if (skills.length === 0) {
@@ -48,11 +48,11 @@ export const skilling = async (
 
   const now = new Date();
   const finishTime = moment(now)
-    .add(skills[0].time * count, "s")
+    .add(skills[0].time * count, 's')
     .toDate();
 
-  const skillingCollection = client.db(dbName).collection("skilling");
-  const userCollection = client.db(dbName).collection("apiKeys");
+  const skillingCollection = client.db(dbName).collection('skilling');
+  const userCollection = client.db(dbName).collection('apiKeys');
 
   await userCollection.findOneAndUpdate(
     { apiKey: currentUser.apiKey },

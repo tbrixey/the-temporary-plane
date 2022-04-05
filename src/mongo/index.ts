@@ -1,13 +1,13 @@
-import * as mongoDB from "mongodb";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import * as mongoDB from 'mongodb';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 // This ensures all models are loaded
-require("./schemas/apiKeys");
-require("./schemas/classes");
-require("./schemas/items");
-require("./schemas/quests");
-require("./schemas/skills");
+require('./schemas/apiKeys');
+require('./schemas/classes');
+require('./schemas/items');
+require('./schemas/quests');
+require('./schemas/skills');
 
 dotenv.config();
 

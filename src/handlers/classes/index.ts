@@ -1,2 +1,2 @@
-export * from "./getClass";
-export * from "./registerClass";
+export * from './getClass';
+export * from './registerClass';

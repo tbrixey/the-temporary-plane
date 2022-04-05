@@ -1,6 +1,6 @@
-import { NextFunction, Response } from "express";
-import { ExpressRequest } from "../types/express";
-import { checkQuest } from "../util/quests";
+import { NextFunction, Response } from 'express';
+import { ExpressRequest } from '../types/express';
+import { checkQuest } from '../util/quests';
 
 export const checkQuestComplete = async (
   req: ExpressRequest,

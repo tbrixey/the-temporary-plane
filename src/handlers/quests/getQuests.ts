@@ -1,8 +1,8 @@
-import { Quest } from "./../../types/quest";
-import { Response } from "express";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest } from "../../types";
-import { find } from "lodash";
+import { Quest } from './../../types/quest';
+import { Response } from 'express';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest } from '../../types';
+import { find } from 'lodash';
 
 interface GetQuestsInterface extends Quest {
   acquireItem?: any;
@@ -11,13 +11,13 @@ interface GetQuestsInterface extends Quest {
 
 export const getQuests = async (req: ExpressRequest, res: Response) => {
   const type = req.query.type;
-  let matchType: { type: any } = { type: { $nin: ["intro"] } };
+  let matchType: { type: any } = { type: { $nin: ['intro'] } };
 
-  if (type === "fetch" || type === "explore") {
+  if (type === 'fetch' || type === 'explore') {
     matchType = { type };
   }
 
-  const collection = client.db(dbName).collection("quests");
+  const collection = client.db(dbName).collection('quests');
   const quests = await collection
     .aggregate([
       {
@@ -25,18 +25,18 @@ export const getQuests = async (req: ExpressRequest, res: Response) => {
       },
       {
         $lookup: {
-          from: "items",
-          localField: "acquire",
-          foreignField: "id",
-          as: "acquireItem",
+          from: 'items',
+          localField: 'acquire',
+          foreignField: 'id',
+          as: 'acquireItem',
         },
       },
       {
         $lookup: {
-          from: "items",
-          localField: "rewards.items.id",
-          foreignField: "id",
-          as: "rewardItems",
+          from: 'items',
+          localField: 'rewards.items.id',
+          foreignField: 'id',
+          as: 'rewardItems',
         },
       },
       {

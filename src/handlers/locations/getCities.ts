@@ -1,6 +1,6 @@
-import { Response } from "express";
-import { client, dbName } from "../../mongo";
-import { ExpressRequest } from "../../types";
+import { Response } from 'express';
+import { client, dbName } from '../../mongo';
+import { ExpressRequest } from '../../types';
 
 interface CityQuery {
   name?: string;
@@ -18,12 +18,12 @@ export const getCities = async (
     population?: number;
     type: string;
   } = {
-    type: "city",
+    type: 'city',
   };
 
-  const collection = client.db(dbName).collection("locations");
+  const collection = client.db(dbName).collection('locations');
 
-  if (filters.name) findObj.name = { $regex: filters.name, $options: "i" };
+  if (filters.name) findObj.name = { $regex: filters.name, $options: 'i' };
 
   if (filters.population) findObj.population = parseInt(filters.population);
 

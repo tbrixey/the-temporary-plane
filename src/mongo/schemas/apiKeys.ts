@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { User } from "../../types";
+import mongoose from 'mongoose';
+import { User } from '../../types';
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -31,14 +31,14 @@ const userSchema = new mongoose.Schema<User>(
     quests: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "quests",
+        ref: 'quests',
       },
     ],
     bag: [
       {
         item: {
           type: mongoose.Types.ObjectId,
-          ref: "items",
+          ref: 'items',
         },
         count: Number,
       },
@@ -65,12 +65,12 @@ const userSchema = new mongoose.Schema<User>(
     finishTime: Date,
     levelPointsToUse: Number,
   },
-  { collection: "apiKeys" }
+  { collection: 'apiKeys' }
 );
 
-userSchema.pre("save", function (this: any, next) {
+userSchema.pre('save', function (this: any, next) {
   this.updatedOn = Date.now();
   next();
 });
 
-export default mongoose.model<User>("apiKeys", userSchema);
+export default mongoose.model<User>('apiKeys', userSchema);
