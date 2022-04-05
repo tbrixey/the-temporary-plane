@@ -29,7 +29,7 @@ export const skilling = async (
   }
 
   const findObj: FindObject = {
-    location: currentUser.location,
+    location: currentUser.location.name,
     skill,
     level: { $lte: currentUser.level },
     itemName: item.toLowerCase(),

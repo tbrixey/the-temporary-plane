@@ -15,7 +15,7 @@ export const travelInfo = async (
     return res.status(400).json({ message: 'Missing destination' });
   }
 
-  if (destination === currentUser.location) {
+  if (destination === currentUser.location.name) {
     return res.status(400).json({ message: 'Currently at destination' });
   }
 

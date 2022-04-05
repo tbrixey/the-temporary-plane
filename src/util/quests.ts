@@ -83,8 +83,8 @@ const giveRewards = async (
 const checkFetchQuest = async (user: User, quest: Quest) => {
   const userCollection = client.db(dbName).collection('apiKeys');
   const checkItem = find(user.bag, { id: quest.acquire });
-  const checkFinalLocation = user.location === quest.location;
-  const checkGotoLocation = user.location === quest.goto;
+  const checkFinalLocation = user.location.name === quest.location;
+  const checkGotoLocation = user.location.name === quest.goto;
 
   if (checkGotoLocation && !checkItem) {
     await itemsToAdd(user, [{ id: quest.acquire, count: 1 }], userCollection);
@@ -97,7 +97,7 @@ const checkFetchQuest = async (user: User, quest: Quest) => {
 };
 
 const checkExploreQuest = async (user: User, quest: Quest) => {
-  const checkFinalLocation = user.location === quest.location;
+  const checkFinalLocation = user.location.name === quest.location;
 
   if (!checkFinalLocation) return { complete: false };
   await giveRewards(user, quest.rewards, quest.id);

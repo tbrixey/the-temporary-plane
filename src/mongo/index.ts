@@ -6,8 +6,12 @@ import dotenv from 'dotenv';
 require('./schemas/apiKeys');
 require('./schemas/classes');
 require('./schemas/items');
+require('./schemas/locations');
 require('./schemas/quests');
+require('./schemas/races');
+require('./schemas/skilling');
 require('./schemas/skills');
+require('./schemas/traveling');
 
 dotenv.config();
 

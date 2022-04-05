@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { client, dbName } from '../../mongo';
+import location from '../../mongo/schemas/locations';
 import { ExpressRequest } from '../../types';
 
 interface CityQuery {
@@ -21,13 +21,11 @@ export const getCities = async (
     type: 'city',
   };
 
-  const collection = client.db(dbName).collection('locations');
-
   if (filters.name) findObj.name = { $regex: filters.name, $options: 'i' };
 
   if (filters.population) findObj.population = parseInt(filters.population);
 
-  const cities = await collection.find(findObj).toArray();
+  const cities = await location.find(findObj);
 
   res.status(200).json({ data: cities });
 };

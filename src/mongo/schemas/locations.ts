@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Location } from '../../types';
 
-const locationSchema = new mongoose.Schema<Location>(
+export const locationSchema = new mongoose.Schema<Location>(
   {
     name: String,
     type: {

@@ -26,7 +26,10 @@ const userSchema = new mongoose.Schema<User>(
     maxHitpoints: Number,
     xpToNextLevel: Number,
     gold: Number,
-    location: String,
+    location: {
+      type: mongoose.Types.ObjectId,
+      ref: 'locations',
+    },
     startingLocation: String,
     quests: [
       {

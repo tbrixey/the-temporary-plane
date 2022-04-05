@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { Quest } from './quest';
+import { Location } from './';
 
 export interface User {
   apiKey: string;
@@ -14,7 +15,7 @@ export interface User {
   gold: number;
   quests: Quest[];
   updatedOn: Date;
-  location: string;
+  location: Location;
   startingLocation: string;
   bag: {
     id: number;

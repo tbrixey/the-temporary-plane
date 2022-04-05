@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { client, dbName } from '../../mongo';
-import { mergeBag } from '../../util/player';
+import apiKeys from '../../mongo/schemas/apiKeys';
 
 export const getPlayer = async (req: Request, res: Response) => {
   const incommingPlayerName = req.params.playerName;
@@ -10,9 +9,8 @@ export const getPlayer = async (req: Request, res: Response) => {
   }
 
   const authSplit = req.headers.authorization.split(' ');
-  const keyCollection = client.db(dbName).collection('apiKeys');
 
-  const collection = await keyCollection.findOne({
+  const collection = await apiKeys.findOne({
     playerName: incommingPlayerName,
   });
 
@@ -33,27 +31,28 @@ export const getPlayer = async (req: Request, res: Response) => {
 };
 
 export const getPlayers = async (req: Request, res: Response) => {
-  const keyCollection = client.db(dbName).collection('apiKeys');
+  const players = await apiKeys
+    .find({ startingLocation: { $exists: true } })
+    .populate('locations');
+  // .aggregate([
+  //   { $match: { startingLocation: { $exists: true } } },
+  //   {
+  //     $lookup: {
+  //       from: 'locations',
+  //       localField: 'location',
+  //       foreignField: 'name',
+  //       as: 'locationCoords',
+  //     },
+  //   },
+  // ])
+  // .map((player) => ({
+  //   playerName: player.playerName,
+  //   location: player.location,
+  //   x: player.locationCoords[0].x,
+  //   y: player.locationCoords[0].y,
+  // }))
 
-  const collection = await keyCollection
-    .aggregate([
-      { $match: { startingLocation: { $exists: true } } },
-      {
-        $lookup: {
-          from: 'locations',
-          localField: 'location',
-          foreignField: 'name',
-          as: 'locationCoords',
-        },
-      },
-    ])
-    .map((player) => ({
-      playerName: player.playerName,
-      location: player.location,
-      x: player.locationCoords[0].x,
-      y: player.locationCoords[0].y,
-    }))
-    .toArray();
+  console.log('collection', players);
 
-  return res.status(200).json({ data: collection });
+  return res.status(200).json({ data: players });
 };

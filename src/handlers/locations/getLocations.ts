@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { client, dbName } from '../../mongo';
+import location from '../../mongo/schemas/locations';
 import { ExpressRequest } from '../../types';
 
 interface CityQuery {
@@ -12,9 +12,7 @@ export const getLocations = async (
   req: ExpressRequest<{}, CityQuery>,
   res: Response
 ) => {
-  const collection = client.db(dbName).collection('locations');
-
-  const cities = await collection.find().toArray();
+  const cities = await location.find();
 
   res.status(200).json(cities);
 };
