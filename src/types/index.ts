@@ -6,3 +6,4 @@ export * from './quest';
 export * from './race';
 export * from './skill';
 export * from './traveling';
+export * from './skilling';
