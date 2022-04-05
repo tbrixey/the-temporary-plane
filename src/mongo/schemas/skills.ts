@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Skill } from "../../types";
 
-const skillSchema = new mongoose.Schema(
+const skillSchema = new mongoose.Schema<Skill>(
   {
     skill: String,
     level: Number,
@@ -13,4 +14,4 @@ const skillSchema = new mongoose.Schema(
   { collection: "skills" }
 );
 
-export default mongoose.model("skills", skillSchema);
+export default mongoose.model<Skill>("skills", skillSchema);

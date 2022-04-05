@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { client, dbName } from "../../mongo";
+import apiKeys from "../../mongo/schemas/apiKeys";
+import classes from "../../mongo/schemas/classes";
 
 // This registers a user to a specific class
 
@@ -8,8 +10,7 @@ export const registerClass = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing class" });
   }
 
-  const classCollection = client.db(dbName).collection("classes");
-  const classFound = await classCollection.findOne({
+  const classFound = await classes.findOne({
     name: req.params.className,
   });
 
@@ -18,9 +19,8 @@ export const registerClass = async (req: Request, res: Response) => {
   }
 
   const authSplit = req.headers.authorization.split(" ");
-  const collection = client.db(dbName).collection("apiKeys");
 
-  const checkClass = await collection.findOne({ apiKey: authSplit[1] });
+  const checkClass = await apiKeys.findOne({ apiKey: authSplit[1] });
 
   if (checkClass.class) {
     return res.status(400).json({ message: "Player already has a class" });
@@ -54,7 +54,7 @@ export const registerClass = async (req: Request, res: Response) => {
         break;
     }
 
-    const newDoc = await collection.findOneAndUpdate(
+    const newDoc = await apiKeys.findOneAndUpdate(
       { apiKey: authSplit[1] },
       {
         $set: {
@@ -68,7 +68,7 @@ export const registerClass = async (req: Request, res: Response) => {
       { returnDocument: "after" }
     );
     return res.status(200).json({
-      data: { ...newDoc.value },
+      data: { ...newDoc },
       message: "Class selected! Pick a race using /api/race/<racename>",
     });
   }

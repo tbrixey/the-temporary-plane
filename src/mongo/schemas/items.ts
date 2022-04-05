@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Item } from "../../types";
 
-export const itemSchema = new mongoose.Schema(
+export const itemSchema = new mongoose.Schema<Item>(
   {
     name: String,
     description: String,
@@ -30,4 +31,4 @@ export const itemSchema = new mongoose.Schema(
   { collection: "items" }
 );
 
-export default mongoose.model("items", itemSchema);
+export default mongoose.model<Item>("items", itemSchema);

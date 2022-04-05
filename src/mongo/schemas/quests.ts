@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Quest } from "../../types";
 
-export const questSchema = new mongoose.Schema(
+export const questSchema = new mongoose.Schema<Quest>(
   {
     title: String,
     description: String,
@@ -27,4 +28,4 @@ export const questSchema = new mongoose.Schema(
   { collection: "quests" }
 );
 
-export default mongoose.model("quests", questSchema);
+export default mongoose.model<Quest>("quests", questSchema);

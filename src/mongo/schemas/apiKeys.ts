@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-import { itemSchema } from "./items";
-import { questSchema } from "./quests";
+import { User } from "../../types";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<User>(
   {
     apiKey: {
       type: String,
@@ -74,4 +73,4 @@ userSchema.pre("save", function (this: any, next) {
   next();
 });
 
-export default mongoose.model("apiKeys", userSchema);
+export default mongoose.model<User>("apiKeys", userSchema);

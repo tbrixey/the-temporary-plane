@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Classes } from "../../types";
 
-const classSchema = new mongoose.Schema(
+const classSchema = new mongoose.Schema<Classes>(
   {
     name: String,
     description: String,
@@ -11,4 +12,4 @@ const classSchema = new mongoose.Schema(
   { collection: "classes" }
 );
 
-export default mongoose.model("classes", classSchema);
+export default mongoose.model<Classes>("classes", classSchema);
