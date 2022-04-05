@@ -2,6 +2,6 @@ export interface Skilling {
   _id: string;
   playerName: string;
   skill: string;
-  arrivalTime: Date;
+  finishTime: Date;
   count: number;
 }

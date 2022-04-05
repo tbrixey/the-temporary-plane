@@ -5,7 +5,7 @@ const skillingSchema = new mongoose.Schema<Skilling>(
   {
     playerName: String,
     skill: String,
-    arrivalTime: Date,
+    finishTime: Date,
     count: Number,
   },
   { collection: 'skilling' }

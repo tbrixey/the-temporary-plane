@@ -6,7 +6,7 @@ const skillSchema = new mongoose.Schema<Skill>(
     skill: String,
     level: Number,
     itemId: Number,
-    itemName: Number,
+    itemName: String,
     location: String,
     craftable: Boolean,
     time: Number,
