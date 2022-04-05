@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { client, dbName } from '../../mongo';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import classes from '../../mongo/schemas/classes';
 
@@ -18,11 +17,7 @@ export const registerClass = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Class not found' });
   }
 
-  const authSplit = req.headers.authorization.split(' ');
-
-  const checkClass = await apiKeys.findOne({ apiKey: authSplit[1] });
-
-  if (checkClass.class) {
+  if (req.body.currentUser.class) {
     return res.status(400).json({ message: 'Player already has a class' });
   } else {
     const statBoost: { [key: string]: number } = {
@@ -55,7 +50,7 @@ export const registerClass = async (req: Request, res: Response) => {
     }
 
     const newDoc = await apiKeys.findOneAndUpdate(
-      { apiKey: authSplit[1] },
+      { apiKey: req.body.currentUser.apiKey },
       {
         $set: {
           class: req.params.className,

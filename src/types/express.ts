@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { Quest } from './quest';
 import { Location } from './';
+import { Item } from './items';
 
 export interface User {
+  _id: string;
   apiKey: string;
   count: number;
   createdOn: Date;
@@ -18,27 +20,9 @@ export interface User {
   location: Location;
   startingLocation: string;
   bag: {
-    id: number;
+    item: Item;
     count: number;
-    _id: any;
-    name: string;
-    description: string;
-    effect?: {
-      hitpoints?: number;
-      speed?: number;
-      weight?: number;
-      time?: number;
-      stats?: {
-        str?: number;
-        dex?: number;
-        con?: number;
-        int?: number;
-        luck?: number;
-      };
-    };
-    type: 'consumable' | 'junk' | 'equipment';
-    value: number;
-    weight: number;
+    _id: string;
   }[];
   race: string;
   skills: {
@@ -51,16 +35,20 @@ export interface User {
   class: string;
   speed: number;
   stats: {
-    str: number;
-    con: number;
-    dex: number;
-    int: number;
-    luck: number;
+    [key: string]: number;
   };
   weight: number;
   arrivalTime?: Date;
   finishTime?: Date;
   levelPointsToUse?: number;
+  bonusStats?: {
+    stats?: {
+      [key: string]: number;
+    };
+    speed?: number;
+    weight?: number;
+    time?: Date;
+  };
 }
 interface RequestUser {
   currentUser: User;

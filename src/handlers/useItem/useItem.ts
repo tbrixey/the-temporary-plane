@@ -1,7 +1,8 @@
 import { Response } from 'express';
-import { find, findIndex } from 'lodash';
+import { findIndex, findKey, keys } from 'lodash';
 import moment from 'moment';
-import { client, dbName } from '../../mongo';
+import apiKeys from '../../mongo/schemas/apiKeys';
+import items from '../../mongo/schemas/items';
 import { ExpressRequest } from '../../types/express';
 
 export const useItem = async (
@@ -12,47 +13,37 @@ export const useItem = async (
     return res.status(400).json({ message: 'Missing parameter playerName' });
   }
 
-  const itemId = parseInt(req.params.itemId);
+  const itemId = req.params.itemId;
   const currentUser = req.body.currentUser;
 
-  const itemIndex = findIndex(currentUser.bag, { id: itemId });
-
-  const playerCollection = client.db(dbName).collection('apiKeys');
-
-  // console.log("CURRENT", itemIndex);
+  const itemIndex = findIndex(
+    currentUser.bag,
+    (o: any) => o.item._id.toString() === itemId
+  );
 
   if (currentUser.bag[itemIndex] && currentUser.bag[itemIndex].count > 0) {
     const setField: any = {};
     const arrayFilters: any = {};
-    if (currentUser.bag[itemIndex].type === 'consumable') {
-      if (currentUser.bag[itemIndex].effect) {
-        const effect = Object.keys(currentUser.bag[itemIndex].effect);
+    const itemToUse = await items.findOne({ _id: itemId }).lean();
+
+    if (itemToUse.type === 'consumable') {
+      if (itemToUse.effect) {
+        const effect = keys(itemToUse.effect);
         const now = new Date();
+        console.log('UGH', effect, itemToUse);
 
         switch (effect[0]) {
           case 'hitpoints':
             if (currentUser.hitpoints < currentUser.maxHitpoints) {
               const newHitpoint =
-                currentUser.hitpoints +
-                  currentUser.bag[itemIndex].effect.hitpoints >
+                currentUser.hitpoints + itemToUse.effect.hitpoints >
                 currentUser.maxHitpoints
                   ? currentUser.maxHitpoints
-                  : currentUser.hitpoints +
-                    currentUser.bag[itemIndex].effect.hitpoints;
+                  : currentUser.hitpoints + itemToUse.effect.hitpoints;
 
               setField.$set = {
                 hitpoints: newHitpoint,
               };
-              if (currentUser.bag[itemIndex].count - 1 <= 0) {
-                setField.$pull = {
-                  bag: { id: itemId },
-                };
-              } else {
-                setField.$inc = {
-                  'bag.$[elem].count': -1,
-                };
-                arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
-              }
             } else {
               return res
                 .status(200)
@@ -60,46 +51,48 @@ export const useItem = async (
             }
             break;
           case 'stats':
-            setField.$inc = {
-              'bag.$[elem].count': -1,
-            };
-            arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
             setField.$set = {
               bonusStats: {
-                stats: statItem(currentUser.bag[itemIndex].effect.stats),
-                time: moment(now)
-                  .add(currentUser.bag[itemIndex].effect.time, 'm')
-                  .toDate(),
+                stats: statItem(itemToUse.effect.stats),
+                time: moment(now).add(itemToUse.effect.time, 'm').toDate(),
               },
             };
             break;
           case 'speed':
           case 'weight':
-            const key = Object.keys(currentUser.bag[itemIndex].effect);
-            setField.$inc = {
-              'bag.$[elem].count': -1,
-            };
-            arrayFilters.arrayFilters = [{ 'elem.id': itemId }];
             setField.$set = {
               bonusStats:
-                key[0] === 'speed'
-                  ? { speed: currentUser.bag[itemIndex].effect.speed }
-                  : { weight: currentUser.bag[itemIndex].effect.weight },
+                effect[0] === 'speed'
+                  ? { speed: itemToUse.effect.speed }
+                  : { weight: itemToUse.effect.weight },
             };
             setField.$set.bonusStats.time = moment(now)
-              .add(currentUser.bag[itemIndex].effect.time, 'm')
+              .add(itemToUse.effect.time, 'm')
               .toDate();
             break;
         }
       }
-    } else if (currentUser.bag[itemIndex].type === 'junk') {
-      return res
-        .status(200)
-        .json({ message: "You can't use " + currentUser.bag[itemIndex].name });
+    } else if (itemToUse.type === 'junk') {
+      return res.status(200).json({
+        message: "You can't use " + itemToUse.name,
+      });
     }
 
+    // if (currentUser.bag[itemIndex].count - 1 <= 0) {
+    //   setField.$pull = {
+    //     bag: { _id: currentUser.bag[itemIndex]._id },
+    //   };
+    // } else {
+    //   setField.$inc = {
+    //     'bag.$[elem].count': -1,
+    //   };
+    //   arrayFilters.arrayFilters = [
+    //     { 'elem._id': currentUser.bag[itemIndex]._id },
+    //   ];
+    // }
+
     if (setField && (setField.$set || setField.$inc)) {
-      await playerCollection.findOneAndUpdate(
+      await apiKeys.updateOne(
         {
           apiKey: currentUser.apiKey,
         },
@@ -108,11 +101,11 @@ export const useItem = async (
       );
     }
 
-    return res
-      .status(200)
-      .json({ message: 'You used ' + currentUser.bag[itemIndex].name });
+    return res.status(200).json({ message: 'You used ' + itemToUse.name });
   } else {
-    return res.status(400).json({ message: 'You does not have item to use.' });
+    return res.status(400).json({
+      message: 'You searched everywhere, but can not find this item.',
+    });
   }
 };
 

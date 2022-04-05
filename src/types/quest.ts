@@ -1,20 +1,18 @@
+import { Item } from './items';
+
 export interface Quest {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   type: 'intro' | 'fetch' | 'explore' | 'fight';
   goto?: string;
-  acquire?: number;
+  acquire?: Item;
   location?: string;
   tasks?: string[];
   active: boolean;
   rewards: {
     gold: number;
     xp: number;
-    items?: {
-      id: number;
-      count: number;
-      name?: string;
-    }[];
+    items?: { item: Item; count: number }[];
   };
 }

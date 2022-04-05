@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import apiKeys from '../mongo/schemas/apiKeys';
-import { addBonusStats, mergeBag, mergeQuests } from '../util/player';
+import { addBonusStats } from '../util/player';
 
 export const checkApiKey = async (
   req: Request,
@@ -13,12 +13,12 @@ export const checkApiKey = async (
       .findOne({ apiKey: authSplit[1] })
       .populate('bag.item')
       .populate('quests')
-      .populate('locations');
-
-    console.log('LOOKUP', lookupKey);
+      .populate('location')
+      .lean();
 
     if (lookupKey) {
-      req.body.currentUser = lookupKey;
+      const newUser = await addBonusStats(lookupKey);
+      req.body.currentUser = newUser;
       next();
     } else {
       res.status(401).json({ message: 'unauthorized' });

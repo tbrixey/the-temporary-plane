@@ -11,7 +11,7 @@ export const checkQuestComplete = async (
     const currentUser = req.body.currentUser;
     if (currentUser.quests.length > 0) {
       currentUser.quests.forEach(async (quest) => {
-        const questComplete = await checkQuest(currentUser, quest.id);
+        const questComplete = await checkQuest(currentUser, quest._id);
         if (questComplete.complete) {
           if (req.body.questsComplete === undefined) {
             req.body.questsComplete = [];

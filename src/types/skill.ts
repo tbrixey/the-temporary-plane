@@ -1,9 +1,10 @@
 export interface Skill {
+  _id: string;
   skill: string;
   level: number;
   itemId: number;
   itemName: number;
   location: string;
-  craftable: Boolean;
+  craftable: boolean;
   time: number;
 }

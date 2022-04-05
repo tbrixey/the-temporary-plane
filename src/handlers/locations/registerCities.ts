@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { client, dbName } from '../../mongo';
 import apiKeys from '../../mongo/schemas/apiKeys';
 
 // This registers a user to a specific class
@@ -9,17 +8,13 @@ export const registerStartingCity = async (req: Request, res: Response) => {
     res.status(400).json({ message: 'Missing cityName' });
   }
 
-  const authSplit = req.headers.authorization.split(' ');
-
-  const checkClass = await apiKeys.findOne({ apiKey: authSplit[1] });
-
-  if (checkClass.startingLocation) {
+  if (req.body.currentUser.startingLocation) {
     return res
       .status(400)
       .json({ message: 'Player already has a starting location' });
   } else {
     const newDoc = await apiKeys.findOneAndUpdate(
-      { apiKey: authSplit[1] },
+      { apiKey: req.body.currentUser.apiKey },
       {
         $set: {
           startingLocation: req.params.cityName,

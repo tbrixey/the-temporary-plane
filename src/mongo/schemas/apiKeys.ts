@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema<User>(
           ref: 'items',
         },
         count: Number,
+        _id: mongoose.Types.ObjectId,
       },
     ],
     race: String,
@@ -67,6 +68,18 @@ const userSchema = new mongoose.Schema<User>(
     arrivalTime: Date,
     finishTime: Date,
     levelPointsToUse: Number,
+    bonusStats: {
+      stats: {
+        str: Number,
+        con: Number,
+        dex: Number,
+        int: Number,
+        luck: Number,
+      },
+      speed: Number,
+      weight: Number,
+      time: Date,
+    },
   },
   { collection: 'apiKeys' }
 );

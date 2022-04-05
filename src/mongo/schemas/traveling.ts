@@ -4,8 +4,14 @@ import { Traveling } from '../../types';
 const travelSchema = new mongoose.Schema<Traveling>(
   {
     playerName: String,
-    from: String,
-    to: String,
+    from: {
+      type: mongoose.Types.ObjectId,
+      ref: 'locations',
+    },
+    to: {
+      type: mongoose.Types.ObjectId,
+      ref: 'locations',
+    },
     arrivalTime: Date,
   },
   { collection: 'traveling' }

@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { client, dbName } from '../mongo';
+import locations from '../mongo/schemas/locations';
 import { ExpressRequest } from '../types';
 
 export const isPlayerInCity = async (
@@ -7,13 +7,7 @@ export const isPlayerInCity = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.body.currentUser;
-
-  const locationCol = client.db(dbName).collection('locations');
-
-  const location = await locationCol.findOne({ name: user.location });
-
-  if (location.type === 'city') {
+  if (req.body.currentUser.location.type === 'city') {
     next();
   } else {
     return res

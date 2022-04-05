@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { client, dbName } from '../../mongo';
 import { find } from 'lodash';
+import locations from '../../mongo/schemas/locations';
 import { ExpressRequest } from '../../types/express';
 
 // This provies class info when requested
@@ -19,16 +19,9 @@ export const travelInfo = async (
     return res.status(400).json({ message: 'Currently at destination' });
   }
 
-  const collection = client.db(dbName).collection('locations');
-
-  const location = await collection
-    .find({
-      $or: [{ name: destination }, { name: currentUser.location }],
-    })
-    .toArray();
-
-  const userLocation = find(location, { name: currentUser.location });
-  const destLocation = find(location, { name: destination });
+  const destLocation = await locations.findOne({
+    name: destination,
+  });
 
   if (!destLocation) {
     return res.status(404).json({
@@ -36,15 +29,15 @@ export const travelInfo = async (
     });
   }
 
-  if (!userLocation) {
+  if (!currentUser.location) {
     return res.status(404).json({
       message:
         "Users location not found. Please reach out to support if you can't travel in a few minutes.",
     });
   }
 
-  const x = userLocation.x - destLocation.x;
-  const y = userLocation.y - destLocation.y;
+  const x = currentUser.location.x - destLocation.x;
+  const y = currentUser.location.y - destLocation.y;
 
   const length = Math.hypot(x, y);
   const travelTime = parseFloat((length / 2 / currentUser.speed).toFixed(2));

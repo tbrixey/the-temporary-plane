@@ -33,26 +33,8 @@ export const getPlayer = async (req: Request, res: Response) => {
 export const getPlayers = async (req: Request, res: Response) => {
   const players = await apiKeys
     .find({ startingLocation: { $exists: true } })
-    .populate('locations');
-  // .aggregate([
-  //   { $match: { startingLocation: { $exists: true } } },
-  //   {
-  //     $lookup: {
-  //       from: 'locations',
-  //       localField: 'location',
-  //       foreignField: 'name',
-  //       as: 'locationCoords',
-  //     },
-  //   },
-  // ])
-  // .map((player) => ({
-  //   playerName: player.playerName,
-  //   location: player.location,
-  //   x: player.locationCoords[0].x,
-  //   y: player.locationCoords[0].y,
-  // }))
-
-  console.log('collection', players);
+    .populate('location')
+    .select('playerName location');
 
   return res.status(200).json({ data: players });
 };

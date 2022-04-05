@@ -16,13 +16,19 @@ export const questSchema = new mongoose.Schema<Quest>(
       xp: Number,
       items: [
         {
-          id: mongoose.Types.ObjectId,
+          item: {
+            type: mongoose.Types.ObjectId,
+            ref: 'items',
+          },
           count: Number,
         },
       ],
     },
     active: Boolean,
-    acquire: Number,
+    acquire: {
+      type: mongoose.Types.ObjectId,
+      ref: 'items',
+    },
     location: String,
   },
   { collection: 'quests' }

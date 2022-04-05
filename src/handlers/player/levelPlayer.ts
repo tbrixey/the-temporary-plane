@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { client, dbName } from '../../mongo';
+import apiKeys from '../../mongo/schemas/apiKeys';
 import { ExpressRequest, User } from '../../types';
 
 type Stats = 'str' | 'con' | 'int' | 'dex' | 'luck';
@@ -54,8 +54,7 @@ export const levelPlayer = async (
   user.hitpoints += newHP;
   user.levelPointsToUse -= 1;
 
-  const collection = client.db(dbName).collection('apiKeys');
-  await collection.updateOne(
+  await apiKeys.updateOne(
     { apiKey: user.apiKey },
     {
       $set: user,

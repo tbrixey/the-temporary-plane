@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { ExpressRequest } from '../types/express';
-import { client, dbName } from '../mongo';
 import moment from 'moment';
+import skilling from '../mongo/schemas/skilling';
+import apiKeys from '../mongo/schemas/apiKeys';
 
 export const checkPlayerSkillingStatus = async (
   req: ExpressRequest,
@@ -14,9 +15,7 @@ export const checkPlayerSkillingStatus = async (
     if (currentUser.finishTime) {
       const date = new Date();
 
-      const skillingCollection = client.db(dbName).collection('skilling');
-      const userCollection = client.db(dbName).collection('apiKeys');
-      const skiller = await skillingCollection.findOne({
+      const skiller = await skilling.findOne({
         playerName: currentUser.playerName,
       });
 
@@ -33,11 +32,11 @@ export const checkPlayerSkillingStatus = async (
             )} seconds`,
           });
         } else {
-          await skillingCollection.deleteOne({
+          await skilling.deleteOne({
             playerName: currentUser.playerName,
           });
           const incString = 'skills.' + skiller.skill;
-          await userCollection.findOneAndUpdate(
+          await apiKeys.findOneAndUpdate(
             { apiKey: currentUser.apiKey },
             {
               $inc: { [incString]: skiller.count },
@@ -47,7 +46,7 @@ export const checkPlayerSkillingStatus = async (
           return next();
         }
       } else {
-        await userCollection.findOneAndUpdate(
+        await apiKeys.findOneAndUpdate(
           { apiKey: currentUser.apiKey },
           { $unset: { finishTime: '' } }
         );

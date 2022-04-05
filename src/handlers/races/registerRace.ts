@@ -1,30 +1,25 @@
-import { Request, Response } from 'express';
-import { client, dbName } from '../../mongo';
-
+import { Response } from 'express';
+import apiKeys from '../../mongo/schemas/apiKeys';
+import { ExpressRequest } from '../../types';
 // This registers a user to a specific class
 
-export const registerRace = async (req: Request, res: Response) => {
+export const registerRace = async (req: ExpressRequest, res: Response) => {
   if (!req.params.raceName) {
     res.status(400).json({ message: 'Missing race' });
   }
 
-  const authSplit = req.headers.authorization.split(' ');
-  const collection = client.db(dbName).collection('apiKeys');
-
-  const checkRace = await collection.findOne({ apiKey: authSplit[1] });
-
-  if (checkRace.race) {
+  if (req.body.currentUser.race) {
     res.status(400).json({ message: 'Player already has a race' });
   } else {
-    const newDoc = await collection.findOneAndUpdate(
-      { apiKey: authSplit[1] },
+    const newDoc = await apiKeys.findOneAndUpdate(
+      { apiKey: req.body.currentUser.apiKey },
       {
         $set: { race: req.params.raceName, updatedOn: new Date() },
       },
       { returnDocument: 'after' }
     );
     res.status(200).json({
-      data: { ...newDoc.value },
+      data: { ...newDoc },
       message: 'Race selected! Pick a starting city /api/city/<racename>',
     });
   }

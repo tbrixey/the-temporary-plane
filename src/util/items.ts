@@ -1,19 +1,18 @@
 import { find } from 'lodash';
-import { Collection, Document } from 'mongodb';
-import { User } from '../types';
+import apiKeys from '../mongo/schemas/apiKeys';
+import { Item, User } from '../types';
 
 export const itemsToAdd = (
   user: User,
-  givenItems: { id: number; count: number }[],
-  collection: Collection<Document>
+  givenItems: { item: Item; count: number }[]
 ) => {
   givenItems.forEach((item) => {
-    const found = find(user.bag, { id: item.id });
+    const found = find(user.bag, { item: item.item._id });
     if (found) {
-      collection.updateOne(
+      apiKeys.updateOne(
         {
           apiKey: user.apiKey,
-          'bag.id': item.id,
+          'bag.item': item.item._id,
         },
         {
           $inc: {
@@ -22,7 +21,7 @@ export const itemsToAdd = (
         }
       );
     } else {
-      collection.updateOne(
+      apiKeys.updateOne(
         {
           apiKey: user.apiKey,
         },

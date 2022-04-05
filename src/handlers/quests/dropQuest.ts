@@ -1,14 +1,14 @@
 import { Response } from 'express';
-import { client, dbName } from '../../mongo';
 import { ExpressRequest } from '../../types';
 import { find } from 'lodash';
+import apiKeys from '../../mongo/schemas/apiKeys';
 
 export const dropQuest = async (req: ExpressRequest, res: Response) => {
   const questId = parseInt(req.params.questId);
   const user = req.body.currentUser;
   const findQuest = find(user.quests, { id: questId });
 
-  if (!questId || Number.isNaN(questId)) {
+  if (!questId) {
     return res.status(400).json({ message: 'Missing quest id.' });
   }
 
@@ -16,14 +16,13 @@ export const dropQuest = async (req: ExpressRequest, res: Response) => {
     return res.status(400).json({ message: 'Quest not found.' });
   }
 
-  const collection = client.db(dbName).collection('apiKeys');
-  await collection.updateOne(
+  await apiKeys.updateOne(
     {
       apiKey: user.apiKey,
     },
     {
       $pull: {
-        quests: { id: questId },
+        quests: questId,
       },
     }
   );

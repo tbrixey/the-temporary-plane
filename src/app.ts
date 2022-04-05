@@ -20,7 +20,7 @@ import { useItem } from './handlers/useItem';
 import { checkQuestComplete } from './middleware/checkQuestComplete';
 import { acceptQuest, dropQuest, getQuests } from './handlers/quests';
 import { isPlayerInCity } from './middleware/isPlayerInCity';
-import { skilling, skillingInfo } from './handlers/skilling';
+import { startSkilling, skillingInfo } from './handlers/skilling';
 import { checkPlayerSkillingStatus } from './middleware/checkPlayerSkillingStatus';
 const app = express();
 
@@ -84,7 +84,7 @@ app.post('/api/quests/:questId', isPlayerInCity, acceptQuest);
 app.delete('/api/quests/:questId', isPlayerInCity, dropQuest);
 
 app.get('/api/skilling', skillingInfo);
-app.post('/api/skilling', skilling);
+app.post('/api/skilling', startSkilling);
 
 app.use((req, res, next) => {
   res.status(404);

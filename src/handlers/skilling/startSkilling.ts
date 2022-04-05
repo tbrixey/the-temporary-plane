@@ -1,6 +1,8 @@
 import { Response } from 'express';
 import moment from 'moment';
-import { client, dbName } from '../../mongo';
+import apiKeys from '../../mongo/schemas/apiKeys';
+import skilling from '../../mongo/schemas/skilling';
+import skills from '../../mongo/schemas/skills';
 import { ExpressRequest } from '../../types';
 
 interface SkillingBody {
@@ -16,7 +18,7 @@ interface FindObject {
   itemName?: string;
 }
 
-export const skilling = async (
+export const startSkilling = async (
   req: ExpressRequest<SkillingBody>,
   res: Response
 ) => {
@@ -37,8 +39,7 @@ export const skilling = async (
 
   console.log(findObj);
 
-  const collection = client.db(dbName).collection('skills');
-  const skills = await collection.find(findObj).toArray();
+  const skillList = await skills.find(findObj);
 
   if (skills.length === 0) {
     return res
@@ -48,18 +49,15 @@ export const skilling = async (
 
   const now = new Date();
   const finishTime = moment(now)
-    .add(skills[0].time * count, 's')
+    .add(skillList[0].time * count, 's')
     .toDate();
 
-  const skillingCollection = client.db(dbName).collection('skilling');
-  const userCollection = client.db(dbName).collection('apiKeys');
-
-  await userCollection.findOneAndUpdate(
+  await apiKeys.findOneAndUpdate(
     { apiKey: currentUser.apiKey },
     { $set: { finishTime } }
   );
 
-  await skillingCollection.insertOne({
+  await skilling.create({
     playerName: currentUser.playerName,
     skill,
     finishTime,

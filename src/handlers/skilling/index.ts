@@ -1,2 +1,2 @@
-export * from './skilling';
+export * from './startSkilling';
 export * from './skillingInfo';

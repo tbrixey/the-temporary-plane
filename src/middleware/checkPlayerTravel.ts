@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { ExpressRequest } from '../types/express';
-import { client, dbName } from '../mongo';
 import moment from 'moment';
+import traveling from '../mongo/schemas/traveling';
+import apiKeys from '../mongo/schemas/apiKeys';
 
 export const checkPlayerTravel = async (
   req: ExpressRequest,
@@ -14,9 +15,7 @@ export const checkPlayerTravel = async (
     if (currentUser.arrivalTime) {
       const date = new Date();
 
-      const travelCollection = client.db(dbName).collection('traveling');
-      const userCollection = client.db(dbName).collection('apiKeys');
-      const traveler = await travelCollection.findOne({
+      const traveler = await traveling.findOne({
         playerName: currentUser.playerName,
       });
 
@@ -33,21 +32,21 @@ export const checkPlayerTravel = async (
             )} seconds`,
           });
         } else {
-          await travelCollection.deleteOne({
+          await traveling.deleteOne({
             playerName: currentUser.playerName,
           });
-          await userCollection.findOneAndUpdate(
+          await apiKeys.findOneAndUpdate(
             { apiKey: currentUser.apiKey },
             {
               $set: { location: traveler.to.name },
               $unset: { arrivalTime: '' },
             }
           );
-          req.body.currentUser.location = traveler.to.name;
+          req.body.currentUser.location = traveler.to;
           return next();
         }
       } else {
-        await userCollection.findOneAndUpdate(
+        await apiKeys.findOneAndUpdate(
           { apiKey: currentUser.apiKey },
           { $unset: { arrivalTime: '' } }
         );

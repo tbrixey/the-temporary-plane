@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { client, dbName } from '../../mongo';
+import apiKeys from '../../mongo/schemas/apiKeys';
+import quests from '../../mongo/schemas/quests';
 
 const genKey = () => {
   return [...Array(10)]
@@ -24,20 +25,16 @@ export const registerKey = async (req: Request, res: Response) => {
 
   const apiKey = genKey();
 
-  const collection = client.db(dbName).collection('apiKeys');
-
-  const getPlayer = await collection.findOne({
+  const getPlayer = await apiKeys.findOne({
     playerName,
   });
 
   if (!getPlayer) {
-    const newPlayerQuest = await client
-      .db(dbName)
-      .collection('quests')
-      .find({ id: 1 }, { projection: { _id: 0 } })
-      .toArray();
+    const newPlayerQuest = await quests.findOne({
+      _id: '61dc6460dd77ecf037e9251d',
+    });
 
-    await collection.insertOne({
+    await apiKeys.create({
       apiKey,
       count: 0,
       playerName,
@@ -54,14 +51,14 @@ export const registerKey = async (req: Request, res: Response) => {
         cooking: 0,
         gathering: 0,
       },
-      quests: [{ id: 1 }],
+      quests: [{ id: '61dc6460dd77ecf037e9251d' }],
     });
     return res.status(201).json({
       data: {
         playerName,
         apiKey,
         message: 'Player created! Pick a class using /api/class/<classname>',
-        quests: newPlayerQuest[0],
+        quests: newPlayerQuest,
       },
     });
   } else {

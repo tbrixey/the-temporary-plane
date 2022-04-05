@@ -1,21 +1,21 @@
 import { find } from 'lodash';
-import { client, dbName } from '../mongo';
-import { User, Quest } from '../types';
+import apiKeys from '../mongo/schemas/apiKeys';
+import { User, Quest, Item } from '../types';
 import { itemsToAdd } from './items';
 import nextLevel from './nextLevel';
 
-export const checkQuest = async (user: User, questId: number) => {
-  const quest = find(user.quests, { id: questId });
+export const checkQuest = async (user: User, questId: string) => {
+  const quest = find(user.quests, { _id: questId });
   if (!quest) {
     return { complete: false };
   }
 
   switch (quest.type) {
     case 'intro':
-      if (quest.id === 1) {
+      if (quest._id === '61dc6460dd77ecf037e9251d') {
         if (user.class && user.race && user.startingLocation) {
           try {
-            await giveRewards(user, quest.rewards, quest.id);
+            await giveRewards(user, quest.rewards, quest._id);
             return { complete: true, title: quest.title };
           } catch (err) {
             console.warn('Error giving rewards');
@@ -38,13 +38,11 @@ const giveRewards = async (
   rewards: {
     gold: number;
     xp: number;
-    items?: { id: number; count: number }[];
+    items?: { item: Item; count: number }[];
   },
-  questId: number,
-  acquire?: number
+  questId: string,
+  acquire?: Item
 ) => {
-  const userCollection = client.db(dbName).collection('apiKeys');
-
   const query: any = {
     $inc: {
       gold: rewards.gold,
@@ -62,7 +60,7 @@ const giveRewards = async (
   }
 
   if (rewards.items && rewards.items.length > 0) {
-    await itemsToAdd(user, rewards.items, userCollection);
+    await itemsToAdd(user, rewards.items);
   }
 
   if (acquire) {
@@ -71,28 +69,26 @@ const giveRewards = async (
     query.$pull = { quests: { id: questId } };
   }
 
-  return userCollection.updateOne(
+  const updated = await apiKeys.findOneAndUpdate(
     { apiKey: user.apiKey },
-    query,
-    (err, res) => {
-      return res;
-    }
+    query
   );
+
+  return updated;
 };
 
 const checkFetchQuest = async (user: User, quest: Quest) => {
-  const userCollection = client.db(dbName).collection('apiKeys');
   const checkItem = find(user.bag, { id: quest.acquire });
   const checkFinalLocation = user.location.name === quest.location;
   const checkGotoLocation = user.location.name === quest.goto;
 
   if (checkGotoLocation && !checkItem) {
-    await itemsToAdd(user, [{ id: quest.acquire, count: 1 }], userCollection);
+    await itemsToAdd(user, [{ item: quest.acquire, count: 1 }]);
   }
   if (!checkItem) return { complete: false };
   if (!checkFinalLocation) return { complete: false };
 
-  await giveRewards(user, quest.rewards, quest.id, quest.acquire);
+  await giveRewards(user, quest.rewards, quest._id, quest.acquire);
   return { complete: true, title: quest.title };
 };
 
@@ -100,6 +96,6 @@ const checkExploreQuest = async (user: User, quest: Quest) => {
   const checkFinalLocation = user.location.name === quest.location;
 
   if (!checkFinalLocation) return { complete: false };
-  await giveRewards(user, quest.rewards, quest.id);
+  await giveRewards(user, quest.rewards, quest._id);
   return { complete: true, title: quest.title };
 };

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../app';
-import { client, dbName } from '../mongo';
+import apiKeys from '../mongo/schemas/apiKeys';
 
 describe('Fails auth', () => {
   it('responds with unauthorized', async () => {
@@ -28,9 +28,7 @@ describe('Register user', () => {
       .post('/api/city/Thalo')
       .set('Authorization', 'Bearer ' + userParse.apiKey);
 
-    const collection = client.db(dbName).collection('apiKeys');
-
-    await collection.deleteOne({ playerName: 'unit-test-user-new' });
+    await apiKeys.deleteOne({ playerName: 'unit-test-user-new' });
     expect(classRes.status).toEqual(200);
     expect(JSON.parse(classRes.text).data.class).toBe('Fighter');
     expect(raceRes.status).toEqual(200);
