@@ -5,7 +5,12 @@ import dotenv from 'dotenv';
 import { registerKey } from './handlers/player/register';
 import { getClass, registerClass } from './handlers/classes';
 import { checkApiKey } from './middleware/apiKey';
-import { getPlayer, getPlayers, levelPlayer } from './handlers/player';
+import {
+  authorizePlayer,
+  getPlayer,
+  getPlayers,
+  levelPlayer,
+} from './handlers/player';
 import {
   getCities,
   getLocations,
@@ -40,7 +45,8 @@ app.get('/api', (req, res) => {
   res.send('The Temporary Plane is online');
 });
 
-// app.post("/api/register/:playerName", registerKey);
+app.post('/api/register/:playerName', registerKey);
+app.post('/api/authorizePlayer', authorizePlayer);
 app.get('/api/players', getPlayers);
 app.get('/api/cities', getCities);
 app.get('/api/class', getClass);

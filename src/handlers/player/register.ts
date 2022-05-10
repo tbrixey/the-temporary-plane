@@ -23,6 +23,10 @@ export const registerKey = async (req: Request, res: Response) => {
 
   const playerName = req.params.playerName;
 
+  if (playerName.length > 36) {
+    return res.status(400).send({ message: 'Player name is too long!' });
+  }
+
   const apiKey = genKey();
 
   const getPlayer = await apiKeys.findOne({
@@ -51,7 +55,7 @@ export const registerKey = async (req: Request, res: Response) => {
         cooking: 0,
         gathering: 0,
       },
-      quests: [{ id: '61dc6460dd77ecf037e9251d' }],
+      quests: ['61dc6460dd77ecf037e9251d'],
     });
     return res.status(201).json({
       data: {

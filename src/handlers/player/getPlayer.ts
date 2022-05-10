@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import apiKeys from '../../mongo/schemas/apiKeys';
+import { ExpressRequest } from '../../types';
 
 export const getPlayer = async (req: Request, res: Response) => {
   const incommingPlayerName = req.params.playerName;
@@ -35,6 +36,20 @@ export const getPlayers = async (req: Request, res: Response) => {
     .find({ startingLocation: { $exists: true } })
     .populate('location')
     .select('playerName location');
+
+  return res.status(200).json({ data: players });
+};
+
+export const authorizePlayer = async (
+  req: ExpressRequest<{ apiKey: string }>,
+  res: Response
+) => {
+  const players = await apiKeys
+    .findOne({ apiKey: req.body.apiKey })
+    .populate('bag.item')
+    .populate('quests')
+    .populate('location')
+    .lean();
 
   return res.status(200).json({ data: players });
 };
