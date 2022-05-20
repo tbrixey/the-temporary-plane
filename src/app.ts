@@ -2,6 +2,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 import { registerKey } from './handlers/player/register';
 import { getClass, registerClass } from './handlers/classes';
 import { checkApiKey } from './middleware/apiKey';
@@ -37,7 +38,7 @@ const rateLimiter = rateLimit({
   message: 'Rate limit exceeded. Please try again later.',
 });
 
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors());
 app.use('/api', rateLimiter);
 
