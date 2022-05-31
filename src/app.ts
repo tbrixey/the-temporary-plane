@@ -57,7 +57,7 @@ app.use(checkApiKey);
 
 app.post('/api/class/:className', registerClass);
 app.post('/api/race/:raceName', registerRace);
-app.post('/api/city/:cityName', registerStartingCity);
+app.post('/api/city/:cityId', registerStartingCity);
 app.get('/api/player/:playerName', getPlayer);
 
 app.use(characterCreationComplete);

@@ -12,20 +12,17 @@ export const checkQuest = async (user: User, questId: string) => {
 
   switch (quest.type) {
     case 'intro':
-      if (quest._id === '61dc6460dd77ecf037e9251d') {
-        if (user.class && user.race && user.startingLocation) {
-          try {
-            await giveRewards(user, quest.rewards, quest._id);
-            return { complete: true, title: quest.title };
-          } catch (err) {
-            console.warn('Error giving rewards');
-            return { complete: false };
-          }
-        } else {
+      if (user.class && user.race && user.startingLocation) {
+        try {
+          await giveRewards(user, quest.rewards, quest._id);
+          return { complete: true, title: quest.title };
+        } catch (err) {
+          console.warn('Error giving rewards');
           return { complete: false };
         }
+      } else {
+        return { complete: false };
       }
-      break;
     case 'fetch':
       return checkFetchQuest(user, quest);
     case 'explore':
@@ -64,9 +61,9 @@ const giveRewards = async (
   }
 
   if (acquire) {
-    query.$pull = { bag: { id: acquire }, quests: { id: questId } };
+    query.$pull = { bag: { id: acquire }, quests: questId };
   } else {
-    query.$pull = { quests: { id: questId } };
+    query.$pull = { quests: questId };
   }
 
   const updated = await apiKeys.findOneAndUpdate(

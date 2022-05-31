@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
+import { ObjectId } from 'mongodb';
 import apiKeys from '../../mongo/schemas/apiKeys';
+import locations from '../../mongo/schemas/locations';
 
 // This registers a user to a specific class
 
 export const registerStartingCity = async (req: Request, res: Response) => {
-  if (!req.params.cityName) {
-    res.status(400).json({ message: 'Missing cityName' });
+  if (!req.params.cityId) {
+    res.status(400).json({ message: 'Missing cityId' });
   }
 
   if (req.body.currentUser.startingLocation) {
@@ -13,12 +15,16 @@ export const registerStartingCity = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: 'Player already has a starting location' });
   } else {
+    const city = await locations.findOne({ _id: req.params.cityId });
+    if (!city) {
+      return res.status(400).json({ message: 'City does not exist' });
+    }
     const newDoc = await apiKeys.findOneAndUpdate(
       { apiKey: req.body.currentUser.apiKey },
       {
         $set: {
-          startingLocation: req.params.cityName,
-          location: req.params.cityName,
+          startingLocation: ObjectId(req.params.cityId),
+          location: ObjectId(req.params.cityId),
           updatedOn: new Date(),
         },
       },
