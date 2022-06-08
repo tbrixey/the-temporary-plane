@@ -58,10 +58,13 @@ export const travelTo = async (
     { $set: { arrivalTime: timeToArrival } }
   );
 
+  const fromId = new ObjectId(currentUser.location._id);
+  const toId = new ObjectId(destLocation._id);
+
   await traveling.create({
     playerName: currentUser.playerName,
-    from: ObjectId(currentUser.location._id),
-    to: ObjectId(destLocation._id),
+    from: fromId,
+    to: toId,
     arrivalTime: timeToArrival,
   });
 

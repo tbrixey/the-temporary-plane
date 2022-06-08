@@ -19,12 +19,13 @@ export const registerStartingCity = async (req: Request, res: Response) => {
     if (!city) {
       return res.status(400).json({ message: 'City does not exist' });
     }
+    const startingLocationId = new ObjectId(req.params.cityId);
     const newDoc = await apiKeys.findOneAndUpdate(
       { apiKey: req.body.currentUser.apiKey },
       {
         $set: {
-          startingLocation: ObjectId(req.params.cityId),
-          location: ObjectId(req.params.cityId),
+          startingLocation: startingLocationId,
+          location: startingLocationId,
           updatedOn: new Date(),
         },
       },
