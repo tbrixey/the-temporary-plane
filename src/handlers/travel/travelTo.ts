@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { find } from 'lodash';
 import moment from 'moment';
+import { ObjectId } from 'mongodb';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import locations from '../../mongo/schemas/locations';
 import traveling from '../../mongo/schemas/traveling';
@@ -59,8 +60,8 @@ export const travelTo = async (
 
   await traveling.create({
     playerName: currentUser.playerName,
-    from: currentUser.location,
-    to: destLocation,
+    from: ObjectId(currentUser.location._id),
+    to: ObjectId(destLocation._id),
     arrivalTime: timeToArrival,
   });
 
@@ -68,5 +69,6 @@ export const travelTo = async (
     message: `It will take ${(newTime * 100).toFixed(
       0
     )} seconds to get to ${destination}`,
+    time: (newTime * 100).toFixed(0),
   });
 };

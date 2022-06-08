@@ -15,9 +15,11 @@ export const checkPlayerTravel = async (
     if (currentUser.arrivalTime) {
       const date = new Date();
 
-      const traveler = await traveling.findOne({
-        playerName: currentUser.playerName,
-      });
+      const traveler = await traveling
+        .findOne({
+          playerName: currentUser.playerName,
+        })
+        .populate('to');
 
       if (traveler) {
         if (currentUser.arrivalTime >= date) {
@@ -38,7 +40,7 @@ export const checkPlayerTravel = async (
           await apiKeys.findOneAndUpdate(
             { apiKey: currentUser.apiKey },
             {
-              $set: { location: traveler.to.name },
+              $set: { location: traveler.to._id },
               $unset: { arrivalTime: '' },
             }
           );
