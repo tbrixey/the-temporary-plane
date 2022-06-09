@@ -40,25 +40,25 @@ const rateLimiter = rateLimit({
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/api', rateLimiter);
+app.use('/gameapi', rateLimiter);
 
-app.get('/api', (req, res) => {
+app.get('/gameapi', (req, res) => {
   res.send('The Temporary Plane is online');
 });
 
-app.post('/api/register/:playerName', registerKey);
-app.post('/api/authorizePlayer', authorizePlayer);
-app.get('/api/players', getPlayers);
-app.get('/api/cities', getCities);
-app.get('/api/class', getClass);
-app.get('/api/race', getRaces);
+app.post('/gameapi/register/:playerName', registerKey);
+app.post('/gameapi/authorizePlayer', authorizePlayer);
+app.get('/gameapi/players', getPlayers);
+app.get('/gameapi/cities', getCities);
+app.get('/gameapi/class', getClass);
+app.get('/gameapi/race', getRaces);
 
 app.use(checkApiKey);
 
-app.post('/api/class/:className', registerClass);
-app.post('/api/race/:raceName', registerRace);
-app.post('/api/city/:cityId', registerStartingCity);
-app.get('/api/player/:playerName', getPlayer);
+app.post('/gameapi/class/:className', registerClass);
+app.post('/gameapi/race/:raceName', registerRace);
+app.post('/gameapi/city/:cityId', registerStartingCity);
+app.get('/gameapi/player/:playerName', getPlayer);
 
 app.use(characterCreationComplete);
 app.use(checkPlayerTravel);
@@ -80,18 +80,18 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.post('/api/player/level/:toLevel', levelPlayer);
-app.post('/api/item/use/:itemId', useItem);
+app.post('/gameapi/player/level/:toLevel', levelPlayer);
+app.post('/gameapi/item/use/:itemId', useItem);
 
-app.get('/api/travel/:destination', travelInfo);
-app.post('/api/travel/:destination', travelTo);
+app.get('/gameapi/travel/:destination', travelInfo);
+app.post('/gameapi/travel/:destination', travelTo);
 
-app.get('/api/quests', isPlayerInCity, getQuests);
-app.post('/api/quests/:questId', isPlayerInCity, acceptQuest);
-app.delete('/api/quests/:questId', isPlayerInCity, dropQuest);
+app.get('/gameapi/quests', isPlayerInCity, getQuests);
+app.post('/gameapi/quests/:questId', isPlayerInCity, acceptQuest);
+app.delete('/gameapi/quests/:questId', isPlayerInCity, dropQuest);
 
-app.get('/api/skilling', skillingInfo);
-app.post('/api/skilling', startSkilling);
+app.get('/gameapi/skilling', skillingInfo);
+app.post('/gameapi/skilling', startSkilling);
 
 app.use((req, res, next) => {
   res.status(404);
