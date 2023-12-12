@@ -4,7 +4,7 @@
   "description": "A RESTful api based world and game",
   "main": "dist/server.js",
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
   },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
@@ -14,7 +14,8 @@
     "dev": "nodemon",
     "test": "jest --watch",
     "test-ci": "jest",
-    "pretty": "npx prettier --write ."
+    "pretty": "npx prettier --write .",
+    "seed": "ts-node ./src/mongo/seed/index.ts"
   },
   "repository": {
     "type": "git",
