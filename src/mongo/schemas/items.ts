@@ -24,7 +24,10 @@ export const itemSchema = new mongoose.Schema<Item>(
         },
       ],
     },
-    type: String,
+    type: {
+      type: String,
+      enum: ['consumable'],
+    },
     value: Number,
     weight: Number,
   },
