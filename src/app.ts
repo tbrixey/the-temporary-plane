@@ -48,7 +48,7 @@ app.get('/gameapi', (req, res) => {
 
 app.post('/gameapi/register/:playerName', registerKey);
 app.post('/gameapi/authorizePlayer', authorizePlayer);
-app.get('/gameapi/players', getPlayers);
+app.get('/gameapi/players', getPlayers); //TODO MAKE THIS NOT OPEN OR RESTRICT TO ONLY DATA I NEED
 app.get('/gameapi/cities', getCities);
 app.get('/gameapi/class', getClass);
 app.get('/gameapi/race', getRaces);
