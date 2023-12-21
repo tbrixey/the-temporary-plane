@@ -44,6 +44,7 @@ export const authorizePlayer = async (
   req: ExpressRequest<{ apiKey: string }>,
   res: Response
 ) => {
+  console.info('AUTHORIZE ATTEMPT ', req.body);
   const players = await apiKeys
     .findOne({ apiKey: req.body.apiKey })
     .populate('bag.item')
