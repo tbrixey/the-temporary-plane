@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import { findIndex, findKey, keys } from 'lodash';
 import moment from 'moment';
 import apiKeys from '../../mongo/schemas/apiKeys';
@@ -6,15 +6,14 @@ import items from '../../mongo/schemas/items';
 import { ExpressRequest } from '../../types/express';
 
 export const useItem = async (
-  req: ExpressRequest<{}, { itemId: string }>,
-  res: Response
+  c: Context<{}, { itemId: string }>
 ) => {
-  if (!req.params.itemId) {
-    return res.status(400).json({ message: 'Missing parameter playerName' });
-  }
+  const itemId = c.req.param('itemId');
+  const currentUser = c.get('currentUser');
 
-  const itemId = req.params.itemId;
-  const currentUser = req.body.currentUser;
+  if (!itemId) {
+    return c.json({ message: 'Missing parameter playerName' }, 400);
+  }
 
   const itemIndex = findIndex(
     currentUser.bag,
@@ -45,9 +44,7 @@ export const useItem = async (
                 hitpoints: newHitpoint,
               };
             } else {
-              return res
-                .status(200)
-                .json({ message: 'You are already at max health' });
+              return c.json({ message: 'You are already at max health' }, 200);
             }
             break;
           case 'stats':
@@ -73,9 +70,9 @@ export const useItem = async (
         }
       }
     } else if (itemToUse.type === 'junk') {
-      return res.status(200).json({
+      return c.json({
         message: "You can't use " + itemToUse.name,
-      });
+      }, 200);
     }
 
     // if (currentUser.bag[itemIndex].count - 1 <= 0) {
@@ -101,11 +98,11 @@ export const useItem = async (
       );
     }
 
-    return res.status(200).json({ message: 'You used ' + itemToUse.name });
+    return c.json({ message: 'You used ' + itemToUse.name }, 200);
   } else {
-    return res.status(400).json({
+    return c.json({
       message: 'You searched everywhere, but can not find this item.',
-    });
+    }, 400);
   }
 };
 

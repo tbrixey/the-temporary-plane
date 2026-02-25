@@ -1,17 +1,14 @@
-import { NextFunction, Response } from 'express';
-import locations from '../mongo/schemas/locations';
-import { ExpressRequest } from '../types';
+import { Context, Next } from 'hono';
 
 export const isPlayerInCity = async (
-  req: ExpressRequest,
-  res: Response,
-  next: NextFunction
+  c: Context,
+  next: Next
 ) => {
-  if (req.body.currentUser.location.type === 'city') {
-    next();
+  const currentUser = c.get('currentUser');
+
+  if (currentUser?.location?.type === 'city') {
+    return next();
   } else {
-    return res
-      .status(400)
-      .json({ message: 'Must be located in a city to run this command.' });
+    return c.json({ message: 'Must be located in a city to run this command.' }, 400);
   }
 };

@@ -1,8 +1,9 @@
-import express from 'express';
-import rateLimit from 'express-rate-limit';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
+import { Context, Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+import { rateLimiter } from 'hono-rate-limiter';
+import { zValidator } from '@hono/zod-validator';
+import { z } from 'zod';
 import { registerKey } from './handlers/player/register';
 import { getClass, registerClass } from './handlers/classes';
 import { checkApiKey } from './middleware/apiKey';
@@ -28,31 +29,42 @@ import { acceptQuest, dropQuest, getQuests } from './handlers/quests';
 import { isPlayerInCity } from './middleware/isPlayerInCity';
 import { startSkilling, skillingInfo } from './handlers/skilling';
 import { checkPlayerSkillingStatus } from './middleware/checkPlayerSkillingStatus';
-const app = express();
+import { AppEnv } from './types/express';
 
-dotenv.config();
-
-const rateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 100, // limit
-  message: 'Rate limit exceeded. Please try again later.',
+const authorizePlayerSchema = z.object({ apiKey: z.string() });
+const startSkillingSchema = z.object({
+  skillName: z.string(),
+  item: z.string(),
+  count: z.number().optional(),
 });
 
-app.use(bodyParser.json());
+const app = new Hono<AppEnv>();
+
+// Rate limiting
+app.use('/gameapi', rateLimiter({
+  windowMs: 1 * 60 * 1000,
+  limit: 100,
+  keyGenerator: (c: Context) => c.req.header('x-forwarded-for') ?? c.req.raw.headers.get('host') ?? 'unknown',
+}));
+
+app.use(logger());
 app.use(cors());
-app.use('/gameapi', rateLimiter);
 
-app.get('/gameapi', (req, res) => {
-  res.send('The Temporary Plane is online');
+// Health check
+app.get('/gameapi', (c) => {
+  return c.json({ message: 'The Temporary Plane is online' });
 });
 
+// Public routes
 app.post('/gameapi/register/:playerName', registerKey);
-app.post('/gameapi/authorizePlayer', authorizePlayer);
-app.get('/gameapi/players', getPlayers); //TODO MAKE THIS NOT OPEN OR RESTRICT TO ONLY DATA I NEED
+app.post('/gameapi/authorizePlayer', zValidator('json', authorizePlayerSchema), authorizePlayer);
+app.get('/gameapi/players', getPlayers);
 app.get('/gameapi/cities', getCities);
+app.get('/gameapi/locations', getLocations);
 app.get('/gameapi/class', getClass);
 app.get('/gameapi/race', getRaces);
 
+// API key authentication
 app.use(checkApiKey);
 
 app.post('/gameapi/class/:className', registerClass);
@@ -60,24 +72,19 @@ app.post('/gameapi/race/:raceName', registerRace);
 app.post('/gameapi/city/:cityId', registerStartingCity);
 app.get('/gameapi/player/:playerName', getPlayer);
 
+// Character creation middleware
 app.use(characterCreationComplete);
 app.use(checkPlayerTravel);
 app.use(checkQuestComplete);
 app.use(checkPlayerSkillingStatus);
 
-app.use(async (req, res, next) => {
-  const oldSend = res.json;
-  res.json = (data) => {
-    const questList =
-      req.body.questsComplete && req.body.questsComplete.join(', ');
-    const newData = {
-      data,
-      questsComplete: questList,
-    };
-    res.json = oldSend;
-    return res.json(newData);
-  };
-  next();
+// Quest completion wrapper
+app.use(async (c, next) => {
+  const oldSend = c.res.headers.get('X-Quests-Complete');
+  await next();
+  if (oldSend) {
+    c.res.headers.set('X-Quests-Complete', oldSend);
+  }
 });
 
 app.post('/gameapi/player/level/:toLevel', levelPlayer);
@@ -91,11 +98,11 @@ app.post('/gameapi/quests/:questId', isPlayerInCity, acceptQuest);
 app.delete('/gameapi/quests/:questId', isPlayerInCity, dropQuest);
 
 app.get('/gameapi/skilling', skillingInfo);
-app.post('/gameapi/skilling', startSkilling);
+app.post('/gameapi/skilling', zValidator('json', startSkillingSchema), startSkilling);
 
-app.use((req, res, next) => {
-  res.status(404);
-  res.send('The path was not found.');
+// 404 handler
+app.notFound((c) => {
+  return c.json({ message: 'The path was not found.' }, 404);
 });
 
 export default app;

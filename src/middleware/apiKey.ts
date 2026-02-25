@@ -1,14 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
+import { Context, Next } from 'hono';
 import apiKeys from '../mongo/schemas/apiKeys';
 import { addBonusStats } from '../util/player';
 
 export const checkApiKey = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+  c: Context,
+  next: Next
 ) => {
-  if (req.headers.authorization) {
-    const authSplit = req.headers.authorization.split(' ');
+  const authHeader = c.req.header('authorization');
+
+  if (authHeader) {
+    const authSplit = authHeader.split(' ');
     const lookupKey = await apiKeys
       .findOne({ apiKey: authSplit[1] })
       .populate('bag.item')
@@ -18,12 +19,12 @@ export const checkApiKey = async (
 
     if (lookupKey) {
       const newUser = await addBonusStats(lookupKey);
-      req.body.currentUser = newUser;
-      next();
+      c.set('currentUser', newUser);
+      return next();
     } else {
-      res.status(401).json({ message: 'unauthorized' });
+      return c.json({ message: 'unauthorized' }, 401);
     }
   } else {
-    res.status(401).json({ message: 'unauthorized' });
+    return c.json({ message: 'unauthorized' }, 401);
   }
 };

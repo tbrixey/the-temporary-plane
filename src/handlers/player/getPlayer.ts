@@ -1,56 +1,53 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import apiKeys from '../../mongo/schemas/apiKeys';
-import { ExpressRequest } from '../../types';
 
-export const getPlayer = async (req: Request, res: Response) => {
-  const incommingPlayerName = req.params.playerName;
+export const getPlayer = async (c: Context) => {
+  const incommingPlayerName = c.req.param('playerName');
 
   if (!incommingPlayerName) {
-    return res.status(400).json({ message: 'Missing parameter playerName' });
+    return c.json({ message: 'Missing parameter playerName' }, 400);
   }
 
-  const authSplit = req.headers.authorization.split(' ');
+  const authSplit = c.req.header('authorization')?.split(' ');
 
   const collection = await apiKeys.findOne({
     playerName: incommingPlayerName,
   });
 
   if (collection) {
-    if (collection.apiKey === authSplit[1]) {
-      return res.status(200).json({ data: req.body.currentUser });
+    if (collection.apiKey === authSplit?.[1]) {
+      return c.json({ data: c.get('currentUser') }, 200);
     } else if (collection) {
-      return res.status(200).json({
+      return c.json({
         data: {
           playerName: collection.playerName,
           class: collection.class,
         },
-      });
+      }, 200);
     }
   } else {
-    return res.status(404).json({ message: 'Player not found' });
+    return c.json({ message: 'Player not found' }, 404);
   }
 };
 
-export const getPlayers = async (req: Request, res: Response) => {
+export const getPlayers = async (c: Context) => {
   const players = await apiKeys
     .find({ startingLocation: { $exists: true } })
     .populate('location')
     .select('playerName location');
 
-  return res.status(200).json({ data: players });
+  return c.json({ data: players }, 200);
 };
 
-export const authorizePlayer = async (
-  req: ExpressRequest<{ apiKey: string }>,
-  res: Response
-) => {
-  console.info('AUTHORIZE ATTEMPT ', req.body);
+export const authorizePlayer = async (c: Context) => {
+  const body = await c.req.json<{ apiKey: string }>();
+  console.info('AUTHORIZE ATTEMPT ', body);
   const players = await apiKeys
-    .findOne({ apiKey: req.body.apiKey })
+    .findOne({ apiKey: body.apiKey })
     .populate('bag.item')
     .populate('quests')
     .populate('location')
     .lean();
 
-  return res.status(200).json({ data: players });
+  return c.json({ data: players }, 200);
 };

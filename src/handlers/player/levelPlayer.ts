@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import { ExpressRequest, User } from '../../types';
 
@@ -30,21 +30,16 @@ const levelMap = new Map([
 ]);
 
 export const levelPlayer = async (
-  req: ExpressRequest<{}, { toLevel: string }>,
-  res: Response
+  c: Context<{}, { toLevel: string }>
 ) => {
-  const user = req.body.currentUser;
-  const toLevel = req.params.toLevel;
+  const user = c.get('currentUser');
+  const toLevel = c.req.param('toLevel');
   if (!user.levelPointsToUse || user.levelPointsToUse <= 0) {
-    return res
-      .status(400)
-      .json({ message: "You don't have any level points to use." });
+    return c.json({ message: "You don't have any level points to use." }, 400);
   }
 
   if (!levelMap.has(toLevel)) {
-    return res
-      .status(400)
-      .json({ message: 'Invalid stat to level: ' + toLevel });
+    return c.json({ message: 'Invalid stat to level: ' + toLevel }, 400);
   }
 
   levelMap.get(toLevel)(user);
@@ -61,5 +56,5 @@ export const levelPlayer = async (
     }
   );
 
-  return res.status(200).json({ message: 'You leveled up!', user });
+  return c.json({ message: 'You leveled up!', user }, 200);
 };

@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-import * as core from 'express-serve-static-core';
+import { Context } from 'hono';
 import { Quest } from './quest';
 import { Location } from './';
 import { Item } from './items';
@@ -50,14 +49,16 @@ export interface User {
     time?: Date;
   };
 }
-interface RequestUser {
-  currentUser: User;
-  questsComplete: any;
+export interface AppEnv {
+  Variables: {
+    currentUser: User;
+    questsComplete: string[];
+  };
 }
 
-export type ExpressRequest<Body = {}, Params = any> = Request<
-  core.ParamsDictionary,
-  any,
-  RequestUser & Body,
+/** @deprecated Use Context<AppEnv> or Context directly with c.get('currentUser') */
+export type ExpressRequest<Body = {}, Params = any> = Context<
+  AppEnv,
+  string,
   Params
 >;

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import { find } from 'lodash';
 import moment from 'moment';
 import { ObjectId } from 'mongodb';
@@ -10,17 +10,16 @@ import { ExpressRequest } from '../../types/express';
 // This provies class info when requested
 
 export const travelTo = async (
-  req: ExpressRequest<{}, { destination: string }>,
-  res: Response
+  c: Context<{}, { destination: string }>
 ) => {
-  const currentUser = req.body.currentUser;
-  const destination = req.params.destination;
+  const currentUser = c.get('currentUser');
+  const destination = c.req.param('destination');
   if (!destination) {
-    return res.status(400).json({ message: 'Missing destination' });
+    return c.json({ message: 'Missing destination' }, 400);
   }
 
   if (destination === currentUser.location.name) {
-    return res.status(400).json({ message: 'Currently at destination' });
+    return c.json({ message: 'Currently at destination' }, 400);
   }
 
   const destLocation = await locations.findOne({
@@ -28,16 +27,16 @@ export const travelTo = async (
   });
 
   if (!destLocation) {
-    return res.status(404).json({
+    return c.json({
       message: "Location not found. Check for locations using '/api/locations'",
-    });
+    }, 404);
   }
 
   if (!currentUser.location) {
-    return res.status(404).json({
+    return c.json({
       message:
         "Users location not found. Please reach out to support if you can't travel in a few minutes.",
-    });
+    }, 404);
   }
 
   const x = currentUser.location.x - destLocation.x;
@@ -68,10 +67,10 @@ export const travelTo = async (
     arrivalTime: timeToArrival,
   });
 
-  return res.status(200).json({
+  return c.json({
     message: `It will take ${(newTime * 100).toFixed(
       0
     )} seconds to get to ${destination}`,
     time: (newTime * 100).toFixed(0),
-  });
+  }, 200);
 };

@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import location from '../../mongo/schemas/locations';
 import { ExpressRequest } from '../../types';
 
@@ -9,10 +9,9 @@ interface CityQuery {
 }
 
 export const getLocations = async (
-  req: ExpressRequest<{}, CityQuery>,
-  res: Response
+  c: Context<{}, CityQuery>
 ) => {
   const cities = await location.find();
 
-  res.status(200).json(cities);
+  return c.json(cities, 200);
 };

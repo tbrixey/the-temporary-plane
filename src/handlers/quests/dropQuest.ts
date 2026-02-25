@@ -1,19 +1,19 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import { ExpressRequest } from '../../types';
 import { find } from 'lodash';
 import apiKeys from '../../mongo/schemas/apiKeys';
 
-export const dropQuest = async (req: ExpressRequest, res: Response) => {
-  const questId = parseInt(req.params.questId);
-  const user = req.body.currentUser;
+export const dropQuest = async (c: Context) => {
+  const questId = parseInt(c.req.param('questId'));
+  const user = c.get('currentUser');
   const findQuest = find(user.quests, { id: questId });
 
   if (!questId) {
-    return res.status(400).json({ message: 'Missing quest id.' });
+    return c.json({ message: 'Missing quest id.' }, 400);
   }
 
   if (!findQuest) {
-    return res.status(400).json({ message: 'Quest not found.' });
+    return c.json({ message: 'Quest not found.' }, 400);
   }
 
   await apiKeys.updateOne(
@@ -27,5 +27,5 @@ export const dropQuest = async (req: ExpressRequest, res: Response) => {
     }
   );
 
-  res.status(200).json('Quest abandoned!');
+  return c.json('Quest abandoned!', 200);
 };

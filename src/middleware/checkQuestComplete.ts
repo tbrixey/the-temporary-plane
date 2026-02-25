@@ -1,26 +1,24 @@
-import { NextFunction, Response } from 'express';
-import { ExpressRequest } from '../types/express';
+import { Context, Next } from 'hono';
 import { checkQuest } from '../util/quests';
 
 export const checkQuestComplete = async (
-  req: ExpressRequest,
-  res: Response,
-  next: NextFunction
+  c: Context,
+  next: Next
 ) => {
-  if (req.body.currentUser) {
-    const currentUser = req.body.currentUser;
+  const currentUser = c.get('currentUser');
+
+  if (currentUser) {
     if (currentUser.quests.length > 0) {
-      currentUser.quests.forEach(async (quest) => {
+      const questsComplete: string[] = [];
+      await Promise.all(currentUser.quests.map(async (quest) => {
         const questComplete = await checkQuest(currentUser, quest._id);
         if (questComplete.complete) {
-          if (req.body.questsComplete === undefined) {
-            req.body.questsComplete = [];
-          }
-          req.body.questsComplete.push(quest.title);
+          questsComplete.push(quest.title);
         }
-      });
+      }));
+      c.set('questsComplete', questsComplete);
     }
-
-    next();
   }
+
+  return next();
 };

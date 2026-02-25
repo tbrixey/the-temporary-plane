@@ -1,14 +1,14 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import moment from 'moment';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import skilling from '../../mongo/schemas/skilling';
 import skills from '../../mongo/schemas/skills';
-import { ExpressRequest } from '../../types';
+import { User } from '../../types';
 
 interface SkillingBody {
   skillName: string;
   item: string;
-  count: number;
+  count?: number;
 }
 
 interface FindObject {
@@ -18,16 +18,14 @@ interface FindObject {
   itemName?: string;
 }
 
-export const startSkilling = async (
-  req: ExpressRequest<SkillingBody>,
-  res: Response
-) => {
-  const { currentUser, skillName: skill, item, count = 1 } = req.body;
+export const startSkilling = async (c: Context) => {
+  const currentUser = c.get('currentUser') as User;
+  const { skillName: skill, item, count = 1 } = await c.req.json<SkillingBody>();
 
   if (!skill || !item) {
-    return res.status(400).json({
+    return c.json({
       message: `invalid request. Missing either skillName or item in the body.`,
-    });
+    }, 400);
   }
 
   const findObj: FindObject = {
@@ -41,10 +39,8 @@ export const startSkilling = async (
 
   const skillList = await skills.find(findObj);
 
-  if (skills.length === 0) {
-    return res
-      .status(200)
-      .json({ message: `Unable to work on ${skill} here.` });
+  if (skillList.length === 0) {
+    return c.json({ message: `Unable to work on ${skill} here.` }, 200);
   }
 
   const now = new Date();
@@ -64,7 +60,7 @@ export const startSkilling = async (
     count,
   });
 
-  res.status(200).json({
+  return c.json({
     message: `Started working on ${skill} getting ${item}`,
-  });
+  }, 200);
 };

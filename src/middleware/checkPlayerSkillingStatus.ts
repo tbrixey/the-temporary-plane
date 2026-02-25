@@ -1,17 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
-import { ExpressRequest } from '../types/express';
+import { Context, Next } from 'hono';
 import moment from 'moment';
 import skilling from '../mongo/schemas/skilling';
 import apiKeys from '../mongo/schemas/apiKeys';
 
 export const checkPlayerSkillingStatus = async (
-  req: ExpressRequest,
-  res: Response,
-  next: NextFunction
+  c: Context,
+  next: Next
 ) => {
-  if (req.body.currentUser) {
-    const currentUser = req.body.currentUser;
+  const currentUser = c.get('currentUser');
 
+  if (currentUser) {
     if (currentUser.finishTime) {
       const date = new Date();
 
@@ -23,14 +21,14 @@ export const checkPlayerSkillingStatus = async (
         if (currentUser.finishTime >= date) {
           const dateNow = moment(date);
           const dateFinished = moment(currentUser.finishTime);
-          return res.status(200).json({
+          return c.json({
             message: `Currently skilling ${
               skiller.skill
             }. Please wait until you finish in ${dateFinished.diff(
               dateNow,
               'seconds'
             )} seconds`,
-          });
+          }, 200);
         } else {
           await skilling.deleteOne({
             playerName: currentUser.playerName,
@@ -55,4 +53,6 @@ export const checkPlayerSkillingStatus = async (
 
     return next();
   }
+
+  return next();
 };

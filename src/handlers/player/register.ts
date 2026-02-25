@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import quests from '../../mongo/schemas/quests';
 
@@ -9,22 +9,22 @@ const genKey = () => {
     .replace(/\./g, '');
 };
 
-export const registerKey = async (req: Request, res: Response) => {
-  if (req.params.playerName === undefined) {
-    return res.status(400).send({ message: 'Missing player name' });
+export const registerKey = async (c: Context) => {
+  const playerName = c.req.param('playerName');
+
+  if (playerName === undefined) {
+    return c.json({ message: 'Missing player name' }, 400);
   }
 
   if (
     process.env.NODE_ENV !== 'test' &&
-    req.params.playerName === 'unit-test-user-new'
+    playerName === 'unit-test-user-new'
   ) {
-    return res.status(409).send({ message: 'Player already exists!' });
+    return c.json({ message: 'Player already exists!' }, 409);
   }
 
-  const playerName = req.params.playerName;
-
   if (playerName.length > 36) {
-    return res.status(400).send({ message: 'Player name is too long!' });
+    return c.json({ message: 'Player name is too long!' }, 400);
   }
 
   const apiKey = genKey();
@@ -57,15 +57,15 @@ export const registerKey = async (req: Request, res: Response) => {
       },
       quests: ['61dc6460dd77ecf037e9251d'],
     });
-    return res.status(201).json({
+    return c.json({
       data: {
         playerName,
         apiKey,
         message: 'Player created! Pick a class using /api/class/<classname>',
         quests: newPlayerQuest,
       },
-    });
+    }, 201);
   } else {
-    return res.status(409).json({ message: 'Player already exists!' });
+    return c.json({ message: 'Player already exists!' }, 409);
   }
 };

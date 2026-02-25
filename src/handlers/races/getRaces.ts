@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import races from '../../mongo/schemas/races';
 
-export const getRaces = async (req: Request, res: Response) => {
+export const getRaces = async (c: Context) => {
   const raceList = await races.find();
 
-  res.status(200).json({ data: raceList });
+  return c.json({ data: raceList }, 200);
 };

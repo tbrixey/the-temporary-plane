@@ -1,24 +1,28 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import classes from '../../mongo/schemas/classes';
 
 // This registers a user to a specific class
 
-export const registerClass = async (req: Request, res: Response) => {
-  if (!req.params.className) {
-    return res.status(400).json({ message: 'Missing class' });
+export const registerClass = async (c: Context) => {
+  const className = c.req.param('className');
+
+  if (!className) {
+    return c.json({ message: 'Missing class' }, 400);
   }
 
   const classFound = await classes.findOne({
-    name: req.params.className,
+    name: className,
   });
 
   if (!classFound) {
-    return res.status(400).json({ message: 'Class not found' });
+    return c.json({ message: 'Class not found' }, 400);
   }
 
-  if (req.body.currentUser.class) {
-    return res.status(400).json({ message: 'Player already has a class' });
+  const currentUser = c.get('currentUser');
+
+  if (currentUser.class) {
+    return c.json({ message: 'Player already has a class' }, 400);
   } else {
     const statBoost: { [key: string]: number } = {
       str: 0,
@@ -28,7 +32,7 @@ export const registerClass = async (req: Request, res: Response) => {
       luck: 0,
     };
 
-    switch (req.params.className) {
+    switch (className) {
       case 'Fighter':
         statBoost.str = 1;
         statBoost.con = 1;
@@ -50,10 +54,10 @@ export const registerClass = async (req: Request, res: Response) => {
     }
 
     const newDoc = await apiKeys.findOneAndUpdate(
-      { apiKey: req.body.currentUser.apiKey },
+      { apiKey: currentUser.apiKey },
       {
         $set: {
-          class: req.params.className,
+          class: className,
           weight: classFound.weight,
           speed: classFound.speed,
           updatedOn: new Date(),
@@ -62,9 +66,9 @@ export const registerClass = async (req: Request, res: Response) => {
       },
       { returnDocument: 'after' }
     );
-    return res.status(200).json({
+    return c.json({
       data: { ...newDoc },
       message: 'Class selected! Pick a race using /api/race/<racename>',
-    });
+    }, 200);
   }
 };

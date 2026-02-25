@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import location from '../../mongo/schemas/locations';
 import { ExpressRequest } from '../../types';
 
@@ -9,10 +9,9 @@ interface CityQuery {
 }
 
 export const getCities = async (
-  req: ExpressRequest<{}, CityQuery>,
-  res: Response
+  c: Context<{}, CityQuery>
 ) => {
-  const filters = req.query;
+  const filters = c.req.query;
   const findObj: {
     name?: { $regex: string; $options: string };
     population?: number;
@@ -27,5 +26,5 @@ export const getCities = async (
 
   const cities = await location.find(findObj);
 
-  res.status(200).json({ data: cities });
+  return c.json({ data: cities }, 200);
 };

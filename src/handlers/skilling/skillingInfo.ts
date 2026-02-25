@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Context } from 'hono';
 import { isNumber } from 'lodash';
 import skills from '../../mongo/schemas/skills';
 import { ExpressRequest } from '../../types';
@@ -15,8 +15,8 @@ interface SkillSearchObj {
   level?: { $lte: number };
 }
 
-export const skillingInfo = async (req: ExpressRequest, res: Response) => {
-  const filters: SkillingQuery = req.query;
+export const skillingInfo = async (c: Context) => {
+  const filters: SkillingQuery = c.req.query;
   const findObj: SkillSearchObj = {};
 
   if (filters.skill) findObj.skill = filters.skill;
@@ -27,10 +27,8 @@ export const skillingInfo = async (req: ExpressRequest, res: Response) => {
   const skillList = await skills.find(findObj);
 
   if (skillList.length === 0) {
-    return res
-      .status(200)
-      .json({ message: 'There are no skills matching your criteria.' });
+    return c.json({ message: 'There are no skills matching your criteria.' }, 200);
   }
 
-  res.status(200).json({ data: skillList });
+  return c.json({ data: skillList }, 200);
 };

@@ -1,17 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
-import { ExpressRequest } from '../types/express';
+import { Context, Next } from 'hono';
 import moment from 'moment';
 import traveling from '../mongo/schemas/traveling';
 import apiKeys from '../mongo/schemas/apiKeys';
 
 export const checkPlayerTravel = async (
-  req: ExpressRequest,
-  res: Response,
-  next: NextFunction
+  c: Context,
+  next: Next
 ) => {
-  if (req.body.currentUser) {
-    const currentUser = req.body.currentUser;
+  const currentUser = c.get('currentUser');
 
+  if (currentUser) {
     if (currentUser.arrivalTime) {
       const date = new Date();
 
@@ -25,14 +23,14 @@ export const checkPlayerTravel = async (
         if (currentUser.arrivalTime >= date) {
           const dateNow = moment(date);
           const dateArrive = moment(currentUser.arrivalTime);
-          return res.status(200).json({
+          return c.json({
             message: `Currently in transit to ${
               traveler.to.name
             }. Please wait until you arrive in ${dateArrive.diff(
               dateNow,
               'seconds'
             )} seconds`,
-          });
+          }, 200);
         } else {
           await traveling.deleteOne({
             playerName: currentUser.playerName,
@@ -44,7 +42,7 @@ export const checkPlayerTravel = async (
               $unset: { arrivalTime: '' },
             }
           );
-          req.body.currentUser.location = traveler.to;
+          c.set('currentUser', { ...currentUser, location: traveler.to });
           return next();
         }
       } else {
@@ -57,4 +55,6 @@ export const checkPlayerTravel = async (
 
     return next();
   }
+
+  return next();
 };
