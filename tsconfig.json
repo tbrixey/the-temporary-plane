@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "module": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "target": "ES2022",
     "noImplicitAny": true,
-    "moduleResolution": "bundler",
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
@@ -12,10 +12,6 @@
   },
   "include": ["src/**/*"],
   "ts-node": {
-    "esm": true,
-    "experimentalEsm": true,
-    "compilerOptions": {
-      "module": "ES2022"
-    }
+    "compilerOptions": { "module": "CommonJS", "moduleResolution": "node" }
   }
 }

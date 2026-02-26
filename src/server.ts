@@ -1,4 +1,4 @@
-import { connectDB } from './mongo/index.js';
+import { connectDB } from './mongo';
 import { serve } from '@hono/node-server';
 import app from './app';
 
