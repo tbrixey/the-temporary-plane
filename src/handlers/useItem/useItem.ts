@@ -1,12 +1,12 @@
 import { Context } from 'hono';
-import { findIndex, findKey, keys } from 'lodash';
+import { findIndex, keys } from 'lodash';
 import moment from 'moment';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import items from '../../mongo/schemas/items';
-import { ExpressRequest } from '../../types/express';
+import { AppEnv } from '../../types/express';
 
 export const useItem = async (
-  c: Context<{}, { itemId: string }>
+  c: Context<AppEnv>
 ) => {
   const itemId = c.req.param('itemId');
   const currentUser = c.get('currentUser');

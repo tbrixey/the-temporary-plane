@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import apiKeys from '../../mongo/schemas/apiKeys';
-import { ExpressRequest, User } from '../../types';
+import { AppEnv, User } from '../../types/express';
 
 type Stats = 'str' | 'con' | 'int' | 'dex' | 'luck';
 
@@ -30,7 +30,7 @@ const levelMap = new Map([
 ]);
 
 export const levelPlayer = async (
-  c: Context<{}, { toLevel: string }>
+  c: Context<AppEnv>
 ) => {
   const user = c.get('currentUser');
   const toLevel = c.req.param('toLevel');

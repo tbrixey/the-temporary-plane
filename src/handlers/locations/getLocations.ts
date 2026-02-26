@@ -1,15 +1,9 @@
 import { Context } from 'hono';
 import location from '../../mongo/schemas/locations';
-import { ExpressRequest } from '../../types';
-
-interface CityQuery {
-  name?: string;
-  population?: string;
-  type?: string;
-}
+import { AppEnv } from '../../types/express';
 
 export const getLocations = async (
-  c: Context<{}, CityQuery>
+  c: Context<AppEnv>
 ) => {
   const cities = await location.find();
 

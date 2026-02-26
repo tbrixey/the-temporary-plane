@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const dotenv = require('dotenv') as { config: () => void };
 
 // This ensures all models are loaded
 require('./schemas/apiKeys');

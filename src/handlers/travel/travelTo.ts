@@ -1,16 +1,15 @@
 import { Context } from 'hono';
-import { find } from 'lodash';
 import moment from 'moment';
 import { ObjectId } from 'mongodb';
 import apiKeys from '../../mongo/schemas/apiKeys';
 import locations from '../../mongo/schemas/locations';
 import traveling from '../../mongo/schemas/traveling';
-import { ExpressRequest } from '../../types/express';
+import { AppEnv } from '../../types/express';
 
 // This provies class info when requested
 
 export const travelTo = async (
-  c: Context<{}, { destination: string }>
+  c: Context<AppEnv>
 ) => {
   const currentUser = c.get('currentUser');
   const destination = c.req.param('destination');

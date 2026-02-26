@@ -1,8 +1,10 @@
 import { Context, Next } from 'hono';
+import { AppEnv } from '../types/express';
+import { Quest } from '../types/quest';
 import { checkQuest } from '../util/quests';
 
 export const checkQuestComplete = async (
-  c: Context,
+  c: Context<AppEnv>,
   next: Next
 ) => {
   const currentUser = c.get('currentUser');
@@ -10,7 +12,7 @@ export const checkQuestComplete = async (
   if (currentUser) {
     if (currentUser.quests.length > 0) {
       const questsComplete: string[] = [];
-      await Promise.all(currentUser.quests.map(async (quest) => {
+      await Promise.all(currentUser.quests.map(async (quest: Quest) => {
         const questComplete = await checkQuest(currentUser, quest._id);
         if (questComplete.complete) {
           questsComplete.push(quest.title);

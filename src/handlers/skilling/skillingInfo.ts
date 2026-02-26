@@ -1,13 +1,6 @@
 import { Context } from 'hono';
-import { isNumber } from 'lodash';
 import skills from '../../mongo/schemas/skills';
-import { ExpressRequest } from '../../types';
-
-interface SkillingQuery {
-  skill?: string;
-  level?: string;
-  location?: string;
-}
+import { AppEnv } from '../../types/express';
 
 interface SkillSearchObj {
   location?: string;
@@ -15,14 +8,14 @@ interface SkillSearchObj {
   level?: { $lte: number };
 }
 
-export const skillingInfo = async (c: Context) => {
-  const filters: SkillingQuery = c.req.query;
+export const skillingInfo = async (c: Context<AppEnv>) => {
+  const filters = c.req.query();
   const findObj: SkillSearchObj = {};
 
   if (filters.skill) findObj.skill = filters.skill;
   if (filters.location) findObj.location = filters.location;
-  if (filters.level && isNumber(filters.level))
-    findObj.level = { $lte: parseInt(filters.level) };
+  const levelNum = filters.level ? parseInt(filters.level, 10) : NaN;
+  if (!isNaN(levelNum)) findObj.level = { $lte: levelNum };
 
   const skillList = await skills.find(findObj);
 
