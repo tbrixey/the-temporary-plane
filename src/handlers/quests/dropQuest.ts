@@ -1,12 +1,11 @@
 import { Context } from 'hono';
-import { ExpressRequest } from '../../types';
-import { find } from 'lodash';
+import { Quest } from '../../types/quest';
 import apiKeys from '../../mongo/schemas/apiKeys';
 
 export const dropQuest = async (c: Context) => {
   const questId = parseInt(c.req.param('questId'));
   const user = c.get('currentUser');
-  const findQuest = find(user.quests, { id: questId });
+  const findQuest = user.quests.find((q: Quest) => q._id === String(questId));
 
   if (!questId) {
     return c.json({ message: 'Missing quest id.' }, 400);

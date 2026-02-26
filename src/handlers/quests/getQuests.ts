@@ -1,7 +1,5 @@
 import { Quest } from './../../types/quest';
 import { Context } from 'hono';
-import { ExpressRequest } from '../../types';
-import { find } from 'lodash';
 import quests from '../../mongo/schemas/quests';
 
 interface GetQuestsInterface extends Quest {
@@ -10,7 +8,7 @@ interface GetQuestsInterface extends Quest {
 }
 
 export const getQuests = async (c: Context) => {
-  const type = c.req.query.type;
+  const type = c.req.query('type');
   let matchType: { type: any } = { type: { $nin: ['intro'] } };
 
   if (type === 'fetch' || type === 'explore') {
