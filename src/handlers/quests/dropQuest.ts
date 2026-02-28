@@ -3,9 +3,9 @@ import { Quest } from '../../types/quest';
 import apiKeys from '../../mongo/schemas/apiKeys';
 
 export const dropQuest = async (c: Context) => {
-  const questId = parseInt(c.req.param('questId'));
+  const questId = c.req.param('questId')?.trim() ?? '';
   const user = c.get('currentUser');
-  const findQuest = user.quests.find((q: Quest) => q._id === String(questId));
+  const findQuest = user.quests.find((q: Quest) => String(q._id) === questId);
 
   if (!questId) {
     return c.json({ message: 'Missing quest id.' }, 400);
