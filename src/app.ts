@@ -6,7 +6,7 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { registerKey } from './handlers/player/register';
 import { getClass, registerClass } from './handlers/classes';
-import { checkApiKey } from './middleware/apiKey';
+import { checkApiKey, optionalApiKey } from './middleware/apiKey';
 import {
   authorizePlayer,
   getPlayer,
@@ -61,8 +61,8 @@ app.get('/gameapi', (c) => {
 app.post('/gameapi/register/:playerName', registerKey);
 app.post('/gameapi/authorizePlayer', zValidator('json', authorizePlayerSchema), authorizePlayer);
 app.get('/gameapi/players', getPlayers);
-app.get('/gameapi/cities', getCities);
-app.get('/gameapi/locations', getLocations);
+app.get('/gameapi/cities', optionalApiKey, getCities);
+app.get('/gameapi/locations', optionalApiKey, getLocations);
 app.get('/gameapi/class', getClass);
 app.get('/gameapi/race', getRaces);
 

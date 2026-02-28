@@ -28,3 +28,27 @@ export const checkApiKey = async (
     return c.json({ message: 'unauthorized' }, 401);
   }
 };
+
+export const optionalApiKey = async (c: Context, next: Next) => {
+  const authHeader = c.req.header('authorization');
+
+  if (!authHeader) {
+    return next();
+  }
+
+  const authSplit = authHeader.split(' ');
+  const lookupKey = await apiKeys
+    .findOne({ apiKey: authSplit[1] })
+    .populate('bag.item')
+    .populate('quests')
+    .populate('location')
+    .lean();
+
+  if (lookupKey) {
+    const newUser = await addBonusStats(lookupKey);
+    c.set('currentUser', newUser);
+    return next();
+  } else {
+    return c.json({ message: 'unauthorized' }, 401);
+  }
+};
