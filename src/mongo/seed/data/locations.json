@@ -123,5 +123,13 @@
     "x": -82,
     "y": 60,
     "population": 890
+  },
+  {
+    "name": "The High Spire",
+    "description": "A towering pinnacle of stone that pierces the clouds. Ancient and mysterious, it stands as a monument to something—or perhaps a warning about something.",
+    "type": "questlocation",
+    "x": 50,
+    "y": 90,
+    "population": 0
   }
 ]

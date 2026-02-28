@@ -1,4 +1,4 @@
-export type LocationType = 'city' | 'town' | 'village' | 'outpost' | 'poi';
+export type LocationType = 'city' | 'town' | 'village' | 'outpost' | 'poi' | 'questlocation';
 
 export interface Location {
   _id: string;

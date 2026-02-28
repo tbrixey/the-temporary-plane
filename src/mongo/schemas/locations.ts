@@ -7,7 +7,7 @@ export const locationSchema = new mongoose.Schema<Location>(
     description: String,
     type: {
       type: String,
-      enum: ['city', 'town', 'village', 'outpost', 'poi'],
+      enum: ['city', 'town', 'village', 'outpost', 'poi', 'questlocation'],
     },
     x: Number,
     y: Number,
