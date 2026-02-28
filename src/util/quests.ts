@@ -29,8 +29,7 @@ export const checkQuest = async (user: User, questId: string) => {
     case 'explore':
       return checkExploreQuest(user, quest);
     case 'kill':
-      // Kill quest completion requires tracking monster kills (e.g. on User or a progress collection). Not yet implemented.
-      return { complete: false };
+      return checkKillQuest(user, quest);
     default:
       return { complete: false };
   }
@@ -111,6 +110,20 @@ const checkExploreQuest = async (user: User, quest: Quest) => {
   const checkFinalLocation = user.location.name === quest.location;
 
   if (!checkFinalLocation) return { complete: false };
+  await giveRewards(user, quest.rewards, quest._id);
+  return { complete: true, title: quest.title };
+};
+
+const checkKillQuest = async (user: User, quest: Quest) => {
+  if (!quest.target || quest.count == null) return { complete: false };
+
+  const killMap = user.killCounts;
+  const kills = killMap instanceof Map
+    ? (killMap.get(quest.target) ?? 0)
+    : ((killMap as Record<string, number>)?.[quest.target] ?? 0);
+
+  if (kills < quest.count) return { complete: false };
+
   await giveRewards(user, quest.rewards, quest._id);
   return { complete: true, title: quest.title };
 };

@@ -4,9 +4,10 @@ import { Location } from '../../types';
 export const locationSchema = new mongoose.Schema<Location>(
   {
     name: String,
+    description: String,
     type: {
       type: String,
-      enum: ['city', 'poi', 'town'],
+      enum: ['city', 'town', 'village', 'outpost', 'poi'],
     },
     x: Number,
     y: Number,

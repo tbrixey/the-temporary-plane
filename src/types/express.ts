@@ -27,9 +27,14 @@ export interface User {
   skills: {
     mining: number;
     woodcutting: number;
-    arcana: number;
+    fishing: number;
+    thievery: number;
     cooking: number;
-    gathering: number;
+    alchemy: number;
+    agility: number;
+    farming: number;
+    smithing: number;
+    slaying: number;
   };
   class: string;
   speed: number;
@@ -40,6 +45,7 @@ export interface User {
   arrivalTime?: Date;
   finishTime?: Date;
   levelPointsToUse?: number;
+  killCounts?: Map<string, number> | Record<string, number>;
   bonusStats?: {
     stats?: {
       [key: string]: number;

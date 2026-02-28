@@ -24,6 +24,8 @@ import { travelTo } from './handlers/travel';
 import { travelInfo } from './handlers/travel/travelInfo';
 import { checkPlayerTravel } from './middleware/checkPlayerTravel';
 import { useItem } from './handlers/useItem';
+import { sellItem } from './handlers/sellItem';
+import { recordKill } from './handlers/kill';
 import { checkQuestComplete } from './middleware/checkQuestComplete';
 import { acceptQuest, dropQuest, getQuests } from './handlers/quests';
 import { isPlayerInCity } from './middleware/isPlayerInCity';
@@ -89,6 +91,8 @@ app.use(async (c, next) => {
 
 app.post('/gameapi/player/level/:toLevel', levelPlayer);
 app.post('/gameapi/item/use/:itemId', useItem);
+app.post('/gameapi/item/sell/:itemId', sellItem);
+app.post('/gameapi/kill/:monsterName', recordKill);
 
 app.get('/gameapi/travel/:destination', travelInfo);
 app.post('/gameapi/travel/:destination', travelTo);

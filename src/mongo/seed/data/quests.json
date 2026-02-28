@@ -83,5 +83,47 @@
       "xp": 300
     },
     "active": true
+  },
+  {
+    "_id": "f1a2b3c4d5e6078901234d01",
+    "title": "Timber for Oakhaven",
+    "description": "The carpenter in Oakhaven is short on lumber. Chop some Pine Wood in Solstice and deliver it.",
+    "type": "fetch",
+    "goto": "Solstice",
+    "acquire": "b100000000000000000000a1",
+    "location": "Oakhaven",
+    "rewards": {
+      "gold": 45,
+      "xp": 80
+    },
+    "active": true
+  },
+  {
+    "_id": "f1a2b3c4d5e6078901234d02",
+    "title": "The Chef's Unusual Request",
+    "description": "The chef in Glimmerhold refuses to explain why, but they want a Confused Guppy. Best not to ask.",
+    "type": "fetch",
+    "goto": "Solstice",
+    "acquire": "b100000000000000000000a2",
+    "location": "Glimmerhold",
+    "rewards": {
+      "gold": 35,
+      "xp": 60
+    },
+    "active": true
+  },
+  {
+    "_id": "f1a2b3c4d5e6078901234d03",
+    "title": "Bread Delivery",
+    "description": "The inn at Dusklight is out of bread. Cook some Edible-ish Bread in Solstice and bring it before the guests riot.",
+    "type": "fetch",
+    "goto": "Solstice",
+    "acquire": "b100000000000000000000a3",
+    "location": "Dusklight",
+    "rewards": {
+      "gold": 25,
+      "xp": 50
+    },
+    "active": true
   }
 ]

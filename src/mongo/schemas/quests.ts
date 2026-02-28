@@ -8,8 +8,10 @@ export const questSchema = new mongoose.Schema<Quest>(
     goto: String,
     type: {
       type: String,
-      enum: ['intro', 'fetch', 'explore'],
+      enum: ['intro', 'fetch', 'explore', 'kill'],
     },
+    target: String,
+    count: Number,
     tasks: [String],
     rewards: {
       gold: Number,

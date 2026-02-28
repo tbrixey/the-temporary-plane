@@ -51,9 +51,14 @@ const userSchema = new mongoose.Schema<User>(
     skills: {
       mining: Number,
       woodcutting: Number,
-      arcana: Number,
+      fishing: Number,
+      thievery: Number,
       cooking: Number,
-      gathering: Number,
+      alchemy: Number,
+      agility: Number,
+      farming: Number,
+      smithing: Number,
+      slaying: Number,
     },
     class: String,
     speed: Number,
@@ -79,6 +84,11 @@ const userSchema = new mongoose.Schema<User>(
       speed: Number,
       weight: Number,
       time: Date,
+    },
+    killCounts: {
+      type: Map,
+      of: Number,
+      default: {},
     },
   },
   { collection: 'apiKeys' }

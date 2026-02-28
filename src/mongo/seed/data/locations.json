@@ -1,6 +1,7 @@
 [
   {
     "name": "Udame",
+    "description": "A windswept fishing town on the eastern coast. The locals are suspicious of anyone who doesn't smell like salt and regret.",
     "type": "town",
     "x": 80,
     "y": 10,
@@ -9,6 +10,7 @@
   },
   {
     "name": "Righteous",
+    "description": "Named by its founders, who were deeply wrong about themselves. A self-important town that holds a festival every other week for no clear reason.",
     "type": "town",
     "x": -25,
     "y": 75,
@@ -17,6 +19,7 @@
   },
   {
     "name": "Pilbur",
+    "description": "A quiet farming town that smells faintly of hay and overconfidence. The pigs here are the size of ponies and twice as opinionated.",
     "type": "town",
     "x": -40,
     "y": 78,
@@ -25,6 +28,7 @@
   },
   {
     "name": "Atrium",
+    "description": "A sprawling city built inside the ruins of something far more impressive. Nobody knows what, and the locals prefer it that way.",
     "type": "city",
     "x": -65,
     "y": -85,
@@ -33,6 +37,7 @@
   },
   {
     "name": "Orabu",
+    "description": "A merchant city perched at the crossroads of four trade routes. If it can be bought, it's here. If it can't, someone is already forging it.",
     "type": "city",
     "x": -12,
     "y": 35,
@@ -41,6 +46,7 @@
   },
   {
     "name": "Oakhaven",
+    "description": "A tidy lumber town with suspiciously well-organized woodpiles and a carpenter who will absolutely tell you about them.",
     "type": "town",
     "x": -35,
     "y": 20,
@@ -48,6 +54,7 @@
   },
   {
     "name": "Ironspire",
+    "description": "An industrial city of forges and fumes, where the air tastes like ambition and metal shavings. The workers here don't stop — ever.",
     "type": "city",
     "x": 90,
     "y": -40,
@@ -55,6 +62,7 @@
   },
   {
     "name": "Mistralis",
+    "description": "An elven-influenced city forever wrapped in low fog. Beautiful, if you like that sort of thing. The locals insist the fog is 'atmospheric', not a problem.",
     "type": "city",
     "x": -10,
     "y": 80,
@@ -62,6 +70,7 @@
   },
   {
     "name": "Dusklight",
+    "description": "A sleepy village known for its particularly good inn and particularly bad sense of urgency. The perfect place to deliver a meal and stay for three days.",
     "type": "village",
     "x": 75,
     "y": 40,
@@ -69,6 +78,7 @@
   },
   {
     "name": "Thalassa Port",
+    "description": "The largest port on the continent. Ships from everywhere, sailors from nowhere in particular, and enough taverns to lose a week in without trying.",
     "type": "city",
     "x": -87,
     "y": -5,
@@ -76,13 +86,15 @@
   },
   {
     "name": "Glimmerhold",
+    "description": "A mountain town nestled in a valley that catches light strangely in the morning. The chef here is famed for asking impossible errands in exchange for a meal.",
     "type": "town",
     "x": 20,
     "y": -70,
     "population": 3400
   },
   {
-    "name": "Vaelin’s Reach",
+    "name": "Vaelin's Reach",
+    "description": "A lonely outpost at the edge of the known map. The garrison here has four soldiers, two very large dogs, and a disturbing amount of paperwork.",
     "type": "outpost",
     "x": 80,
     "y": -90,
@@ -90,6 +102,7 @@
   },
   {
     "name": "Cinderpeak",
+    "description": "Built on the slope of a dormant volcano. The residents insist it is dormant. There is some disagreement on the definition of 'dormant'.",
     "type": "town",
     "x": 45,
     "y": -75,
@@ -97,6 +110,7 @@
   },
   {
     "name": "Solstice",
+    "description": "The beating heart of the known world. Enormous, noisy, and always at least a little on fire somewhere. If you can't find it in Solstice, you don't need it.",
     "type": "city",
     "x": 0,
     "y": 0,
@@ -104,6 +118,7 @@
   },
   {
     "name": "Briarwatch",
+    "description": "A small village famous for watching the briar. Nobody is sure what they are watching for, but the locals take turns and seem satisfied.",
     "type": "village",
     "x": -82,
     "y": 60,

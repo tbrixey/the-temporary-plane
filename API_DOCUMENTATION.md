@@ -145,6 +145,7 @@ Authorization: Bearer <your-api-key>
     {
       "_id": "locationId",
       "name": "Solstice",
+      "description": "The beating heart of the known world. Enormous, noisy, and always at least a little on fire somewhere.",
       "type": "city",
       "x": 0,
       "y": 0,
@@ -153,6 +154,7 @@ Authorization: Bearer <your-api-key>
     {
       "_id": "locationId",
       "name": "Oakhaven",
+      "description": "A tidy lumber town with suspiciously well-organized woodpiles and a carpenter who will absolutely tell you about them.",
       "type": "town",
       "x": -35,
       "y": 20,
@@ -177,6 +179,7 @@ Authorization: Bearer <your-api-key>
   {
     "_id": "locationId",
     "name": "Udame",
+    "description": "A windswept fishing town on the eastern coast. The locals are suspicious of anyone who doesn't smell like salt and regret.",
     "type": "town",
     "x": 80,
     "y": 10,
@@ -475,6 +478,85 @@ Authorization: Bearer <your-api-key>
 
 ---
 
+### 13b. Sell Item
+**Endpoint:** `POST /gameapi/item/sell/:itemId`
+
+**Description:** Sells one or more of an item from the player's bag for gold based on the item's `value`.
+
+**Path Parameter:**
+- `itemId` (string): MongoDB ObjectId of the item to sell
+
+**Request Body (optional):**
+```json
+{
+  "count": 1
+}
+```
+- `count` (optional, integer, default 1): Number of that item to sell. Must be ≤ bag count.
+
+**Response (Success - 200):**
+```json
+{
+  "message": "You sold 1x Pine Wood for 8 gold.",
+  "goldEarned": 8
+}
+```
+
+**Response (Error - 400):**
+```json
+{
+  "message": "You searched everywhere, but can not find this item."
+}
+```
+
+**Response (Error - 400):**
+```json
+{
+  "message": "You only have 2 of that item."
+}
+```
+
+---
+
+### 13c. Record Kill
+**Endpoint:** `POST /gameapi/kill/:monsterName`
+
+**Description:** Records a monster kill for the current player. The player must be at the monster's location. Kill counts are used for kill-type quest completion.
+
+**Path Parameter:**
+- `monsterName` (string, URL-encoded): Name of the monster to kill (e.g. `Aggressive%20Pigeon`)
+
+**Known monsters and their locations:**
+| Monster | Location |
+|---|---|
+| Aggressive Pigeon | Solstice Plaza |
+| Sentient Dust Bunny | Shady Alley |
+| Buff Rat | Solstice Sewers |
+
+**Response (Success - 200):**
+```json
+{
+  "message": "You defeated a Aggressive Pigeon!",
+  "kills": 1
+}
+```
+
+**Response (Error - 400):**
+```json
+{
+  "message": "Aggressive Pigeon is not here. Try heading to Solstice Plaza."
+}
+```
+
+**Response (Error - 404):**
+```json
+{
+  "message": "Unknown monster: SomeName"
+}
+```
+
+---
+
 ### 14. Get Travel Info
 **Endpoint:** `GET /gameapi/travel/:destination`
 
@@ -569,7 +651,7 @@ travelTime = (distance / 2) / speed
 **Description:** Retrieves available quests. Requires player to be in a city.
 
 **Query Parameters:**
-- `type` (optional, string): Filter by quest type (`fetch` or `explore`). When omitted, all non-intro quests are returned.
+- `type` (optional, string): Filter by quest type (`fetch`, `explore`, or `kill`). When omitted, all non-intro quests are returned.
 
 **Response (Success - 200):**
 ```json
@@ -841,9 +923,14 @@ Common status codes:
   skills: {
     mining: number;
     woodcutting: number;
-    arcana: number;
+    fishing: number;
+    thievery: number;
     cooking: number;
-    gathering: number;
+    alchemy: number;
+    agility: number;
+    farming: number;
+    smithing: number;
+    slaying: number;
   };
   quests: string[]; // Array of quest IDs
   class?: string;
@@ -866,6 +953,7 @@ Common status codes:
   arrivalTime?: Date;
   finishTime?: Date;
   updatedOn?: Date;
+  killCounts?: Record<string, number>; // monster name → kill count
 }
 ```
 
@@ -925,6 +1013,7 @@ Common status codes:
 {
   _id: string;
   name: string;
+  description?: string;
   type: 'city' | 'town' | 'village' | 'outpost' | 'poi';
   x: number;
   y: number;
@@ -969,3 +1058,60 @@ Used by **kill**-type quests (`target` field). Not exposed by a dedicated API en
 ```
 
 **Seed examples:** Aggressive Pigeon (Solstice Plaza), Sentient Dust Bunny (Shady Alley), Buff Rat (Solstice Sewers).
+
+---
+
+## Seed Item Reference
+
+Items obtainable through skilling or found in the world. All items below are seeded into the `items` collection.
+
+| Name | Value | Weight | Notable Effect |
+|---|---|---|---|
+| Rusty Iron Ore | 5 | 2 | — |
+| Pine Wood | 8 | 3 | — |
+| Confused Guppy | 6 | 1 | — |
+| Edible-ish Bread | 4 | 1 | — |
+| Minor Health Potion | 10 | 1 | Restores 5 HP |
+| Lumberjack's Lager | 25 | 1 | +5 woodcutting for 10 min |
+| Miner's Mud | 25 | 1 | +5 mining for 10 min |
+| Angler's Ale | 25 | 1 | +5 fishing for 10 min |
+| Light-Finger Liquid | 25 | 1 | +5 thievery for 10 min |
+| Chef's Secret Sauce | 25 | 1 | +5 cooking for 10 min |
+| Alchemist's Mistake | 25 | 1 | +5 alchemy for 10 min |
+| Bouncy Brew | 25 | 1 | +5 agility for 10 min |
+| Green Thumb Tonic | 25 | 1 | +5 farming for 10 min |
+| Blacksmith's Beverage | 25 | 1 | +5 smithing for 10 min |
+| Hunter's Hooch | 25 | 1 | +5 slaying for 10 min |
+| Zoom Juice | 50 | 1 | +20 speed for 5 min |
+| Mule's Milk | 50 | 1 | +50 weight for 15 min |
+
+---
+
+## Seed Quest Reference
+
+All active quests in the game by type:
+
+**Intro**
+| Title | Reward |
+|---|---|
+| Intro to the Plane | 100 gold, 100 xp, 1× Minor Health Potion |
+
+**Fetch**
+| Title | Get item at | Deliver to | Reward |
+|---|---|---|---|
+| The Heavy Lifting | Solstice Mine | Solstice Forge | 50 gold, 100 xp |
+| Timber for Oakhaven | Solstice | Oakhaven | 45 gold, 80 xp |
+| The Chef's Unusual Request | Solstice | Glimmerhold | 35 gold, 60 xp |
+| Bread Delivery | Solstice | Dusklight | 25 gold, 50 xp |
+
+**Explore**
+| Title | Location | Reward |
+|---|---|---|
+| The Scenic Route | The High Spire | 20 gold, 50 xp |
+
+**Kill**
+| Title | Target | Count | Location | Reward |
+|---|---|---|---|---|
+| Pigeon Patrol | Aggressive Pigeon | 5 | Solstice Plaza | 40 gold, 120 xp |
+| Spring Cleaning | Sentient Dust Bunny | 10 | Shady Alley | 30 gold, 150 xp |
+| Sewer Scourge | Buff Rat | 3 | Solstice Sewers | 100 gold, 300 xp |

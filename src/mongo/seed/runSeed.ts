@@ -27,12 +27,13 @@ export async function runSeed<T extends Doc>(
     return;
   }
 
-  const operations: mongoose.mongo.BulkWriteOperation<mongoose.mongo.BSON.Document>[] = data.map(
+  const operations: mongoose.mongo.AnyBulkWriteOperation<mongoose.mongo.BSON.Document>[] = data.map(
     (doc) => {
       const prepared = prepare ? prepare({ ...doc }) : (doc as Doc);
       const filter: Doc = {};
+      const preparedDoc = prepared as Doc;
       for (const key of upsertKeys) {
-        let value = prepared[key];
+        let value = preparedDoc[key as string];
         if (key === '_id' && typeof value === 'string') {
           value = new mongoose.Types.ObjectId(value);
         }
