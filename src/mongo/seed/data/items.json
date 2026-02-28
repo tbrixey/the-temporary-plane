@@ -1,0 +1,165 @@
+[
+  {
+    "_id": "a1b2c3d4e5f6078901234abc",
+    "name": "Rusty Iron Ore",
+    "description": "Ore from the Solstice Mine. Good for smithing or throwing at pigeons.",
+    "type": "consumable",
+    "value": 5,
+    "weight": 2
+  },
+  {
+    "_id": "6579626d209aa0bd73c4e771",
+    "name": "Minor Health Potion",
+    "description": "Heals the player from minor injuries. Tastes like cherry and medicine.",
+    "effect": {
+      "hitpoints": 5
+    },
+    "type": "consumable",
+    "value": 10,
+    "weight": 1
+  },
+  {
+    "_id": "d2bb61f743cd4d31849e41c5",
+    "name": "Lumberjack's Lager",
+    "description": "Gives you the sudden urge to chop things. Side effects include wearing flannel.",
+    "effect": {
+      "woodcutting": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "163143730bf543a4a961c00b",
+    "name": "Miner's Mud",
+    "description": "Tastes like dirt, but makes your arms feel like jackhammers.",
+    "effect": {
+      "mining": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "e5d0687601ff41bc824b1b27",
+    "name": "Angler's Ale",
+    "description": "Makes you smell so much like a fish that they actually trust you.",
+    "effect": {
+      "fishing": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "4610ee5ecd5e49c8b0588dfd",
+    "name": "Light-Finger Liquid",
+    "description": "Turns your fingers into butter. The slippery kind, not the tasty kind.",
+    "effect": {
+      "thievery": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "7a8d4b56d8524f0da99aedc8",
+    "name": "Chef's Secret Sauce",
+    "description": "You finally understand that salt is actually necessary.",
+    "effect": {
+      "cooking": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "3d3951dd8e1b41dea52ffaa5",
+    "name": "Alchemist's Mistake",
+    "description": "A potion that makes you better at making potions. Don't think about the logic too hard.",
+    "effect": {
+      "alchemy": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "d7dde800dc824e259285d4eb",
+    "name": "Bouncy Brew",
+    "description": "Makes your knees feel 20 years younger and slightly rubbery.",
+    "effect": {
+      "agility": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "55e7f8d7c652435c85970dc4",
+    "name": "Green Thumb Tonic",
+    "description": "Plants seem to grow faster just to get away from your singing.",
+    "effect": {
+      "farming": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "a947bf3e7d304eef8322a789",
+    "name": "Blacksmith's Beverage",
+    "description": "Hardens your skin and your resolve. And your liver.",
+    "effect": {
+      "smithing": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "b83aa578698f48118920875c",
+    "name": "Hunter's Hooch",
+    "description": "Gives you a very specific set of skills for finding things with too many legs.",
+    "effect": {
+      "slaying": 5,
+      "time": 10
+    },
+    "type": "consumable",
+    "value": 25,
+    "weight": 1
+  },
+  {
+    "_id": "a33c0a867c0647b790da4cda",
+    "name": "Zoom Juice",
+    "description": "The world slows down, or you just start vibrating. It's hard to tell.",
+    "effect": {
+      "speed": 20,
+      "time": 5
+    },
+    "type": "consumable",
+    "value": 50,
+    "weight": 1
+  },
+  {
+    "_id": "f746b7ba2bb64d9788141ecb",
+    "name": "Mule's Milk",
+    "description": "Makes your backpack feel like it's filled with helium. Do not actually drink milk from a mule.",
+    "effect": {
+      "weight": 50,
+      "time": 15
+    },
+    "type": "consumable",
+    "value": 50,
+    "weight": 1
+  }
+]

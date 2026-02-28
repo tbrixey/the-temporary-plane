@@ -1,0 +1,87 @@
+[
+  {
+    "_id": "61dc6460dd77ecf037e9251d",
+    "title": "Intro to the Plane",
+    "description": "Finish creating your character for a quick boost to get you started!",
+    "type": "intro",
+    "rewards": {
+      "gold": 100,
+      "xp": 100,
+      "items": [
+        {
+          "item": "6579626d209aa0bd73c4e771",
+          "count": 1
+        }
+      ]
+    },
+    "active": true
+  },
+  {
+    "_id": "e886aa56f2b94d0e819d0664",
+    "title": "The Heavy Lifting",
+    "description": "Fetch some Rusty Iron Ore from the Solstice Mine and bring it to the Forge.",
+    "type": "fetch",
+    "goto": "Solstice Mine",
+    "acquire": "a1b2c3d4e5f6078901234abc",
+    "location": "Solstice Forge",
+    "rewards": {
+      "gold": 50,
+      "xp": 100
+    },
+    "active": true
+  },
+  {
+    "_id": "cac2d347a3db48b6a4b5b439",
+    "title": "The Scenic Route",
+    "description": "Visit The High Spire.",
+    "type": "explore",
+    "location": "The High Spire",
+    "rewards": {
+      "gold": 20,
+      "xp": 50
+    },
+    "active": true
+  },
+  {
+    "_id": "5c08257ade054227a30acb87",
+    "title": "Pigeon Patrol",
+    "description": "The local statues are suffering. Thin out the pigeon population at the Plaza.",
+    "type": "kill",
+    "target": "Aggressive Pigeon",
+    "count": 5,
+    "location": "Solstice Plaza",
+    "rewards": {
+      "gold": 40,
+      "xp": 120
+    },
+    "active": true
+  },
+  {
+    "_id": "ff365c482a4d4ac5b955220c",
+    "title": "Spring Cleaning",
+    "description": "The Shady Alley is getting... fuzzier. Eliminate the Sentient Dust Bunnies.",
+    "type": "kill",
+    "target": "Sentient Dust Bunny",
+    "count": 10,
+    "location": "Shady Alley",
+    "rewards": {
+      "gold": 30,
+      "xp": 150
+    },
+    "active": true
+  },
+  {
+    "_id": "03bb0515247c4cf3a3d0a330",
+    "title": "Sewer Scourge",
+    "description": "The rats in the sewers are getting too big for their whiskers. Take down a few Buff Rats.",
+    "type": "kill",
+    "target": "Buff Rat",
+    "count": 3,
+    "location": "Solstice Sewers",
+    "rewards": {
+      "gold": 100,
+      "xp": 300
+    },
+    "active": true
+  }
+]

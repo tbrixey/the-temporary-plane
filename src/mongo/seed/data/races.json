@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Human",
+    "description": "Just a normal human. Remarkably average at everything, yet somehow convinced they should run the world."
+  },
+  {
+    "name": "Elf",
+    "description": "Pointy-eared vegetarians who live way too long and never let you forget how much better things were in the 'old days'."
+  },
+  {
+    "name": "Dwarf",
+    "description": "Short, loud, and smells faintly of damp stone and questionable ale. Do not touch their beard."
+  },
+  {
+    "name": "Halfling",
+    "description": "Three feet of pure optimism and hunger. Mostly used as a projectile by the stronger party members."
+  },
+  {
+    "name": "Orc",
+    "description": "Large, green, and generally considers 'reading' to be a decorative hobby for people without muscles."
+  },
+  {
+    "name": "Gnome",
+    "description": "A concentrated ball of curiosity and bad ideas. Usually found vibrating with excitement or on fire."
+  }
+]

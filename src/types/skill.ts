@@ -3,8 +3,9 @@ export interface Skill {
   skill: string;
   level: number;
   itemId: number;
-  itemName: number;
+  itemName: string;
   location: string;
   craftable: boolean;
   time: number;
+  description?: string;
 }

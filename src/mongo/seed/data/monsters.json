@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "4fae0921a8b346e6891d98af",
+    "name": "Aggressive Pigeon",
+    "description": "It has seen too many statues and is looking for revenge.",
+    "hp": 15,
+    "level": 1,
+    "location": "Solstice Plaza",
+    "drops": [
+      {
+        "item": "item_feather",
+        "chance": 50
+      }
+    ]
+  },
+  {
+    "_id": "a47ac24ef3bf4a67a6a9bb2a",
+    "name": "Sentient Dust Bunny",
+    "description": "A collection of lint and hair that has gained a mean streak.",
+    "hp": 10,
+    "level": 1,
+    "location": "Shady Alley",
+    "drops": [
+      {
+        "item": "item_lint",
+        "chance": 100
+      }
+    ]
+  },
+  {
+    "_id": "c59a4bb90781403d8fd01c60",
+    "name": "Buff Rat",
+    "description": "This rat didn't just eat cheese; it ate protein powder.",
+    "hp": 40,
+    "level": 3,
+    "location": "Solstice Sewers",
+    "drops": [
+      {
+        "item": "item_rat_tail",
+        "chance": 100
+      }
+    ]
+  }
+]

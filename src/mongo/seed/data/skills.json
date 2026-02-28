@@ -1,0 +1,102 @@
+[
+  {
+    "skill": "woodcutting",
+    "level": 0,
+    "itemId": 1,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Pine Wood",
+    "time": 60,
+    "description": "The art of hitting a tree until it falls over, or you get bored."
+  },
+  {
+    "skill": "mining",
+    "level": 0,
+    "itemId": 2,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Rusty Iron Ore",
+    "time": 45,
+    "description": "Violently liberating rocks from their homes in the ground."
+  },
+  {
+    "skill": "fishing",
+    "level": 0,
+    "itemId": 3,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Confused Guppy",
+    "time": 50,
+    "description": "Standing by water and hoping a fish is dumb enough to bite a metal hook."
+  },
+  {
+    "skill": "thievery",
+    "level": 0,
+    "itemId": 4,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Pocket Lint",
+    "time": 8,
+    "description": "Reaching into pockets you don't own. Usually results in fluff, occasionally jail."
+  },
+  {
+    "skill": "cooking",
+    "level": 0,
+    "itemId": 5,
+    "craftable": true,
+    "location": "Solstice",
+    "itemName": "Edible-ish Bread",
+    "time": 20,
+    "description": "Applying heat to ingredients and praying the result isn't a biohazard."
+  },
+  {
+    "skill": "alchemy",
+    "level": 0,
+    "itemId": 6,
+    "craftable": true,
+    "location": "Solstice",
+    "itemName": "Vial of Regret",
+    "time": 35,
+    "description": "Mixing liquids that definitely shouldn't be mixed. Wear goggles."
+  },
+  {
+    "skill": "agility",
+    "level": 0,
+    "itemId": 7,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Sweaty Headband",
+    "time": 15,
+    "description": "Running in circles and jumping over fences for no apparent reason."
+  },
+  {
+    "skill": "farming",
+    "level": 0,
+    "itemId": 8,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Judgmental Carrot",
+    "time": 300,
+    "description": "Burying things in dirt and waiting for them to judge your lack of patience."
+  },
+  {
+    "skill": "smithing",
+    "level": 0,
+    "itemId": 9,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Iron Bar",
+    "time": 10,
+    "description": "Turning ore into bars by hitting it repeatedly. It’s basically professionalized vandalism."
+  },
+  {
+    "skill": "slaying",
+    "level": 0,
+    "itemId": 10,
+    "craftable": false,
+    "location": "Solstice",
+    "itemName": "Rat Tail",
+    "time": 120,
+    "description": "Evicting monsters from existence. It's a living."
+  }
+]

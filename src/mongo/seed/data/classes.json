@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Warrior",
+    "description": "The bread and butter of any party. Usually just a guy with a sharp piece of metal and a very thick skull.",
+    "weight": 200,
+    "speed": 50,
+    "bonus": "Can wear heavy armor without complaining."
+  },
+  {
+    "name": "Rogue",
+    "description": "A professional shadow-stayer. If you can see them, they're probably about to steal your lunch money.",
+    "weight": 100,
+    "speed": 90,
+    "bonus": "Higher chance to 'find' things in other people's pockets."
+  },
+  {
+    "name": "Wizard",
+    "description": "A glass cannon made of old paper and bad eyesight. Can rewrite reality but will die if a stiff breeze hits them.",
+    "weight": 80,
+    "speed": 75,
+    "bonus": "Occasionally remembers where they put their spellbook."
+  },
+  {
+    "name": "Paladin",
+    "description": "A warrior with a moral compass and way too much shiny metal. Basically a walking tank powered by self-righteousness.",
+    "weight": 260,
+    "speed": 30,
+    "bonus": "Naturally glows in the dark (terrible for stealth, great for finding keys)."
+  },
+  {
+    "name": "Ranger",
+    "description": "Likes trees more than people. Prefers to solve problems from a safe distance of exactly 50 paces.",
+    "weight": 150,
+    "speed": 65,
+    "bonus": "Can talk to squirrels, though the squirrels rarely have anything helpful to say."
+  }
+]

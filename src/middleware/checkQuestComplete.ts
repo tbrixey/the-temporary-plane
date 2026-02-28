@@ -9,17 +9,17 @@ export const checkQuestComplete = async (
 ) => {
   const currentUser = c.get('currentUser');
 
-  if (currentUser) {
-    if (currentUser.quests.length > 0) {
-      const questsComplete: string[] = [];
-      await Promise.all(currentUser.quests.map(async (quest: Quest) => {
-        const questComplete = await checkQuest(currentUser, quest._id);
-        if (questComplete.complete) {
+  if (currentUser?.quests?.length) {
+    const questsComplete: string[] = [];
+    await Promise.all(
+      currentUser.quests.map(async (quest: Quest) => {
+        const result = await checkQuest(currentUser, String(quest._id));
+        if (result?.complete && quest.title) {
           questsComplete.push(quest.title);
         }
-      }));
-      c.set('questsComplete', questsComplete);
-    }
+      })
+    );
+    c.set('questsComplete', questsComplete);
   }
 
   return next();

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Udame",
+    "type": "town",
+    "x": 80,
+    "y": 10,
+    "population": 524,
+    "__v": 0
+  },
+  {
+    "name": "Righteous",
+    "type": "town",
+    "x": -25,
+    "y": 75,
+    "population": 723,
+    "__v": 0
+  },
+  {
+    "name": "Pilbur",
+    "type": "town",
+    "x": -40,
+    "y": 78,
+    "population": 692,
+    "__v": 0
+  },
+  {
+    "name": "Atrium",
+    "type": "city",
+    "x": -65,
+    "y": -85,
+    "population": 5602,
+    "__v": 0
+  },
+  {
+    "name": "Orabu",
+    "type": "city",
+    "x": -12,
+    "y": 35,
+    "population": 9631,
+    "__v": 0
+  },
+  {
+    "name": "Oakhaven",
+    "type": "town",
+    "x": -35,
+    "y": 20,
+    "population": 1204
+  },
+  {
+    "name": "Ironspire",
+    "type": "city",
+    "x": 90,
+    "y": -40,
+    "population": 42150
+  },
+  {
+    "name": "Mistralis",
+    "type": "city",
+    "x": -10,
+    "y": 80,
+    "population": 15820
+  },
+  {
+    "name": "Dusklight",
+    "type": "village",
+    "x": 75,
+    "y": 40,
+    "population": 432
+  },
+  {
+    "name": "Thalassa Port",
+    "type": "city",
+    "x": -87,
+    "y": -5,
+    "population": 89100
+  },
+  {
+    "name": "Glimmerhold",
+    "type": "town",
+    "x": 20,
+    "y": -70,
+    "population": 3400
+  },
+  {
+    "name": "Vaelin’s Reach",
+    "type": "outpost",
+    "x": 80,
+    "y": -90,
+    "population": 150
+  },
+  {
+    "name": "Cinderpeak",
+    "type": "town",
+    "x": 45,
+    "y": -75,
+    "population": 2850
+  },
+  {
+    "name": "Solstice",
+    "type": "city",
+    "x": 0,
+    "y": 0,
+    "population": 125400
+  },
+  {
+    "name": "Briarwatch",
+    "type": "village",
+    "x": -82,
+    "y": 60,
+    "population": 890
+  }
+]
